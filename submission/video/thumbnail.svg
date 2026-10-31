@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+ <rect width="1280" height="720" fill="#fff"/>
+ <text x="72" y="94" font-family="Arial,sans-serif" font-size="38" font-weight="700" fill="#0c1117">COMRDY<tspan fill="#165dff">.</tspan></text>
+ <path d="M72 139H1208" stroke="#d9dee5"/>
+ <text x="72" y="220" font-family="Arial,sans-serif" font-size="17" letter-spacing="3" fill="#526171">THE PURCHASE VS. THE PROMISE</text>
+ <text x="72" y="306" font-family="Arial,sans-serif" font-size="65" font-weight="700" letter-spacing="-2" fill="#0c1117">A payment can succeed.</text>
+ <text x="72" y="382" font-family="Arial,sans-serif" font-size="65" font-weight="700" letter-spacing="-2" fill="#0c1117">The purchase can still be wrong.</text>
+ <rect x="72" y="449" width="530" height="170" rx="10" fill="#f7f9fc" stroke="#d9dee5"/>
+ <text x="102" y="490" font-family="Arial,sans-serif" font-size="17" fill="#526171">CONFIRMED INTENT</text><text x="102" y="569" font-family="Arial,sans-serif" font-size="54" font-weight="700" fill="#0c1117">SIZE M</text>
+ <path d="M623 533h55m-12-12 12 12-12 12" fill="none" stroke="#165dff" stroke-width="4"/>
+ <rect x="704" y="449" width="504" height="170" rx="10" fill="#fff2f0" stroke="#efb4ac"/>
+ <text x="734" y="490" font-family="Arial,sans-serif" font-size="17" fill="#a33220">CONTROLLED CHECKOUT FAULT</text><text x="734" y="569" font-family="Arial,sans-serif" font-size="54" font-weight="700" fill="#a33220">SIZE S</text>
+ <text x="72" y="672" font-family="Arial,sans-serif" font-size="18" fill="#526171">Transaction testing for AI checkout · PayPal Sandbox</text>
+</svg>

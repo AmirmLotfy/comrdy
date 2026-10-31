@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: comrdy
+    runtime: node
+    plan: 0.5c-512mb
+    buildCommand: npm ci && npm run build
+    startCommand: npm run db:migrate && npm run serve
+    healthCheckPath: /api/v1/status
+    disk:
+      name: comrdy-evidence
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22.13.1
+      - key: APP_MODE
+        value: sandbox
+      - key: PAYPAL_ENV
+        value: sandbox
+      - key: EVIDENCE_DIR
+        value: /var/data/evidence
+      - key: DATABASE_URL
+        fromDatabase:
+          name: comrdy-db
+          property: connectionString
+      - key: APP_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-6-luna
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: PAYPAL_MERCHANT_ID
+        sync: false
+      - key: PAYPAL_WEBHOOK_ID
+        sync: false
+      - key: KERNEL_API_KEY
+        sync: false
+      - key: RUN_ACCESS_CODE
+        sync: false
+databases:
+  - name: comrdy-db
+    plan: 0.1c-256mb
+    diskSizeGB: 1
+    ipAllowList: []
+    databaseName: comrdy
+    user: comrdy

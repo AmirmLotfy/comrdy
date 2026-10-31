@@ -1,0 +1,142 @@
+[
+  {
+    "id": "canonical",
+    "text": "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. Do not substitute another size and do not start a subscription.",
+    "expect": {
+      "size": "M",
+      "cap": 16000,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "paraphrase",
+    "text": "One blue medium Ocean Shell, please. Maximum delivered price USD 160. No substitutions and no recurring plan.",
+    "expect": {
+      "size": "M",
+      "cap": 16000,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "cents",
+    "text": "Buy one blue Ocean Shell size M for at most USD 148.01 including shipping and tax. No substitutions or subscriptions.",
+    "expect": {
+      "size": "M",
+      "cap": 14801,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "exact-boundary",
+    "text": "Buy one blue medium Ocean Shell for no more than USD 148 delivered, without substitutions or a subscription.",
+    "expect": {
+      "size": "M",
+      "cap": 14800,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "too-low",
+    "text": "Buy one blue Ocean Shell in medium. Delivered total must not exceed USD 147.99. No substitution or subscription.",
+    "expect": {
+      "size": "M",
+      "cap": 14799,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "small",
+    "text": "Buy one blue Ocean Shell, size S, maximum USD 160 delivered. No substitutions, no subscription.",
+    "expect": {
+      "size": "S",
+      "cap": 16000,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "large",
+    "text": "Buy one blue Ocean Shell size L for at most USD 160 including all charges. Do not substitute or subscribe.",
+    "expect": {
+      "size": "L",
+      "cap": 16000,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "reordered",
+    "text": "No subscriptions. No substitutions. USD 160 is my entire delivered budget for one blue medium Ocean Shell.",
+    "expect": {
+      "size": "M",
+      "cap": 16000,
+      "noSubscription": true,
+      "noSubstitution": true
+    }
+  },
+  {
+    "id": "currency-missing",
+    "text": "Buy one blue medium Ocean Shell for at most 160 delivered. No subscriptions or substitutions.",
+    "clarification": true
+  },
+  {
+    "id": "budget-missing",
+    "text": "Buy one blue medium Ocean Shell. No substitutions or subscriptions.",
+    "clarification": true
+  },
+  {
+    "id": "ambiguous-size",
+    "text": "Buy one blue Ocean Shell in my usual size for at most USD 160 delivered. No subscriptions.",
+    "clarification": true
+  },
+  {
+    "id": "ambiguous-budget",
+    "text": "Buy one blue medium Ocean Shell for around USD 160, delivered. No substitutions or subscriptions.",
+    "clarification": true
+  },
+  {
+    "id": "unsupported-product",
+    "text": "Buy one blue medium Summit Boot, maximum USD 160 delivered. No subscriptions or substitutions.",
+    "clarification": true
+  },
+  {
+    "id": "unsupported-currency",
+    "text": "Buy one blue medium Ocean Shell, maximum EUR 160 delivered. No subscriptions or substitutions.",
+    "clarification": true
+  },
+  {
+    "id": "quantity-two",
+    "text": "Buy two blue medium Ocean Shells for at most USD 300 delivered. No subscriptions or substitutions.",
+    "clarification": true
+  },
+  {
+    "id": "contradiction",
+    "text": "Buy one blue Ocean Shell. It must be size M and must be size S. Maximum USD 160 delivered. No subscriptions.",
+    "clarification": true
+  },
+  {
+    "id": "deadline",
+    "text": "Buy one blue medium Ocean Shell for at most USD 160 delivered. It must arrive tomorrow before noon. No subscriptions.",
+    "clarification": true
+  },
+  {
+    "id": "unsupported-color",
+    "text": "Buy one red medium Ocean Shell for at most USD 160 delivered. No substitutions or subscriptions.",
+    "clarification": true
+  },
+  {
+    "id": "subscription",
+    "text": "Subscribe to receive one blue medium Ocean Shell every month, at most USD 160 per delivery.",
+    "clarification": true
+  },
+  {
+    "id": "unbounded",
+    "text": "Buy one blue medium Ocean Shell at any price, including shipping. No substitutions or subscriptions.",
+    "clarification": true
+  }
+]

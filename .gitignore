@@ -1,0 +1,10 @@
+.env*
+!.env.example
+node_modules/
+.next/
+.data/
+artifacts/
+*.tsbuildinfo
+.DS_Store
+public/media/**/*.wav
+public/media/**/*.mp4
