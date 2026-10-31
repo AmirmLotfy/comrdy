@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowDownLeft,
   ArrowRight,
@@ -15,10 +15,12 @@ import {
   GitCompareArrows,
   LayoutDashboard,
   LoaderCircle,
-  PanelLeft,
+  Menu,
+  X,
   ShoppingBag,
   TriangleAlert,
 } from "lucide-react";
+import { BrandMark } from "./brand-mark";
 import { api, type Mode, type ServiceStatus } from "./types";
 
 export function Brand({ inverse = false }: { inverse?: boolean }) {
@@ -28,7 +30,10 @@ export function Brand({ inverse = false }: { inverse?: boolean }) {
       className={`wordmark${inverse ? " inverse" : ""}`}
       aria-label="COMRDY home"
     >
-      COMRDY<span className="wordmark-period">.</span>
+      <BrandMark />
+      <span className="wordmark-name">
+        COMRDY<span className="wordmark-period">.</span>
+      </span>
     </Link>
   );
 }
@@ -106,18 +111,142 @@ export function StatusPill({
   );
 }
 
+const navigationLinks = [
+  { href: "/demo", label: "Test lab" },
+  { href: "/compare", label: "Compare runs" },
+  { href: "/store", label: "Demo store" },
+  { href: "/docs", label: "Documentation" },
+];
+
+function MobileNavigation({ workspace = false }: { workspace?: boolean }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const id = workspace ? "workspace-mobile-menu" : "overview-mobile-menu";
+  function close() {
+    dialog.current?.close();
+    setOpen(false);
+    trigger.current?.focus();
+  }
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const desktop = window.matchMedia("(min-width: 761px)");
+    const resize = () => {
+      if (desktop.matches) {
+        dialog.current?.close();
+        setOpen(false);
+      }
+    };
+    desktop.addEventListener("change", resize);
+    return () => {
+      document.body.style.overflow = previous;
+      desktop.removeEventListener("change", resize);
+    };
+  }, [open]);
+  return (
+    <>
+      <button
+        ref={trigger}
+        className="mobile-menu-trigger"
+        aria-label="Open navigation"
+        aria-expanded={open}
+        aria-controls={id}
+        aria-haspopup="dialog"
+        onClick={() => {
+          dialog.current?.showModal();
+          setOpen(true);
+        }}
+      >
+        <Menu size={20} />
+        <span>Menu</span>
+      </button>
+      <dialog
+        id={id}
+        ref={dialog}
+        className="mobile-navigation"
+        aria-label="COMRDY navigation"
+        onCancel={(event) => {
+          event.preventDefault();
+          close();
+        }}
+        onClose={() => setOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") return;
+          const items = Array.from(
+            event.currentTarget.querySelectorAll<HTMLElement>(
+              "a[href], button:not([disabled])",
+            ),
+          );
+          const first = items[0];
+          const last = items[items.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last?.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+          }
+        }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) close();
+        }}
+      >
+        <div className="mobile-navigation-content">
+          <div className="mobile-navigation-heading">
+            <Brand />
+            <button
+              className="icon-button"
+              aria-label="Close navigation"
+              onClick={close}
+            >
+              <X size={21} />
+            </button>
+          </div>
+          <p className="technical-label">Transaction workbench</p>
+          <nav aria-label="Mobile navigation">
+            {navigationLinks.map(({ href, label }, index) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={close}
+                aria-current={pathname === href ? "page" : undefined}
+              >
+                <span className="mono">0{index + 1}</span>
+                {label}
+                <ArrowUpRight size={18} />
+              </Link>
+            ))}
+          </nav>
+          <Link href="/" className="mobile-overview-link" onClick={close}>
+            Product overview <ArrowRight size={15} />
+          </Link>
+          <p className="mobile-navigation-note">
+            Controlled merchant. No real money.
+            <br />
+            Every run identifies its environment.
+          </p>
+        </div>
+      </dialog>
+    </>
+  );
+}
+
 export function MarketingNav() {
   return (
     <header className="marketing-header">
       <div className="marketing-nav container">
         <Brand />
-        <nav aria-label="Main navigation">
+        <nav className="desktop-navigation" aria-label="Main navigation">
           <Link href="/#mechanism">How it works</Link>
           <Link href="/docs">Documentation</Link>
           <Link href="/demo" className="button small dark">
             Open the lab <ArrowUpRight size={14} />
           </Link>
         </nav>
+        <MobileNavigation />
       </div>
     </header>
   );
@@ -125,25 +254,38 @@ export function MarketingNav() {
 
 export function Footer() {
   return (
-    <footer className="site-footer container">
-      <div>
-        <Brand />
-        <p>Keep the purchase inside the promise.</p>
+    <footer className="footer-band">
+      <div className="site-footer container">
+        <div className="footer-brand">
+          <Brand inverse />
+          <p>
+            Keep the purchase
+            <br />
+            inside the promise.
+          </p>
+          <span className="footer-note">
+            A working prototype. Clear evidence. No real money.
+          </span>
+        </div>
+        <nav aria-label="Footer">
+          <span className="footer-nav-label">Explore the workbench</span>
+          {navigationLinks.map(({ href, label }) => (
+            <Link href={href} key={href}>
+              {label}
+              <ArrowUpRight size={15} />
+            </Link>
+          ))}
+        </nav>
+        <div className="footer-bottom">
+          <span>
+            Contract <span aria-hidden="true">→</span> observation{" "}
+            <span aria-hidden="true">→</span> decision
+          </span>
+          <Link href="/docs#evidence">
+            Evidence and limits <ArrowUpRight size={13} />
+          </Link>
+        </div>
       </div>
-      <nav aria-label="Footer">
-        <Link href="/demo">
-          Test lab <ArrowUpRight size={13} />
-        </Link>
-        <Link href="/store">
-          Demo store <ArrowUpRight size={13} />
-        </Link>
-        <Link href="/docs">
-          Documentation <ArrowUpRight size={13} />
-        </Link>
-      </nav>
-      <span className="footer-note">
-        A working prototype. Explicit evidence. Clear limits.
-      </span>
     </footer>
   );
 }
@@ -159,7 +301,6 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const { status, error } = useServiceStatus();
-  const [menu, setMenu] = useState(false);
   const links = [
     { href: "/demo", label: "Test lab", icon: FlaskConical },
     { href: "/compare", label: "Compare runs", icon: GitCompareArrows },
@@ -168,19 +309,14 @@ export function AppShell({
   ];
   return (
     <div className="app-shell">
-      <aside className={`sidebar ${menu ? "open" : ""}`}>
+      <aside className="sidebar">
         <div className="sidebar-brand">
           <Brand />
-          <button
-            className="icon-button mobile-only"
-            onClick={() => setMenu(false)}
-            aria-label="Close navigation"
-          >
-            <PanelLeft size={18} />
-          </button>
         </div>
         <div className="workspace-picker">
-          <span className="workspace-avatar">C</span>
+          <span className="workspace-avatar">
+            <BrandMark />
+          </span>
           <div>
             <strong>COMRDY Lab</strong>
             <span>Controlled demo workspace</span>
@@ -192,7 +328,6 @@ export function AppShell({
             <Link
               key={href}
               href={href}
-              onClick={() => setMenu(false)}
               className={`sidebar-link ${pathname === href || (href === "/demo" && pathname.startsWith("/cases/")) ? "active" : ""}`}
               aria-current={pathname === href ? "page" : undefined}
             >
@@ -220,41 +355,39 @@ export function AppShell({
           </Link>
         </div>
       </aside>
-      {menu && (
-        <button
-          className="sidebar-backdrop"
-          onClick={() => setMenu(false)}
-          aria-label="Close navigation"
-        />
-      )}
       <div className="app-main">
         <header className="app-topbar">
           <div className="breadcrumb">
-            <button
-              className="icon-button mobile-only"
-              onClick={() => setMenu(true)}
-              aria-label="Open navigation"
-            >
-              <PanelLeft size={18} />
-            </button>
+            <div className="app-mobile-brand">
+              <Brand />
+            </div>
             <span>{section}</span>
             <span className="breadcrumb-slash">/</span>
             <strong>{title}</strong>
           </div>
-          <EnvironmentBadge
-            mode={status?.mode}
-            checking={!status && !error}
-            unavailable={error}
-          />
+          <div className="topbar-actions">
+            <EnvironmentBadge
+              mode={status?.mode}
+              checking={!status && !error}
+              unavailable={error}
+            />
+            <MobileNavigation workspace />
+          </div>
         </header>
         <main id="main" className="workspace-content">
           {children}
         </main>
         <footer className="app-footer">
           <span>Controlled merchant · No real money</span>
-          <Link href="/docs#evidence">
-            Understand the evidence <ArrowUpRight size={12} />
-          </Link>
+          <nav aria-label="Workspace footer">
+            <Link href="/demo">Test lab</Link>
+            <Link href="/docs#evidence">
+              Evidence guide <ArrowUpRight size={13} />
+            </Link>
+            <Link href="/">
+              Overview <ArrowUpRight size={13} />
+            </Link>
+          </nav>
         </footer>
       </div>
     </div>

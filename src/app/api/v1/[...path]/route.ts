@@ -12,6 +12,7 @@ import { releaseLibrary } from "@/server/library";
 import { status } from "@/server/config";
 import { createCanonicalState } from "@/core/fixtures";
 export const runtime = "nodejs";
+export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 async function handle(
   req: NextRequest,

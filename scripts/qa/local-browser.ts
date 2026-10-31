@@ -55,13 +55,50 @@ try {
   assert.deepEqual(playbackWrites, []);
   page.off("request", watch);
 
-  for (const width of [390, 768, 1440]) {
+  for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     await page.screenshot({ path: `artifacts/screenshots/case-${width}.png` });
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > window.innerWidth + 2,
     );
     assert.equal(overflow, false, `document overflow at ${width}`);
+    if (width <= 390) {
+      await page.locator(".lineage-mobile").scrollIntoViewIfNeeded();
+      assert.equal(await page.locator(".lineage-mobile").isVisible(), true);
+      assert.match(
+        await page.locator(".lineage-mobile").innerText(),
+        /First drift/,
+      );
+      const trigger = page.getByRole("button", {
+        name: "Open navigation",
+        exact: true,
+      });
+      await trigger.click();
+      const navigation = page.getByRole("dialog", {
+        name: "COMRDY navigation",
+        exact: true,
+      });
+      assert.equal(await navigation.isVisible(), true);
+      assert.equal(await trigger.getAttribute("aria-expanded"), "true");
+      for (let i = 0; i < 12; i++) {
+        await page.keyboard.press("Tab");
+        assert.equal(
+          await navigation.evaluate((el) =>
+            el.contains(document.activeElement),
+          ),
+          true,
+        );
+      }
+      await page.keyboard.press("Escape");
+      assert.equal(await navigation.isVisible(), false);
+      assert.equal(
+        await trigger.evaluate((el) => el === document.activeElement),
+        true,
+      );
+      await page.locator(".lineage-mobile").screenshot({
+        path: `artifacts/screenshots/mobile-evidence-${width}.png`,
+      });
+    }
   }
   const recovery = await context.request.post(
     base + `/api/v1/runs/${run.id}/recover`,
@@ -101,6 +138,104 @@ try {
   await page.screenshot({ path: "artifacts/screenshots/store.png" });
   await page.goto(base);
   await page.screenshot({ path: "artifacts/screenshots/home.png" });
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: width <= 390 ? 844 : 1000 });
+    for (const route of [
+      "/",
+      "/demo",
+      "/docs",
+      "/store",
+      `/compare?left=${run.id}&right=${recovered.id}`,
+    ]) {
+      await page.goto(base + route);
+      await page.locator("main").waitFor();
+      if (route === "/demo")
+        await page.locator(".runs-table tbody tr").first().waitFor();
+      if (route.startsWith("/compare"))
+        await page.locator(".compare-table").waitFor();
+      assert.equal(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth > innerWidth + 2,
+        ),
+        false,
+        `${route} overflows at ${width}`,
+      );
+      await page.screenshot({
+        path: `artifacts/screenshots/redesign-${route.split("?")[0].replaceAll("/", "") || "home"}-${width}.png`,
+        fullPage: true,
+      });
+    }
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base);
+  await page
+    .getByRole("button", { name: "Open navigation", exact: true })
+    .click();
+  await page.screenshot({ path: "artifacts/screenshots/mobile-menu.png" });
+  await page
+    .getByRole("dialog", { name: "COMRDY navigation" })
+    .getByRole("link", { name: /Test lab/ })
+    .click();
+  await page.waitForURL(base + "/demo");
+  assert.equal(
+    await page.getByRole("dialog", { name: "COMRDY navigation" }).isVisible(),
+    false,
+  );
+  await page.goto(base);
+  await page.locator(".site-footer").scrollIntoViewIfNeeded();
+  assert.equal(
+    await page.evaluate(
+      () =>
+        document.getAnimations().filter((a) => a.playState === "running")
+          .length,
+    ),
+    0,
+    "reduced motion leaves no running animations",
+  );
+  await page.screenshot({ path: "artifacts/screenshots/mobile-footer.png" });
+  const noJS = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 390, height: 844 },
+  });
+  const staticPage = await noJS.newPage();
+  await staticPage.goto(base);
+  assert.equal(await staticPage.locator("h1").isVisible(), true);
+  assert.equal(await staticPage.locator("#mechanism h2").isVisible(), true);
+  await noJS.close();
+  const touch = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+    reducedMotion: "no-preference",
+  });
+  const touchPage = await touch.newPage();
+  await touchPage.goto(base);
+  await touchPage
+    .getByRole("button", { name: "Open navigation", exact: true })
+    .tap();
+  await touchPage
+    .getByRole("dialog", { name: "COMRDY navigation" })
+    .getByRole("link", { name: /Test lab/ })
+    .tap();
+  await touchPage.waitForURL(base + "/demo");
+  await touchPage
+    .getByRole("button", { name: "Compile intent contract", exact: true })
+    .tap();
+  await touchPage
+    .getByRole("button", { name: "Confirm these constraints", exact: true })
+    .tap();
+  await touchPage
+    .getByRole("button", { name: "Run transaction test", exact: true })
+    .tap();
+  await touchPage
+    .getByRole("heading", { name: "Constraint evidence", exact: true })
+    .waitFor();
+  assert.equal(await touchPage.locator(".lineage-mobile").isVisible(), true);
+  await touchPage.screenshot({
+    path: "artifacts/screenshots/touch-run.png",
+    fullPage: true,
+  });
+  await touch.close();
   assert.deepEqual(errors, []);
   await writeFile(
     "artifacts/local-browser.json",
@@ -110,12 +245,18 @@ try {
         mode: "simulation",
         runId: run.id,
         recoveryId: recovered.id,
-        widths: [390, 768, 1440],
+        widths: [320, 390, 768, 1440],
         checks: [
           "compile-confirm-deny",
           "read-only-event-playback",
           "dialog-escape",
-          "responsive-overflow",
+          "responsive-overflow-all-product-routes",
+          "mobile-final-divergence-visible",
+          "mobile-menu-focus-containment-and-return",
+          "mobile-menu-navigation",
+          "reduced-motion",
+          "no-javascript-home-content",
+          "touch-menu-and-complete-local-run",
           "bounded-recovery",
           "private-session-isolation",
           "cross-origin-rejection",

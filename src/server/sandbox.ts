@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { executionProvenance } from "./provenance";
 import { z } from "zod";
 import {
   assertCaptureBinding,
@@ -261,11 +262,18 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
             : "unknown";
         op.errorCode = safeError(error);
         op.updatedAt = timestamp();
-        run.status = op.state === "unknown" ? "reconciling" : "infra_failed";
-        run.payment.status =
-          op.state === "unknown"
-            ? `${kind.toUpperCase()}_UNKNOWN`
-            : "PROVIDER_ERROR";
+        const settlementUnresolved = kind === "capture" || kind === "void";
+        run.status =
+          op.state === "unknown" || settlementUnresolved
+            ? "reconciling"
+            : "infra_failed";
+        // A rejected settlement command does not release its authorization.
+        // Preserve provider truth until a fresh readback confirms settlement.
+        if (!settlementUnresolved)
+          run.payment.status =
+            op.state === "unknown"
+              ? `${kind.toUpperCase()}_UNKNOWN`
+              : "PROVIDER_ERROR";
         pushEvent(
           run,
           timestamp(),
@@ -287,6 +295,7 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
       unresolved: result.candidate.needsResolution,
       mode: "sandbox" as const,
       compiler: {
+        execution: executionProvenance(),
         model: result.model,
         responseId: result.responseId,
         usage: result.usage,
@@ -315,21 +324,25 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
       if (
         Object.values(db.runs).some(
           (r) =>
-            r.owner === owner &&
-            r.mode === "sandbox" &&
-            [
-              "queued",
-              "shopping",
-              "creating_order",
-              "awaiting_approval",
-              "approved",
-              "authorizing",
-              "verifying",
-              "capturing",
-              "voiding",
-              "reconciling",
-              "inconclusive",
-            ].includes(r.status),
+            (r.owner === owner &&
+              r.mode === "sandbox" &&
+              [
+                "queued",
+                "shopping",
+                "creating_order",
+                "awaiting_approval",
+                "approved",
+                "authorizing",
+                "verifying",
+                "capturing",
+                "voiding",
+                "reconciling",
+                "inconclusive",
+              ].includes(r.status)) ||
+            (r.owner === owner &&
+              r.mode === "sandbox" &&
+              !!r.payment.authorizationId &&
+              !["VOIDED", "COMPLETED"].includes(r.payment.status)),
         )
       )
         throw new Error(
@@ -355,6 +368,7 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
         id,
         owner,
         mode: "sandbox",
+        execution: executionProvenance(),
         fault,
         status: "queued",
         contract: structuredClone(saved.contract),
@@ -570,10 +584,17 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
         run.status =
           capture.status === "COMPLETED"
             ? "completed"
-            : capture.status === "PENDING"
+            : ["PENDING", "DECLINED", "FAILED"].includes(capture.status)
               ? "reconciling"
               : "payment_failed";
         if (capture.status === "COMPLETED") {
+          // Reconciliation can resolve provider uncertainty without changing the
+          // deterministic gate that authorized this already-persisted command.
+          if (state.gate && state.gate.decision === "ALLOW")
+            run.decision = {
+              verdict: state.gate.decision,
+              reason: reasonOf(state.gate),
+            };
           const existingOrder = run.merchantOrder as
             { captureId: string } | undefined;
           if (existingOrder && existingOrder.captureId !== capture.id) {
@@ -614,6 +635,11 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
     const authorization = await api.getAuthorization(
       run.payment.authorizationId!,
     );
+    if (
+      authorization.id !== run.payment.authorizationId ||
+      (authorization.orderId && authorization.orderId !== run.payment.orderId)
+    )
+      throw new Error("Authorization binding mismatch during void readback.");
     await tx((db) => {
       const current = db.runs[runId]!;
       current.voidEvidence = authorization;
@@ -623,13 +649,17 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
         voidEvidence: authorization,
       };
       current.status =
-        authorization.status === "VOIDED" ? "blocked" : "reconciling";
+        authorization.status === "VOIDED"
+          ? current.decision.verdict === "ALLOW"
+            ? "payment_failed"
+            : "blocked"
+          : "reconciling";
       pushEvent(
         current,
         timestamp(),
         "Authorization retrieved",
         authorization.status === "VOIDED"
-          ? "PayPal confirms VOIDED. COMRDY did not issue capture for this blocked case."
+          ? "PayPal confirms VOIDED. No completed capture is claimed for this case."
           : `Provider status is ${authorization.status}; release of the authorization is not yet confirmed.`,
       );
     });
@@ -914,7 +944,43 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
         (captureCommand.result as PayPalCapture | undefined)?.id ??
         order.captureIds[0];
       if (knownCaptureId) {
-        await recordCapture(runId, await api.getCapture(knownCaptureId));
+        if (!order.captureIds.includes(knownCaptureId))
+          throw new Error("Capture does not belong to the retrieved order.");
+        const observedCapture = await api.getCapture(knownCaptureId);
+        await recordCapture(runId, observedCapture);
+        if (!["DECLINED", "FAILED"].includes(observedCapture.status)) return;
+      }
+      if (captureCommand.state === "failed" || knownCaptureId) {
+        // A definitively rejected capture may still leave a live authorization.
+        // Read it first; cleanup is a distinct persisted void, never a new capture.
+        const authorization = await api.getAuthorization(
+          run.payment.authorizationId!,
+        );
+        if (
+          authorization.id !== run.payment.authorizationId ||
+          (authorization.orderId && authorization.orderId !== order.id)
+        )
+          throw new Error("Authorization binding mismatch during cleanup.");
+        if (authorization.status === "VOIDED") {
+          await recordVoid(runId, api);
+          return;
+        }
+        const voidOp = state.commands.void;
+        if (
+          allowReplay &&
+          authorization.status === "CREATED" &&
+          (!voidOp || ["unknown", "sent"].includes(voidOp.state))
+        ) {
+          const payload = { authorizationId: authorization.id };
+          await command(
+            runId,
+            "void",
+            payload,
+            (actionId) => api.voidAuthorization({ ...payload, actionId }),
+            !!voidOp,
+          );
+        }
+        await recordVoid(runId, api);
         return;
       }
       if (allowReplay && ["unknown", "sent"].includes(captureCommand.state)) {
@@ -1038,8 +1104,9 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
           (r) =>
             r.mode === "sandbox" &&
             (["queued", "approved"].includes(r.status) ||
-              ((r.status === "reconciling" || live(r).pendingWebhook) &&
-                live(r).reconcileAttempts < 12 &&
+              ((live(r).pendingWebhook ||
+                (r.status === "reconciling" &&
+                  live(r).reconcileAttempts < 12)) &&
                 (!live(r).lastReconciledAt ||
                   now - Date.parse(live(r).lastReconciledAt!) >= 15_000))),
         )
@@ -1051,7 +1118,19 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
           : run.status === "approved"
             ? "authorize"
             : "reconcile";
-      const allowReplay = run.status === "reconciling";
+      const allowReplay =
+        run.status === "reconciling" &&
+        !live(run).pendingWebhook &&
+        live(run).reconcileAttempts < 12;
+      const workerExecution = executionProvenance();
+      const executions = (run.workerExecutions ?? []) as ReturnType<
+        typeof executionProvenance
+      >[];
+      if (
+        !executions.some((entry) => sha256(entry) === sha256(workerExecution))
+      )
+        executions.push(workerExecution);
+      run.workerExecutions = executions;
       live(run).lease = {
         token: leaseToken,
         until: new Date(now + 5 * 60_000).toISOString(),

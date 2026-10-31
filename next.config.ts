@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
+import { readFileSync } from "node:fs";
+let buildProvenance = JSON.stringify({
+  revision: null,
+  dirty: true,
+  builtAt: null,
+});
+try {
+  buildProvenance = readFileSync(".build-provenance.json", "utf8");
+} catch {}
 const config: NextConfig = {
   poweredByHeader: false,
+  env: { COMRDY_BUILD_PROVENANCE: buildProvenance },
   async headers() {
     return [
       {

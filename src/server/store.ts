@@ -47,7 +47,10 @@ const globalStore = globalThis as typeof globalThis & {
 };
 function sqlClient() {
   return (globalStore.comrdySql ??= postgres(process.env.DATABASE_URL!, {
-    max: 4,
+    max: process.env.VERCEL ? 2 : 4,
+    idle_timeout: 20,
+    connect_timeout: 10,
+    prepare: false,
   }));
 }
 export async function transaction<T>(
@@ -65,8 +68,10 @@ export async function transaction<T>(
       return result;
     })) as T;
   }
-  if (process.env.APP_MODE === "sandbox")
-    throw new Error("Sandbox requires PostgreSQL durability");
+  if (process.env.APP_MODE === "sandbox" || process.env.VERCEL)
+    throw new Error(
+      "Hosted runs require PostgreSQL durability; configure DATABASE_URL. Local file storage is development-only.",
+    );
   const previous = globalStore.comrdyLock ?? Promise.resolve();
   const next = previous
     .catch(() => {})
@@ -102,6 +107,8 @@ export function publicRun(run: StoredRun) {
     decision: run.decision,
     payment: run.payment,
     createdAt: run.createdAt,
+    ...(run.execution ? { execution: run.execution } : {}),
+    ...(run.workerExecutions ? { workerExecutions: run.workerExecutions } : {}),
     ...(run.parentId ? { parentId: run.parentId } : {}),
     ...(run.evaluations ? { evaluations: run.evaluations } : {}),
     ...(run.evidence ? { evidence: run.evidence } : {}),

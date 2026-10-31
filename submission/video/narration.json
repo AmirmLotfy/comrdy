@@ -1,9 +1,44 @@
 [
- {"start":0,"seconds":12,"title":"A successful wrong purchase","text":"A payment can succeed and still be the wrong purchase. In this isolated PayPal Sandbox control, the capture succeeds. But the customer asked for medium. The order contains small."},
- {"start":12,"seconds":23,"title":"The instruction becomes a contract","text":"COMRDY is a transaction test lab for engineers building AI checkout. Start with a customer's instruction: one blue Ocean Shell, medium, at most one hundred sixty dollars delivered. No substitutions. No subscription. AI compiles the request into constraints. The buyer reviews the source phrases and confirms the contract."},
- {"start":35,"seconds":25,"title":"A controlled fault","text":"A shopping agent opens our controlled Northpath storefront and prepares the cart. The item is one hundred twenty-nine dollars. Shipping is ten. Tax is nine. The total is one hundred forty-eight. The buyer approves through PayPal Sandbox. We now deliberately inject the test fault: the merchant changes medium to small, at exactly the same price."},
- {"start":60,"seconds":30,"title":"Find the first divergence","text":"Payment authorization alone cannot detect this mistake. Intent Lineage shows where the purchase first diverged from the confirmed instruction. Medium becomes small between authorization and the final capture check. The deterministic gate denies capture. COMRDY then voids the authorization and retrieves PayPal's actual status. The test verdict and the payment status stay separate. A blocked test is only resolved when the provider confirms what happened."},
- {"start":90,"seconds":35,"title":"Recover within the same promise","text":"Now try one bounded recovery. We restore the requested medium without changing the original contract or increasing the budget. This is a fresh checkout attempt, with fresh buyer approval. COMRDY checks the merchant revision, the authorization, the amount, and every required constraint again. With all checks passing, it captures one hundred forty-eight dollars and records the merchant order. If the correction fails, recovery stops. This demonstrates recovery from a controlled fault, not a claim that an agent can repair every checkout."},
- {"start":125,"seconds":20,"title":"Inspectable evidence","text":"Each run keeps the instruction, observed states, first divergence, verdict, and redacted PayPal resources. Compare the blocked attempt with its recovery. Retry verification checks that duplicate commands do not create a second capture or merchant order. The report includes its sample sizes. Saved playback never invokes a payment."},
- {"start":145,"seconds":20,"title":"Test what the agent actually bought","text":"Teams can use COMRDY to reproduce checkout failures before changing an agent, model, or payment integration. Our second fault raises shipping and tests the delivered budget. The demo uses a controlled merchant and PayPal Sandbox throughout. Explore the evidence and the source. COMRDY. Test the purchase against the promise."}
+  {
+    "start": 0,
+    "seconds": 12,
+    "title": "What payment success cannot prove",
+    "text": "Payment success alone cannot verify a product. This Sandbox payment completes beside a local test fixture changed from medium to small. The control creates no merchant order."
+  },
+  {
+    "start": 12,
+    "seconds": 23,
+    "title": "The instruction becomes a contract",
+    "text": "COMRDY is a transaction test lab for engineers building AI checkout. Start with a customer's instruction: one blue Ocean Shell, medium, at most one hundred sixty dollars delivered. No substitutions. No subscription. AI compiles the request into constraints. The buyer reviews the source phrases and confirms the contract."
+  },
+  {
+    "start": 35,
+    "seconds": 25,
+    "title": "A controlled fault",
+    "text": "A shopping agent opens our controlled Northpath storefront and prepares the cart. The item is one hundred twenty-nine dollars. Shipping is ten. Tax is nine. The total is one hundred forty-eight. The buyer approves through PayPal Sandbox. We now deliberately inject the test fault: the merchant changes medium to small, at exactly the same price."
+  },
+  {
+    "start": 60,
+    "seconds": 30,
+    "title": "Find the first divergence",
+    "text": "Payment authorization alone cannot detect this mistake. Intent Lineage shows where the purchase first diverged from the confirmed instruction. Medium becomes small between authorization and the final capture check. The deterministic gate denies capture. COMRDY then voids the authorization and retrieves PayPal's actual status. The test verdict and the payment status stay separate. A blocked test is only resolved when the provider confirms what happened."
+  },
+  {
+    "start": 90,
+    "seconds": 35,
+    "title": "Recover within the same promise",
+    "text": "Now try one bounded recovery. We restore the requested medium without changing the original contract or increasing the budget. This is a fresh checkout attempt, with fresh buyer approval. COMRDY checks the merchant revision, the authorization, the amount, and every required constraint again. With all checks passing, it captures one hundred forty-eight dollars and records the merchant order. If the correction fails, recovery stops. This demonstrates recovery from a controlled fault, not a claim that an agent can repair every checkout."
+  },
+  {
+    "start": 125,
+    "seconds": 20,
+    "title": "Inspectable evidence",
+    "text": "Each run keeps the instruction, observed states, first divergence, verdict, and redacted PayPal resources. Compare the blocked attempt with its recovery. Retry verification checks that duplicate commands do not create a second capture or merchant order. The report includes its sample sizes. Saved playback never invokes a payment."
+  },
+  {
+    "start": 145,
+    "seconds": 20,
+    "title": "Test what the agent actually bought",
+    "text": "Teams can use COMRDY to reproduce checkout failures before changing an agent, model, or payment integration. Our second fault raises shipping and tests the delivered budget. The demo uses a controlled merchant and PayPal Sandbox throughout. Explore the evidence and the source. COMRDY. Test the purchase against the promise."
+  }
 ]

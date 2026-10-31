@@ -16,6 +16,10 @@ Use only PayPal Sandbox credentials. Set APP_MODE=sandbox, PAYPAL_ENV=sandbox, D
 
 Buyer approval is a separate human step. Captures must reference confirmed intent and the verified checkout revision. A blocked authorization must be voided and its provider state reconciled. Saved playback must never initiate a payment.
 
+## Deployment
+
+The website and API are prepared for Vercel CLI, with the durable worker and PostgreSQL kept as companion services. Run `npm run deploy:check` for a secret-free local preflight. [Deployment guide](docs/VERCEL_DEPLOYMENT.md) documents configuration, staged deployment, revision checks and remaining hosted acceptance.
+
 ## Source and evidence
 
 The original product blueprint remains in `comrdy_blueprint/`. `docs/IMPLEMENTATION_SCOPE.md` is the current release scope. `CURRENT_HANDOFF.md` records actual acceptance and unfinished work. Submission files are drafts until backed by qualified live evidence.

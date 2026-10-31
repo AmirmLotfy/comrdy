@@ -3,6 +3,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import assert from "node:assert/strict";
 import { transaction } from "../src/server/store";
 import { PayPalSandboxAdapter } from "../src/providers/paypal";
+import { assertQualifiedCapture } from "./lib/qualification";
+import { verifyContractHash } from "../src/core/invariants";
 nextEnv.loadEnvConfig(process.cwd());
 const ids = process.argv.slice(2);
 if (ids.length !== 9)
@@ -25,6 +27,37 @@ const runs = await transaction((db) =>
     return structuredClone(run);
   }),
 );
+const executions = runs.map((run) => {
+  const execution = run.execution as
+    | { revision: string | null; dirty: boolean; builtAt: string | null }
+    | undefined;
+  assert.ok(
+    execution &&
+      typeof execution.revision === "string" &&
+      /^[a-f0-9]{40}$/.test(execution.revision),
+    "Run must record its execution commit",
+  );
+  assert.equal(
+    execution.dirty,
+    false,
+    "Release runs must execute a clean build",
+  );
+  const workers = run.workerExecutions as (typeof execution)[] | undefined;
+  assert.ok(workers?.length, "Worker execution provenance is required");
+  assert.ok(
+    workers.every(
+      (worker) =>
+        worker.revision === execution.revision && worker.dirty === false,
+    ),
+    "Every worker must execute the same clean revision as the run",
+  );
+  return execution;
+});
+assert.equal(
+  new Set(executions.map((execution) => execution.revision)).size,
+  1,
+  "All release runs must execute the same commit",
+);
 const results = [];
 for (const fault of ["none", "variant", "shipping"])
   assert.equal(
@@ -41,20 +74,37 @@ for (const run of runs) {
     );
     assert.equal(order.customId, run.id);
     assert.equal(order.payeeId, process.env.PAYPAL_MERCHANT_ID);
+    assert.deepEqual(order.amount, { amountMinor: 14800, currency: "USD" });
+    assert.deepEqual(authorization.amount, {
+      amountMinor: 14800,
+      currency: "USD",
+    });
+    if (authorization.orderId) assert.equal(authorization.orderId, order.id);
+    if (authorization.payeeId)
+      assert.equal(authorization.payeeId, order.payeeId);
     assert.ok(order.authorizationIds.includes(authorization.id));
+    assert.ok(verifyContractHash(run.contract));
     if (run.fault === "none") {
       assert.equal(run.decision.verdict, "ALLOW");
       assert.ok(run.payment.captureId);
       const capture = await api.getCapture(run.payment.captureId);
-      assert.equal(capture.status, "COMPLETED");
-      assert.deepEqual(capture.amount, { amountMinor: 14800, currency: "USD" });
-      assert.equal(capture.finalCapture, true);
+      assertQualifiedCapture({
+        order,
+        authorization,
+        capture,
+        caseId: run.id,
+        payeeId: process.env.PAYPAL_MERCHANT_ID!,
+      });
       assert.equal((run.merchantOrder as any)?.captureId, capture.id);
-      assert.equal(new Set(order.captureIds).size, 1);
+      assert.equal((run.merchantOrder as any)?.caseId, run.id);
+      assert.equal((run.merchantOrder as any)?.size, "M");
+      assert.deepEqual((run.merchantOrder as any)?.amount, capture.amount);
       results.push({
         id: run.id,
         fault: run.fault,
         passed: true,
+        order: { ...order, approvalUrl: null },
+        contractHash: run.contract.hash,
         authorization,
         capture,
       });
@@ -68,6 +118,8 @@ for (const run of runs) {
         id: run.id,
         fault: run.fault,
         passed: true,
+        order: { ...order, approvalUrl: null },
+        contractHash: run.contract.hash,
         authorization,
       });
     }
@@ -85,6 +137,9 @@ const report = {
   generatedAt: new Date().toISOString(),
   passed: results.filter((r) => r.passed).length,
   total: 9,
+  execution: executions[0],
+  selection:
+    "Nine operator-selected original runs from one recorded clean revision; consecutive execution requires a separate release receipt.",
   results,
 };
 await mkdir("artifacts", { recursive: true });

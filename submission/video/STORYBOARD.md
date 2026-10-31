@@ -4,7 +4,7 @@ Status: production specification, not a completed video. Record only qualified r
 
 | Seconds | Footage | Narration intent |
 |---|---|---|
-| 0–12 | Operator-only ungated Sandbox control, genuine capture and wrong size | You asked for medium. The payment succeeded. The purchase was wrong. |
+| 0–12 | Operator-only Sandbox payment control, retrieved capture and explicitly labeled local M-to-S fixture mutation | A payment can complete beside changed fixture data. This control creates no merchant order and does not prove a wrong-size purchase. |
 | 12–35 | Actual AI compile and human confirmation | COMRDY turns the buyer's instructions into explicit checks for engineers building AI checkout. |
 | 35–60 | Shopper, buyer approval, disclosed mutation | The agent selected medium. Our controlled merchant injects a stale variant after authorization. |
 | 60–90 | Lineage and provider-confirmed void | The first wrong value is visible. Capture is blocked and the authorization is voided. |

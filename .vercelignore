@@ -1,0 +1,13 @@
+.git
+.env*
+node_modules
+.next
+.data
+artifacts
+*.tsbuildinfo
+CURRENT_HANDOFF.md
+comrdy_blueprint
+submission
+video
+tests
+public/media

@@ -1,6 +1,8 @@
 import nextEnv from "@next/env";
 import { setTimeout as pause } from "node:timers/promises";
 nextEnv.loadEnvConfig(process.cwd());
+const { assertWorkerSource } = await import("./worker-source");
+assertWorkerSource();
 const { processSandboxJobs } = await import("./sandbox");
 let stopping = false;
 for (const signal of ["SIGINT", "SIGTERM"] as const)

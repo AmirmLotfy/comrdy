@@ -22,6 +22,7 @@ export function status() {
     ready,
     liveReady: Object.values(ready).every(Boolean),
     spendingLimitUSD: 100,
+    storageReady: !process.env.VERCEL || ready.database,
     accessCodeRequired: process.env.APP_MODE === "sandbox",
   };
 }

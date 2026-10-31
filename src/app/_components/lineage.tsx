@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import {
   ArrowRight,
+  ArrowUpRight,
   Braces,
   Check,
   ChevronLeft,
@@ -216,8 +217,7 @@ export function Lineage({
     <div className="lineage-panel">
       <div className="panel-heading">
         <div>
-          <span className="mini-label">INTENT LINEAGE</span>
-          <h3>Every checkpoint. The same promise.</h3>
+          <h3>Constraint evidence</h3>
         </div>
         <span className="lineage-legend">
           <span className="legend-dot" />
@@ -306,6 +306,81 @@ export function Lineage({
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="lineage-mobile">
+        <div className="mobile-contract-summary">
+          <span>Confirmed intent</span>
+          <strong>
+            Size {size ?? "unspecified"} ·{" "}
+            {cap === undefined
+              ? "No total specified"
+              : `≤ ${money(cap, currency)}`}
+          </strong>
+        </div>
+        {snapshots.map((snapshot, index) => (
+          <section
+            className="checkpoint-card"
+            key={`${snapshot.checkpoint}-${index}`}
+            aria-label={checkpointName(snapshot.checkpoint)}
+          >
+            <header>
+              <span className="mono">{String(index + 1).padStart(2, "0")}</span>
+              <h4>{checkpointName(snapshot.checkpoint)}</h4>
+              <span>Revision {snapshot.revision}</span>
+            </header>
+            {rows.map((row) => {
+              const invalid = row.invalid(snapshot);
+              const unknown = row.unknown(snapshot);
+              const content = (
+                <>
+                  <span>{row.label}</span>
+                  <span className="checkpoint-values">
+                    <span>{row.expected}</span>
+                    <ArrowRight size={14} />
+                    <strong>{row.value(snapshot)}</strong>
+                  </span>
+                  <small>
+                    {invalid
+                      ? index === snapshots.findIndex(row.invalid)
+                        ? "First drift"
+                        : "Outside intent"
+                      : unknown
+                        ? "Evidence missing"
+                        : "Observed"}
+                    {onInspect && <ArrowUpRight size={12} />}
+                  </small>
+                </>
+              );
+              return onInspect ? (
+                <button
+                  key={row.key}
+                  className={`checkpoint-fact ${invalid ? "invalid" : unknown ? "unknown" : ""}`}
+                  onClick={() =>
+                    onInspect({
+                      title: `${row.label} · ${checkpointName(snapshot.checkpoint)}`,
+                      subtitle: `Source: ${snapshot.source}. Revision ${snapshot.revision}.`,
+                      data: {
+                        mode: run.mode,
+                        expected: row.expected,
+                        observed: row.value(snapshot),
+                        snapshot,
+                      },
+                    })
+                  }
+                >
+                  {content}
+                </button>
+              ) : (
+                <div
+                  key={row.key}
+                  className={`checkpoint-fact ${invalid ? "invalid" : unknown ? "unknown" : ""}`}
+                >
+                  {content}
+                </div>
+              );
+            })}
+          </section>
+        ))}
       </div>
       <div className={`lineage-caption ${firstDrift >= 0 ? "has-drift" : ""}`}>
         {firstDrift >= 0 ? (
@@ -449,7 +524,7 @@ export function RunResult({
             rel="noreferrer"
           >
             Approve in PayPal Sandbox
-            <ArrowUpRightIcon />
+            <ArrowUpRight size={12} />
           </a>
         </div>
       )}
@@ -478,7 +553,7 @@ export function RunResult({
               className="button small ghost"
             >
               Full evidence
-              <ArrowUpRightIcon />
+              <ArrowUpRight size={12} />
             </Link>
           )}
         </div>

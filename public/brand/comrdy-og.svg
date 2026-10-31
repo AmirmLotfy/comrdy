@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+<rect width="1200" height="630" fill="#fff"/><path d="M0 0H1200" stroke="#0b63f6" stroke-width="12"/>
+<g transform="translate(54 45) scale(1.15)"><path d="M28 7H15L7 15V25L15 33H28M30 15V25" stroke="#0b63f6" stroke-width="5"/><path d="M18 20H25M35 20H39" stroke="#71e2ed" stroke-width="4"/></g>
+<g font-family="Arial, Helvetica, sans-serif"><text x="111" y="80" fill="#0c1117" font-size="30" font-weight="700" letter-spacing="-1.5">COMRDY<tspan fill="#0b63f6">.</tspan></text>
+<text x="57" y="162" fill="#0b63f6" font-size="14" letter-spacing="1.6">TRANSACTION ASSURANCE FOR AI CHECKOUT</text>
+<text x="54" y="245" fill="#0c1117" font-size="56" letter-spacing="-2.5">Test the purchase.</text><text x="54" y="311" fill="#0c1117" font-size="56" letter-spacing="-2.5">Before the capture.</text>
+<text x="57" y="377" fill="#47515e" font-size="21">A confirmed contract. A changed merchant state.</text><text x="57" y="410" fill="#47515e" font-size="21">An inspectable decision.</text>
+<rect x="57" y="459" width="224" height="48" rx="4" fill="#0b63f6"/><text x="78" y="490" fill="#fff" font-size="16">Run the failure case</text><path d="M245 482H258M252 476L258 482L252 488" stroke="#fff" stroke-width="1.5"/>
+<rect x="676" y="134" width="474" height="402" fill="#e9f8fb"/><rect x="662" y="120" width="474" height="402" fill="#0b54c4"/>
+<path d="M662 170H1136" stroke="#76a7eb" stroke-opacity=".55"/><text x="687" y="152" fill="#fff" font-size="12" letter-spacing=".7">01 / VARIANT DRIFT</text><text x="1007" y="152" fill="#d5e8ff" font-size="11">Illustrative example</text>
+<text x="687" y="207" fill="#d5e8ff" font-size="12">Confirmed contract</text><text x="687" y="231" fill="#fff" font-size="14">Ocean Shell / Blue / One / ≤ $160</text>
+<text x="700" y="277" fill="#d5e8ff" font-size="11" letter-spacing="1">REQUESTED</text><text x="969" y="277" fill="#d5e8ff" font-size="11" letter-spacing="1">FINAL CHECK</text>
+<text x="695" y="384" fill="#71e2ed" font-size="115" letter-spacing="-6">M</text><text x="967" y="384" fill="#ffb9ac" font-size="115" letter-spacing="-6">S</text><path d="M824 341H935M927 333L935 341L927 349" stroke="#71e2ed" stroke-width="2"/>
+<text x="838" y="320" fill="#d5e8ff" font-size="12">size changed</text><path d="M687 411H1111" stroke="#76a7eb" stroke-opacity=".55"/>
+<text x="687" y="439" fill="#d5e8ff" font-size="13">Amount: $148.00</text><text x="988" y="439" fill="#d5e8ff" font-size="12">Within budget</text>
+<rect x="662" y="458" width="474" height="64" fill="#e9f8fb"/><text x="687" y="497" fill="#072b57" font-size="20">Capture blocked</text><text x="1059" y="495" fill="#b42318" font-size="13" letter-spacing="1.2">DENY</text>
+<path d="M57 563H1136" stroke="#d9dee5"/><text x="57" y="598" fill="#697586" font-size="12">Controlled merchant · Simulation or PayPal Sandbox · No real-money payments</text><text x="857" y="598" fill="#697586" font-size="12">Contract → observation → decision</text></g></svg>

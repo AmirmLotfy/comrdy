@@ -8,3 +8,8 @@ artifacts/
 .DS_Store
 public/media/**/*.wav
 public/media/**/*.mp4
+
+.build-provenance.json
+
+.vercel/
+.vercel

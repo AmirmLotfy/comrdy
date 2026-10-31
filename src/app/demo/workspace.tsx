@@ -222,9 +222,8 @@ export function DemoWorkspace() {
   return (
     <AppShell title="Test lab">
       <PageHeading
-        eyebrow="CONTROLLED TRANSACTION LAB"
-        title="Keep the purchase inside the promise."
-        description="Confirm an intent. Introduce a fault. Inspect the exact decision."
+        title="Test a transaction"
+        description="Confirm the contract, choose a failure, then inspect the decision."
         action={
           <Link href="/store" className="button secondary small">
             Open demo store
@@ -232,6 +231,31 @@ export function DemoWorkspace() {
           </Link>
         }
       />
+      <ol className="setup-progress" aria-label="Test setup progress">
+        <li className={contract ? "complete" : "current"}>
+          <span>{contract ? <Check size={13} /> : "01"}</span>
+          <div>
+            <strong>Compile intent</strong>
+            <small>
+              {contract ? "Contract prepared" : "Start with the instruction"}
+            </small>
+          </div>
+        </li>
+        <li className={confirmed ? "complete" : contract ? "current" : ""}>
+          <span>{confirmed ? <Check size={13} /> : "02"}</span>
+          <div>
+            <strong>Confirm constraints</strong>
+            <small>{confirmed ? "Intent locked" : "Review the boundary"}</small>
+          </div>
+        </li>
+        <li className={confirmed ? "current" : ""}>
+          <span>03</span>
+          <div>
+            <strong>Run & inspect</strong>
+            <small>Choose a controlled failure</small>
+          </div>
+        </li>
+      </ol>
       <div className="lab-context">
         <div>
           <span className="context-dot" />
@@ -369,16 +393,11 @@ export function DemoWorkspace() {
           {!contract ? (
             <div className="contract-placeholder">
               <FileCheck2 size={28} />
-              <h3>The instruction becomes the boundary.</h3>
+              <h3>Waiting for a contract</h3>
               <p>
                 Compile the example to review its exact constraints. Your
                 confirmation is required before a run.
               </p>
-              <div className="placeholder-lines" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </div>
             </div>
           ) : (
             <>
@@ -638,13 +657,13 @@ export function DemoWorkspace() {
                           : item.id}
                       </Link>
                     </td>
-                    <td>
+                    <td data-label="Condition">
                       {faultLabels[item.fault] ?? item.fault}
                       {item.parentId && (
                         <span className="inline-note">Recovery</span>
                       )}
                     </td>
-                    <td>
+                    <td data-label="Decision">
                       <StatusPill
                         verdict={
                           isRunPending(item)
@@ -653,7 +672,7 @@ export function DemoWorkspace() {
                         }
                       />
                     </td>
-                    <td>
+                    <td data-label="Environment">
                       <span className="table-mode">
                         {item.mode === "sandbox"
                           ? "PayPal Sandbox"
@@ -758,17 +777,17 @@ function ObservedCounts({ runs }: { runs: Run[] }) {
                   <strong>{group.scenario}</strong>
                   <span className="table-mode">{group.mode}</span>
                 </td>
-                <td>{group.total}</td>
-                <td>
+                <td data-label="Recorded">{group.total}</td>
+                <td data-label="Allow / evaluated">
                   {group.allow} / {group.evaluated}
                 </td>
-                <td>
+                <td data-label="Deny / evaluated">
                   {group.deny} / {group.evaluated}
                 </td>
-                <td>
+                <td data-label="Review / evaluated">
                   {group.review} / {group.evaluated}
                 </td>
-                <td>{group.excluded}</td>
+                <td data-label="Not evaluated">{group.excluded}</td>
               </tr>
             ))}
           </tbody>

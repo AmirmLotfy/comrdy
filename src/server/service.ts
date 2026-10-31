@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { transaction, publicRun, type StoredRun } from "./store";
 import { releaseLibrary } from "./library";
 import { status } from "./config";
+import { executionProvenance } from "./provenance";
 import {
   createCanonicalContract,
   createCanonicalSnapshot,
@@ -116,6 +117,7 @@ export async function start(
       id,
       owner,
       mode: "simulation",
+      execution: executionProvenance(),
       fault,
       status: "completed",
       contract,

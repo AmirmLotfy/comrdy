@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
-    "build": "next build",
+    "build": "tsx scripts/build-provenance.ts && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
@@ -13,7 +13,9 @@
     "video:render": "tsx scripts/render-video.ts",
     "serve": "tsx scripts/serve.ts",
     "qualify:intent": "tsx scripts/qualify-intent.ts",
-    "format": "prettier --write src scripts tests video next.config.ts"
+    "format": "prettier --write src scripts tests video next.config.ts",
+    "build:provenance": "tsx scripts/build-provenance.ts",
+    "deploy:check": "tsx scripts/vercel-preflight.ts"
   },
   "dependencies": {
     "@onkernel/sdk": "^0.139.0",
@@ -40,5 +42,8 @@
   "type": "module",
   "overrides": {
     "zod": "$zod"
+  },
+  "engines": {
+    "node": ">=22.13.0 <23"
   }
 }

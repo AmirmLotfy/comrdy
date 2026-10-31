@@ -573,6 +573,8 @@ function sandboxHarness(
   options: {
     captureTimeout?: "before" | "after";
     capturePending?: boolean;
+    captureRejected?: boolean;
+    voidRejected?: boolean;
     shopperFails?: boolean;
     changeBeforeCapture?: boolean;
   } = {},
@@ -662,6 +664,8 @@ function sandboxHarness(
           null,
           true,
         );
+      if (options.captureRejected)
+        throw new PayPalError("Rejected capture", "CAPTURE_DENIED", 422, false);
       captured = true;
       authorizationStatus = "CAPTURED";
       if (options.captureTimeout === "after" && calls.capture === 1)
@@ -678,6 +682,8 @@ function sandboxHarness(
     },
     async voidAuthorization() {
       calls.void++;
+      if (options.voidRejected)
+        throw new PayPalError("Rejected void", "VOID_DENIED", 422, false);
       authorizationStatus = "VOIDED";
     },
     async getCheckpoint() {
@@ -745,6 +751,14 @@ function sandboxHarness(
     service,
     calls,
     fakeProvider,
+    setCaptureStatus: (status: "PENDING" | "COMPLETED") => {
+      captureResult.status = status;
+    },
+    setAuthorizationStatus: (
+      status: ProviderCheckpoint["authorizationStatus"],
+    ) => {
+      authorizationStatus = status;
+    },
     advance: (milliseconds: number) => {
       time = new Date(time.getTime() + milliseconds);
     },
@@ -1075,4 +1089,116 @@ test("cancellation is idempotent before authorization and cannot abandon a finan
       h.service.cancel(second.id, "owner"),
       /active authorization/,
     );
+  }));
+
+test("definitive capture rejection keeps the authorization unresolved until confirmed void", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness({ captureRejected: true });
+    const created = await h.service.start(
+      { id: h.contract.id },
+      "none",
+      "owner",
+    );
+    await h.service.processJobs();
+    await h.service.approve(created.id, "owner");
+    await h.service.processJobs();
+    const run = h.db.runs[created.id]!;
+    assert.equal(run.status, "reconciling");
+    assert.equal(run.payment.status, "AUTHORIZED");
+    await assert.rejects(
+      h.service.start({ id: h.contract.id }, "none", "owner"),
+      /reconcile/,
+    );
+    await h.service.processJobs();
+    assert.equal(run.status, "payment_failed");
+    assert.equal(run.payment.status, "VOIDED");
+    assert.equal(run.decision.verdict, "ALLOW");
+    assert.equal(h.calls.capture, 1);
+    assert.equal(h.calls.void, 1);
+    assert.equal(run.merchantOrder, undefined);
+    await h.service.start({ id: h.contract.id }, "none", "owner");
+  }));
+
+test("definitive void rejection is read back without retrying and blocks another economic attempt", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness({ voidRejected: true });
+    const created = await h.service.start(
+      { id: h.contract.id },
+      "variant",
+      "owner",
+    );
+    await h.service.processJobs();
+    await h.service.approve(created.id, "owner");
+    await h.service.processJobs();
+    const run = h.db.runs[created.id]!;
+    assert.equal(run.status, "reconciling");
+    await h.service.processJobs();
+    assert.equal(run.payment.status, "CREATED");
+    assert.equal(run.status, "reconciling");
+    assert.equal(h.calls.capture, 0);
+    assert.equal(h.calls.void, 1);
+    // The unresolved-resource guard also protects older infra_failed records.
+    run.status = "infra_failed";
+    await assert.rejects(
+      h.service.start({ id: h.contract.id }, "none", "owner"),
+      /reconcile/,
+    );
+    run.status = "reconciling";
+    (run.live as { reconcileAttempts: number }).reconcileAttempts = 11;
+    h.advance(16_000);
+    await h.service.processJobs();
+    assert.equal(run.status, "inconclusive");
+    h.setAuthorizationStatus("VOIDED");
+    h.advance(16_000);
+    await h.service.webhook(
+      JSON.stringify({
+        id: "WH-late-void",
+        event_type: "PAYMENT.AUTHORIZATION.VOIDED",
+        resource: { id: "AUTH123" },
+      }),
+      {},
+    );
+    await h.service.processJobs();
+    assert.equal(run.status, "blocked");
+    assert.equal(run.payment.status, "VOIDED");
+    assert.equal(h.calls.void, 1);
+  }));
+
+test("a late verified webhook performs read-only reconciliation after periodic budget exhaustion", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness({ capturePending: true });
+    const created = await h.service.start(
+      { id: h.contract.id },
+      "none",
+      "owner",
+    );
+    await h.service.processJobs();
+    await h.service.approve(created.id, "owner");
+    await h.service.processJobs();
+    const run = h.db.runs[created.id]!;
+    (run.live as { reconcileAttempts: number }).reconcileAttempts = 11;
+    await h.service.processJobs();
+    assert.equal(run.status, "inconclusive");
+    h.setCaptureStatus("COMPLETED");
+    h.advance(16_000);
+    const notification = JSON.stringify({
+      id: "WH-late-capture",
+      event_type: "PAYMENT.CAPTURE.COMPLETED",
+      resource: { id: "CAPTURE123" },
+    });
+    await h.service.webhook(notification, {});
+    await h.service.processJobs();
+    assert.equal(run.status, "completed");
+    assert.equal(run.payment.status, "COMPLETED");
+    assert.equal(run.decision.verdict, "ALLOW");
+    assert.doesNotMatch(run.decision.reason, /manual reconciliation/);
+    assert.equal((run.workerExecutions as unknown[]).length, 1);
+    assert.equal(
+      (run.merchantOrder as { captureId: string }).captureId,
+      "CAPTURE123",
+    );
+    assert.equal(h.calls.capture, 1);
+    assert.equal(h.calls.void, 0);
+    assert.equal((await h.service.webhook(notification, {})).duplicate, true);
+    assert.equal((await h.service.processJobs()).processed, false);
   }));

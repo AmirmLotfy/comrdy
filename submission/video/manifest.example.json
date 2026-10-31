@@ -1,1 +1,50 @@
-{"qualified":false,"release":"REPLACE_WITH_SOURCE_COMMIT","providerRunIds":[],"narration":"media/narration/final.wav","clips":[{"file":"media/01-control.mp4","start":0,"seconds":12,"caption":"Isolated ungated control · PayPal Sandbox"},{"file":"media/02-contract.mp4","start":12,"seconds":23,"caption":"AI compilation → human confirmation"},{"file":"media/03-fault.mp4","start":35,"seconds":25,"caption":"Controlled fault: medium → small"},{"file":"media/04-void.mp4","start":60,"seconds":30,"caption":"Capture blocked · authorization void confirmed"},{"file":"media/05-recovery.mp4","start":90,"seconds":35,"caption":"Same contract · fresh approval · correct purchase"},{"file":"media/06-evidence.mp4","start":125,"seconds":20,"caption":"Inspect the verdict and the provider evidence"},{"file":"media/07-close.mp4","start":145,"seconds":20,"caption":"COMRDY · Test the purchase against the promise"}]}
+{
+  "qualified": false,
+  "release": "REPLACE_WITH_SOURCE_COMMIT",
+  "providerRunIds": [],
+  "narration": "media/narration/final.wav",
+  "clips": [
+    {
+      "file": "media/01-control.mp4",
+      "start": 0,
+      "seconds": 12,
+      "caption": "Sandbox payment + local fixture mutation \u00b7 No merchant order"
+    },
+    {
+      "file": "media/02-contract.mp4",
+      "start": 12,
+      "seconds": 23,
+      "caption": "AI compilation \u2192 human confirmation"
+    },
+    {
+      "file": "media/03-fault.mp4",
+      "start": 35,
+      "seconds": 25,
+      "caption": "Controlled fault: medium \u2192 small"
+    },
+    {
+      "file": "media/04-void.mp4",
+      "start": 60,
+      "seconds": 30,
+      "caption": "Capture blocked \u00b7 authorization void confirmed"
+    },
+    {
+      "file": "media/05-recovery.mp4",
+      "start": 90,
+      "seconds": 35,
+      "caption": "Same contract \u00b7 fresh approval \u00b7 correct purchase"
+    },
+    {
+      "file": "media/06-evidence.mp4",
+      "start": 125,
+      "seconds": 20,
+      "caption": "Inspect the verdict and the provider evidence"
+    },
+    {
+      "file": "media/07-close.mp4",
+      "start": 145,
+      "seconds": 20,
+      "caption": "COMRDY \u00b7 Test the purchase against the promise"
+    }
+  ]
+}

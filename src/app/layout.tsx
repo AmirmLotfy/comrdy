@@ -13,7 +13,35 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const siteUrl =
+  process.env.APP_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://127.0.0.1:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    type: "website",
+    siteName: "COMRDY",
+    title: "COMRDY — Test the purchase. Before the capture.",
+    description:
+      "A confirmed contract. A changed merchant state. An inspectable decision. A controlled test lab for AI checkout.",
+    images: [
+      {
+        url: "/brand/comrdy-og.png",
+        width: 1200,
+        height: 630,
+        alt: "COMRDY transaction assurance: requested size M changes to S, so capture is blocked. Illustrative example.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "COMRDY — Test the purchase. Before the capture.",
+    description: "Test AI checkout against the customer's confirmed intent.",
+    images: ["/brand/comrdy-og.png"],
+  },
   title: {
     default: "COMRDY — Keep the purchase inside the promise",
     template: "%s · COMRDY",

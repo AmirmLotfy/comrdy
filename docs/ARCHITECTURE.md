@@ -2,11 +2,11 @@
 
 ```mermaid
 flowchart LR
- U[Engineer / buyer] --> W[Next.js test lab]
+ U[Engineer / buyer] --> W[Vercel Next.js test lab / API]
  W --> C[OpenAI intent compiler]
  C --> H[Human confirmation]
  H --> D[(PostgreSQL state and leases)]
- D --> J[Single worker]
+ D --> J[Persistent companion worker]
  J --> A[Constrained AI shopper]
  A --> K[KERNEL isolated browser]
  K --> M[Controlled Northpath merchant]
@@ -30,4 +30,6 @@ The small demo uses one PostgreSQL JSON state record under a transaction advisor
 
 The public interface permits compile, confirm, start/read/stream, buyer-approved continuation, one recovery, evidence retrieval and verified webhooks. Capture and void have no public execution endpoint. Fresh paid execution requires an operator access code; saved exported evidence is public without signup. Global daily quotas limit compiler calls and fresh attempts. Provider dashboard spending alerts remain necessary because quotas are not a currency billing meter.
 
-Simulation mode uses local serialized JSON storage and fixed fixtures. It is useful for development and is visibly labeled; it is not payment or model qualification. Sandbox mode requires PostgreSQL and all provider configuration. Keep a persistent disk for bounded screenshots and an exported public release library; keep secrets and raw traces out of exports.
+Local simulation uses serialized JSON storage and fixed fixtures. Hosted simulation requires PostgreSQL; Vercel never falls back to ephemeral filesystem state. It is useful for development and is visibly labeled; it is not payment or model qualification. Sandbox mode requires PostgreSQL and all provider configuration. Keep a persistent disk for bounded screenshots and an exported public release library; keep secrets and raw traces out of exports.
+
+The prepared Vercel deployment shares one canonical origin and database with the companion worker. See `VERCEL_DEPLOYMENT.md` for CLI configuration, retention budget and execution revision gates. Source consistency metadata is separate from provider truth.

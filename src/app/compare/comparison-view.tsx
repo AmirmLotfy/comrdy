@@ -117,8 +117,7 @@ export function ComparisonView({
   return (
     <AppShell title="Compare runs">
       <PageHeading
-        eyebrow="BEFORE / AFTER"
-        title="See what changed. Keep the context."
+        title="Compare recorded runs"
         description="Compare recorded attempts against their confirmed intent. A recovery never overwrites the original."
       />
       <ErrorNotice message={error} />
@@ -214,8 +213,8 @@ export function ComparisonView({
                           key={row.label}
                         >
                           <th scope="row">{row.label}</th>
-                          <td>{a}</td>
-                          <td>
+                          <td data-column="Original / A">{a}</td>
+                          <td data-column="Comparison / B">
                             {a !== b && <ArrowRight size={13} />}
                             <span>{b}</span>
                             {a !== b && (

@@ -3,13 +3,16 @@ import { mkdir, readFile, writeFile, rename, rmdir } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { PayPalSandboxAdapter } from "../src/providers/paypal";
 import { createCanonicalState } from "../src/core/fixtures";
+import assert from "node:assert/strict";
+import { assertQualifiedCapture } from "./lib/qualification";
 nextEnv.loadEnvConfig(process.cwd());
 if (
   process.env.PAYPAL_ENV !== "sandbox" ||
-  process.env.ALLOW_UNGATED_CONTROL !== "true"
+  process.env.ALLOW_UNGATED_CONTROL !== "true" ||
+  !process.env.PAYPAL_MERCHANT_ID
 )
   throw new Error(
-    "Operator-only Sandbox control requires PAYPAL_ENV=sandbox and ALLOW_UNGATED_CONTROL=true. Never expose this script through the web application.",
+    "Operator-only Sandbox control requires PAYPAL_ENV=sandbox, ALLOW_UNGATED_CONTROL=true and the expected PAYPAL_MERCHANT_ID. Never expose this script through the web application.",
   );
 const phase = process.argv[2];
 if (!["prepare", "complete", "inspect"].includes(phase))
@@ -64,7 +67,9 @@ try {
     const id = randomUUID();
     record = {
       id,
-      kind: "operator-only-ungated-sandbox-control",
+      kind: "operator-only-fixture-mutation-sandbox-payment-control",
+      evidenceLimit:
+        "A real Sandbox payment beside a deliberately mutated local merchant fixture. No shopper, Northpath cart or merchant order is created; this is not wrong-size purchase or fulfillment evidence.",
       status: "creating",
       commands: {},
       originalMerchantState: createCanonicalState("none"),
@@ -120,6 +125,8 @@ try {
         throw new Error(
           "A fresh, matching buyer-approved order is required. Use inspect for previously dispatched commands.",
         );
+      assert.equal(order.payeeId, process.env.PAYPAL_MERCHANT_ID);
+      assert.deepEqual(order.amount, { amountMinor: 14800, currency: "USD" });
       const authorized: any = await write("authorize", () =>
         api.authorize({
           orderId: order.id,
@@ -130,7 +137,7 @@ try {
         throw new Error("Authorization is ambiguous; inspect provider.");
       record.mutatedMerchantState = createCanonicalState("variant");
       record.disclosedFault =
-        "M → S after authorization, same $148 price. No protection gate in this isolated control.";
+        "Local fixture M → S after authorization, same $148 price. No merchant order exists and no protection gate is invoked in this isolated payment control.";
       await save();
       const captured: any = await write("capture", () =>
         api.capture({
@@ -139,10 +146,26 @@ try {
           actionId: record.id + "-capture",
         }),
       );
+      record.status = "needs_reconciliation";
+      await save();
       record.observedCapture = await api.getCapture(captured.id);
+      if (record.observedCapture.status === "COMPLETED") {
+        record.observedOrder = await api.getOrder(order.id);
+        record.observedAuthorization = await api.getAuthorization(
+          authorized.authorizationIds[0],
+        );
+        await save();
+        assertQualifiedCapture({
+          order: record.observedOrder,
+          authorization: record.observedAuthorization,
+          capture: record.observedCapture,
+          caseId: record.id,
+          payeeId: process.env.PAYPAL_MERCHANT_ID!,
+        });
+      }
       record.status =
         record.observedCapture.status === "COMPLETED"
-          ? "control_completed"
+          ? "payment_control_capture_completed"
           : "needs_reconciliation";
       await save();
       console.log(
