@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import postgres from "postgres";
 import { transaction } from "../src/server/store";
 const url = process.env.TEST_DATABASE_URL;
 test(
@@ -33,6 +34,21 @@ test(
     await Promise.all([child(), child(), child()]);
     const count = await transaction((db) => db.quotas?.[key]);
     assert.equal(count, 30);
+    const inspector = postgres(url!, { max: 1 });
+    try {
+      const [before] =
+        await inspector`SELECT xmin::text AS version FROM comrdy_state WHERE key='main'`;
+      await transaction((db) => db.quotas?.[key]);
+      const [after] =
+        await inspector`SELECT xmin::text AS version FROM comrdy_state WHERE key='main'`;
+      assert.equal(
+        after!.version,
+        before!.version,
+        "Read-only polls must not create a new PostgreSQL row version",
+      );
+    } finally {
+      await inspector.end();
+    }
     await transaction((db) => {
       delete db.quotas![key];
     });

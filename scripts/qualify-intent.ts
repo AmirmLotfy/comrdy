@@ -11,6 +11,18 @@ if (!process.argv.includes("--live"))
     "Explicit --live required: this calls the paid OpenAI API for 20 requests.",
   );
 if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY required");
+if (process.env.NODE_ENV !== "production" || process.env.APP_MODE !== "sandbox")
+  throw new Error(
+    "Use NODE_ENV=production APP_MODE=sandbox for release qualification.",
+  );
+const { assertWorkerSource } = await import("../src/server/worker-source");
+assertWorkerSource();
+const { executionProvenance } = await import("../src/server/provenance");
+const execution = executionProvenance();
+if (!execution.revision || execution.dirty)
+  throw new Error(
+    "Qualify a clean pinned build before making paid corpus requests.",
+  );
 const corpus: IntentFixture[] = JSON.parse(
   await readFile("tests/fixtures/intent-corpus.json", "utf8"),
 );
@@ -39,6 +51,7 @@ for (const item of corpus) {
 const report = {
   generatedAt: new Date().toISOString(),
   kind: "live-openai-intent-corpus",
+  execution,
   passed: results.filter((r) => r.passed).length,
   total: corpus.length,
   executable: {

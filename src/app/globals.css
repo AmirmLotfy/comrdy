@@ -2540,43 +2540,9 @@ summary::marker {
   font-size: 10px;
 }
 
-.outcome-brand {
-  width: 27px;
-  height: 27px;
-}
-
 .transaction-diagram {
+  padding: 0 24px;
   position: relative;
-  padding: 8px 0 20px;
-}
-
-.transaction-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-.diagram-label {
-  fill: #d7eaff;
-  font: 12px var(--font-mono);
-  letter-spacing: 0.7px;
-}
-
-.diagram-size {
-  fill: var(--cyan);
-  font: 108px var(--font-sans);
-  font-weight: 400;
-  letter-spacing: -8px;
-}
-
-.diagram-size-drift {
-  fill: #ffb9ac;
-}
-
-.diagram-annotation {
-  fill: #d7eaff;
-  font: 11px var(--font-mono);
 }
 
 .diagram-wire {
@@ -2595,52 +2561,19 @@ summary::marker {
   animation: signal-trace 1.2s var(--ease-out) both;
 }
 
-.diagram-trace-late {
-  stroke: #ffb9ac;
-  animation-delay: 1s;
-}
-
-.diagram-arrow {
-  fill: none;
-  stroke: var(--cyan);
-  stroke-width: 1.5;
-}
-
-.diagram-barrier {
-  fill: none;
-  stroke: #ffb9ac;
-  stroke-width: 4;
-  animation: gate-settle 0.5s var(--ease-out) 1.7s both;
-}
-
-.diagram-stop {
-  fill: #ffb9ac;
-  animation: gate-settle 0.3s var(--ease-out) 1.7s both;
-}
-
-.diagram-blocked-wire {
-  stroke-dasharray: 3 5;
-  stroke-opacity: 0.35;
-}
-
-.diagram-blocked-label {
-  fill: #ffcfbf;
-  font-size: 8px;
-}
-
 .diagram-replay {
-  position: absolute;
   bottom: 5px;
   left: 24px;
+  position: static;
   display: inline-flex;
-  align-items: center;
   gap: 6px;
-  background: transparent;
+  align-items: center;
   border: 0;
-  padding: 6px 0;
+  background: transparent;
+  padding: 8px 0;
   color: #d5e8ff;
   font-size: 10px;
-  min-height: 28px;
+  min-height: 36px;
 }
 
 .diagram-replay:hover {
@@ -2654,6 +2587,10 @@ summary::marker {
 .capture-band {
   background: var(--navy);
   color: #fff;
+}
+
+.capture-copy > p:not(.technical-label) {
+  color: #bdcee3;
 }
 
 .capture-copy .technical-label {
@@ -2763,6 +2700,160 @@ summary::marker {
 .contract-review.is-confirmed {
   background: #f0fafb;
   border-top-color: #5ba7b4;
+}
+
+.bench-heading {
+  display: flex;
+  gap: 13px;
+  padding: 24px 24px 13px;
+  align-items: center;
+}
+
+.bench-heading-rule {
+  width: 3px;
+  height: 39px;
+  background: var(--cyan);
+  flex-shrink: 0;
+}
+
+.bench-heading h2 {
+  font-size: 22px;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.bench-heading p {
+  font-size: 11px;
+  color: #d5e8ff;
+  margin-top: 6px;
+}
+
+.test-bench {
+  position: relative;
+  padding-left: 78px;
+}
+
+.bench-rail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 72px;
+  height: 100%;
+  overflow: visible;
+}
+
+.bench-stages {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bench-stages li {
+  min-height: 88px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.18);
+}
+
+.bench-stages li:last-child {
+  border-bottom: 0;
+}
+
+.bench-stages li > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.bench-stage-index {
+  font: 9px var(--font-mono);
+  color: #b9d6ff;
+}
+
+.bench-stage-note {
+  font: 9px var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+
+.bench-stages h3 {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  margin-top: 5px;
+  color: #fff;
+}
+
+.bench-stages p {
+  font-size: 11px;
+  color: #d5e8ff;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.bench-stage-gate h3 {
+  color: var(--cyan);
+}
+
+.bench-control-wire {
+  fill: none;
+  stroke: #accfff;
+  stroke-width: 1;
+  stroke-opacity: 0.3;
+  stroke-dasharray: 3 4;
+}
+
+.bench-control-trace {
+  stroke-width: 1;
+  stroke-opacity: 0.6;
+  animation-delay: 0.5s;
+}
+
+.bench-node {
+  fill: var(--signal-canvas);
+  stroke: #d5e8ff;
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+}
+
+.bench-gate {
+  fill: var(--signal-canvas);
+  stroke: var(--cyan);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.bench-evidence {
+  stroke: var(--cyan);
+}
+
+.bench-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+  padding-block: 6px;
+}
+
+.bench-controls > span {
+  font-size: 10px;
+  color: #d5e8ff;
+}
+
+.bench-evidence-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--cyan-soft);
+  color: var(--navy);
+  padding: 15px 24px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.bench-evidence-link:hover {
+  background: #d7f3f7;
 }
 
 @media (min-width: 1500px) {
@@ -3967,81 +4058,6 @@ h3 {
   font-family: var(--font-sans);
   color: #d5e8ff;
 }
-.figure-contract {
-  padding: 22px 24px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 12px;
-}
-.figure-contract > span {
-  font-size: 11px;
-  color: #c5dfff;
-}
-.figure-contract strong {
-  font-weight: 500;
-  color: #fff;
-  font-size: 12px;
-}
-.figure-facts {
-  margin-inline: 24px;
-  font-size: 12px;
-}
-.figure-facts > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding-block: 12px;
-  border-top: 1px solid rgb(255 255 255 / 0.22);
-}
-.figure-facts dt {
-  color: #d5e8ff;
-}
-.figure-facts dd {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-}
-.figure-facts dd > span {
-  font-family: var(--font-sans);
-  font-size: 10px;
-  color: #d5e8ff;
-}
-.figure-facts svg {
-  color: var(--cyan);
-}
-.figure-facts dd .failure-text {
-  color: #ffe0d7;
-}
-.figure-outcome {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 18px 24px;
-  background: #e9f8fb;
-  color: var(--navy);
-  border-top: 0;
-  margin-top: 10px;
-}
-.figure-outcome div {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.figure-outcome strong {
-  font-size: 13px;
-  font-weight: 500;
-}
-.figure-outcome div span {
-  font-size: 11px;
-  color: #34516a;
-}
-.figure-deny {
-  color: var(--red);
-  margin-left: auto;
-  font: 10px var(--font-mono);
-}
 .figure-caption {
   padding: 9px 24px;
   color: #d5e8ff;
@@ -4082,9 +4098,11 @@ h3 {
   letter-spacing: -0.045em;
   margin-top: 20px;
 }
+.workflow-intro > p:not(.technical-label) {
+  color: var(--secondary);
+}
 .workflow-intro > p:not(.technical-label),
 .capture-copy > p:not(.technical-label) {
-  color: var(--secondary);
   font-size: 14px;
   line-height: 1.8;
   margin-top: 22px;
@@ -4557,9 +4575,6 @@ h3 {
     padding-left: 22px;
     padding: 20px;
   }
-  .figure-facts dd > span {
-    display: none;
-  }
 }
 @media (max-width: 760px) {
   html {
@@ -4620,19 +4635,6 @@ h3 {
   .figure-top {
     padding: 12px 17px;
     font-size: 9px;
-  }
-  .figure-contract {
-    padding: 20px 18px 0;
-  }
-  .figure-facts {
-    margin-inline: 18px;
-    font-size: 12px;
-  }
-  .figure-facts dd > span {
-    display: inline;
-  }
-  .figure-outcome {
-    padding: 17px 18px;
   }
   .figure-caption {
     padding: 10px 18px;
@@ -5245,15 +5247,6 @@ h3 {
   .overview-actions {
     gap: 18px;
   }
-  .figure-facts dd > span {
-    display: none;
-  }
-  .figure-outcome {
-    gap: 10px;
-  }
-  .figure-outcome div span {
-    font-size: 10px;
-  }
   .app-topbar {
     padding-inline: 16px;
   }
@@ -5302,9 +5295,7 @@ h3 {
   html {
     scroll-behavior: auto;
   }
-  .diagram-trace,
-  .diagram-barrier,
-  .diagram-stop {
+  .diagram-trace {
     animation: none;
     stroke-dashoffset: 0;
   }
@@ -5450,6 +5441,21 @@ h3 {
   .lab-context {
     padding: 13px;
     font-size: 11px;
+  }
+  .transaction-diagram {
+    padding: 0 18px;
+  }
+  .bench-heading h2 {
+    font-size: 21px;
+  }
+  .bench-rail {
+    width: 58px;
+  }
+  .bench-stages p {
+    font-size: 11px;
+  }
+  .bench-evidence-link {
+    padding: 15px 18px;
   }
 }
 @keyframes signal-trace {

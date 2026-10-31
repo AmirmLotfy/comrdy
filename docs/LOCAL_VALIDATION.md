@@ -32,3 +32,11 @@ Live compiler corpus: 0/20 executed. Release payment scenarios: 0/9 executed. Li
 - Deployment preflight correctly reports missing durable database/canonical HTTPS configuration and dirty source. It is not a hosted readiness or live-provider test. `artifacts/vercel-preflight.json`.
 
 Current external gates remain unchanged: live AI 0/20, live payment qualification 0/9, real recovery/retries/webhooks, hosting, final video and submission unverified. The isolated control now explicitly disclaims a merchant order. Credentials were not revealed or changed. Additional spend: $0.
+
+## Focused plan-completion pass — November 1
+
+The hero and OG now show a four-stage testing workflow instead of a size comparison. The app's deliberate variant fault remains. This pass also closes edited-contract provenance, the isolated merchant-order control, financial dispatch restart coverage, consecutive sample selection, and media-bundle validation. See the current handoff for final counts and artifact paths; earlier numbers above remain historical receipts.
+
+The control source now creates a merchant order only after completed provider readback, superseding the earlier fixture-only limitation. This is still **not** a live control result. The new local narration and rehearsal are separate draft artifacts; the original final provider film remains gated. No provider, hosting or submission acceptance follows from the local render.
+
+Final local completion results: **72/72 tests passed with zero skips**, including real PostgreSQL serialization and unchanged row versions on read-only polls. Production build/TypeScript and focused hero/edited-provenance Chrome checks passed. The complete rehearsal rendered to1080p/30fps H.264+AAC (165.013s container duration); full caption text/timing and source-media validation passed. Artifact paths and exact provider boundaries are in `CURRENT_HANDOFF.md`. Live compiler0/20, payment0/9 and publication remain pending; spend remains$0.

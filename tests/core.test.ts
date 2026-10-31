@@ -34,7 +34,12 @@ import {
   PayPalSandboxAdapter,
   toPayPalMoney,
 } from "../src/providers/paypal";
-import { createSandboxService } from "../src/server/sandbox";
+import {
+  createSandboxService,
+  WEBHOOK_RECEIPT_LIMIT,
+  WEBHOOK_RECEIPT_RETENTION_MS,
+} from "../src/server/sandbox";
+import { publicRun } from "../src/server/store";
 import type {
   Database,
   transaction as StoreTransaction,
@@ -598,6 +603,9 @@ function sandboxHarness(
   let authorized = false;
   let captured = false;
   let changedBeforeCapture = false;
+  const dispatched: Partial<
+    Record<"create" | "authorize" | "capture" | "void", Database>
+  > = {};
   const calls = {
     create: 0,
     authorize: 0,
@@ -629,6 +637,7 @@ function sandboxHarness(
   });
   const fakeProvider = {
     async createOrder(input: { caseId: string }) {
+      dispatched.create ??= structuredClone(db);
       calls.create++;
       orderCase = input.caseId;
       authorized = false;
@@ -640,6 +649,7 @@ function sandboxHarness(
       return order();
     },
     async authorize() {
+      dispatched.authorize ??= structuredClone(db);
       calls.authorize++;
       authorized = true;
       return order();
@@ -655,6 +665,7 @@ function sandboxHarness(
       };
     },
     async capture(input: { actionId: string }) {
+      dispatched.capture ??= structuredClone(db);
       calls.capture++;
       calls.captureActionIds.push(input.actionId);
       if (options.captureTimeout === "before" && calls.capture === 1)
@@ -681,6 +692,7 @@ function sandboxHarness(
       return captureResult;
     },
     async voidAuthorization() {
+      dispatched.void ??= structuredClone(db);
       calls.void++;
       if (options.voidRejected)
         throw new PayPalError("Rejected void", "VOID_DENIED", 422, false);
@@ -751,6 +763,22 @@ function sandboxHarness(
     service,
     calls,
     fakeProvider,
+    dispatched,
+    rewindAfterAuthorization: () => {
+      captured = false;
+      authorizationStatus = "CREATED";
+      calls.capture = 0;
+      calls.void = 0;
+    },
+    restart: () =>
+      createSandboxService({
+        transaction: transact,
+        now: () => time,
+        providerFactory: () => fakeProvider,
+        shopper: async () => {
+          throw new Error("Restart must reconcile, not reshop");
+        },
+      }),
     setCaptureStatus: (status: "PENDING" | "COMPLETED") => {
       captureResult.status = status;
     },
@@ -1201,4 +1229,323 @@ test("a late verified webhook performs read-only reconciliation after periodic b
     assert.equal(h.calls.void, 0);
     assert.equal((await h.service.webhook(notification, {})).duplicate, true);
     assert.equal((await h.service.processJobs()).processed, false);
+  }));
+
+for (const boundary of ["create", "authorize", "capture", "void"] as const) {
+  test(`worker restart restores durable ${boundary} dispatch before result installation`, async () =>
+    withSandboxEnvironment(async () => {
+      const h = sandboxHarness();
+      const created = await h.service.start(
+        { id: h.contract.id },
+        boundary === "void" ? "variant" : "none",
+        "owner",
+      );
+      await h.service.processJobs();
+      if (boundary !== "create") {
+        await h.service.approve(created.id, "owner");
+        await h.service.processJobs();
+      }
+      const checkpoint = h.dispatched[boundary]!;
+      assert.ok(
+        checkpoint,
+        "Durable dispatch checkpoint exists before provider I/O",
+      );
+      const before = checkpoint.runs[created.id]!;
+      const sent = (
+        before.live as {
+          commands: Record<string, { state: string; requestId: string }>;
+        }
+      ).commands[boundary]!;
+      assert.equal(sent.state, "sent");
+      const requestId = sent.requestId;
+      h.db.runs = structuredClone(checkpoint.runs);
+      if (boundary === "authorize") h.rewindAfterAuthorization();
+      h.advance(301_000);
+      const restarted = h.restart();
+      await restarted.processJobs();
+      const restored = h.db.runs[created.id]!;
+      assert.equal(
+        (restored.live as { commands: Record<string, { requestId: string }> })
+          .commands[boundary]!.requestId,
+        requestId,
+      );
+      assert.ok(!["infra_failed", "inconclusive"].includes(restored.status));
+      if (boundary === "create") {
+        assert.equal(restored.status, "awaiting_approval");
+        assert.equal(h.calls.authorize, 0);
+        assert.equal(h.calls.capture, 0);
+      } else if (boundary === "void") {
+        assert.equal(restored.payment.status, "VOIDED");
+        assert.equal(h.calls.void, 1);
+        assert.equal(h.calls.capture, 0);
+        assert.equal(restored.merchantOrder, undefined);
+      } else {
+        assert.equal(restored.payment.status, "COMPLETED");
+        assert.equal(h.calls.capture, 1);
+        assert.equal(h.calls.authorize, 1);
+        assert.equal(
+          (restored.merchantOrder as { captureId: string }).captureId,
+          "CAPTURE123",
+        );
+      }
+    }));
+}
+
+test("early verified authorization notification associates after provider IDs are installed", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness();
+    const raw = JSON.stringify({
+      id: "WH-early-auth",
+      event_type: "PAYMENT.AUTHORIZATION.CREATED",
+      resource: {
+        id: "AUTH123",
+        payer: { email_address: "private-buyer@example.invalid" },
+        shipping: { address: "PRIVATE ADDRESS" },
+      },
+    });
+    assert.deepEqual(await h.service.webhook(raw, {}), {
+      accepted: true,
+      duplicate: false,
+      runId: null,
+    });
+    assert.equal(h.db.webhooks["WH-early-auth"], false);
+    assert.equal((await h.service.webhook(raw, {})).duplicate, true);
+    assert.equal(h.db.webhooks["WH-early-auth"], false);
+    assert.deepEqual(
+      Object.keys(h.db.webhookReceipts!["WH-early-auth"]).sort(),
+      ["authorizationId", "eventType", "orderId", "receivedAt", "resourceId"],
+    );
+    assert.doesNotMatch(
+      JSON.stringify(h.db.webhookReceipts),
+      /private-buyer|PRIVATE ADDRESS|payer|shipping/,
+    );
+    const created = await h.service.start(
+      { id: h.contract.id },
+      "none",
+      "owner",
+    );
+    await h.service.processJobs();
+    await h.service.approve(created.id, "owner");
+    await h.service.processJobs();
+    assert.equal(
+      h.db.webhooks["WH-early-auth"],
+      false,
+      "Authorization response installed after that scan",
+    );
+    const beforeCalls = structuredClone(h.calls);
+    await h.service.processJobs();
+    const run = h.db.runs[created.id]!;
+    assert.equal(h.db.webhooks["WH-early-auth"], true);
+    assert.equal(
+      run.events.filter((event) => event.title === "Verified PayPal webhook")
+        .length,
+      1,
+    );
+    assert.equal(run.payment.status, "COMPLETED");
+    assert.deepEqual(
+      h.calls,
+      beforeCalls,
+      "Association only retrieved existing provider truth",
+    );
+    assert.equal((await h.service.webhook(raw, {})).duplicate, true);
+    assert.equal((await h.service.processJobs()).processed, false);
+  }));
+
+test("redelivery can associate an unmatched order event without authorizing or settling payment", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness();
+    const raw = JSON.stringify({
+      id: "WH-early-order",
+      event_type: "CHECKOUT.ORDER.APPROVED",
+      resource: { id: "ORDER123" },
+    });
+    await h.service.webhook(raw, {});
+    const created = await h.service.start(
+      { id: h.contract.id },
+      "none",
+      "owner",
+    );
+    await h.service.processJobs();
+    const second = await h.service.webhook(raw, {});
+    assert.equal(second.duplicate, true);
+    assert.equal(second.runId, created.id);
+    const run = h.db.runs[created.id]!;
+    assert.equal(run.status, "awaiting_approval");
+    assert.equal(
+      (run.live as { pendingWebhook?: boolean }).pendingWebhook,
+      true,
+    );
+    await h.service.processJobs();
+    assert.equal(run.status, "awaiting_approval");
+    assert.equal(run.approvalRequestedAt, undefined);
+    assert.equal(h.calls.authorize, 0);
+    assert.equal(h.calls.capture, 0);
+    assert.equal(h.calls.void, 0);
+    assert.deepEqual(Object.keys((run.live as { commands: object }).commands), [
+      "create",
+    ]);
+    await h.service.webhook(raw, {});
+    assert.equal((await h.service.processJobs()).processed, false);
+    assert.equal(
+      run.events.filter((event) => event.title === "Verified PayPal webhook")
+        .length,
+      1,
+    );
+  }));
+
+test("out-of-order notifications never replace retrieved payment truth or issue economic commands", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness();
+    const created = await h.service.start(
+      { id: h.contract.id },
+      "none",
+      "owner",
+    );
+    await h.service.processJobs();
+    await h.service.approve(created.id, "owner");
+    await h.service.processJobs();
+    const beforeCalls = structuredClone(h.calls);
+    const beforeCommands = structuredClone(
+      (h.db.runs[created.id]!.live as { commands: object }).commands,
+    );
+    for (const [id, eventType, resourceId] of [
+      ["WH-older-pending", "PAYMENT.CAPTURE.PENDING", "CAPTURE123"],
+      ["WH-older-created", "PAYMENT.AUTHORIZATION.CREATED", "AUTH123"],
+      ["WH-conflicting-void", "PAYMENT.AUTHORIZATION.VOIDED", "AUTH123"],
+    ]) {
+      const raw = JSON.stringify({
+        id,
+        event_type: eventType,
+        resource: { id: resourceId },
+      });
+      await h.service.webhook(raw, {});
+      assert.equal((await h.service.webhook(raw, {})).duplicate, true);
+    }
+    await h.service.processJobs();
+    const run = h.db.runs[created.id]!;
+    assert.equal(run.payment.status, "COMPLETED");
+    assert.equal(run.status, "completed");
+    assert.equal(run.payment.captureId, "CAPTURE123");
+    assert.equal(
+      run.events.filter((event) => event.title === "Verified PayPal webhook")
+        .length,
+      3,
+    );
+    assert.deepEqual(h.calls, beforeCalls);
+    assert.deepEqual(
+      (run.live as { commands: object }).commands,
+      beforeCommands,
+    );
+  }));
+
+test("verified webhook receipt and dedupe retention are bounded and expire together", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness();
+    h.db.webhookReceipts = {};
+    for (let i = 0; i < WEBHOOK_RECEIPT_LIMIT + 3; i++) {
+      const id = `WH-retained-${i}`;
+      h.db.webhookReceipts[id] = {
+        eventType: "PAYMENT.AUTHORIZATION.CREATED",
+        resourceId: `UNKNOWN-${i}`,
+        orderId: null,
+        authorizationId: null,
+        receivedAt: NOW,
+      };
+      h.db.webhooks[id] = false;
+    }
+    h.db.webhookReceipts["WH-expired"] = {
+      eventType: "PAYMENT.AUTHORIZATION.CREATED",
+      resourceId: "OLD",
+      orderId: null,
+      authorizationId: null,
+      receivedAt: new Date(
+        Date.parse(NOW) - WEBHOOK_RECEIPT_RETENTION_MS - 1,
+      ).toISOString(),
+    };
+    h.db.webhooks["WH-expired"] = true;
+    await h.service.webhook(
+      JSON.stringify({
+        id: "WH-new",
+        event_type: "PAYMENT.AUTHORIZATION.CREATED",
+        resource: { id: "UNKNOWN-NEW" },
+      }),
+      {},
+    );
+    assert.equal(
+      Object.keys(h.db.webhookReceipts).length,
+      WEBHOOK_RECEIPT_LIMIT,
+    );
+    assert.equal(Object.keys(h.db.webhooks).length, WEBHOOK_RECEIPT_LIMIT);
+    assert.equal(h.db.webhookReceipts["WH-expired"], undefined);
+    assert.equal(h.db.webhooks["WH-expired"], undefined);
+    assert.ok(h.db.webhookReceipts["WH-new"]);
+    h.advance(WEBHOOK_RECEIPT_RETENTION_MS + 1);
+    await h.service.processJobs();
+    assert.deepEqual(h.db.webhookReceipts, {});
+    assert.deepEqual(h.db.webhooks, {});
+  }));
+
+test("unverified notification cannot enter the unmatched-receipt store", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness();
+    h.fakeProvider.verifyWebhook = async () => false;
+    await assert.rejects(
+      h.service.webhook(
+        JSON.stringify({
+          id: "WH-invalid",
+          event_type: "PAYMENT.CAPTURE.COMPLETED",
+          resource: { id: "CAPTURE123" },
+        }),
+        {},
+      ),
+      /signature verification failed/,
+    );
+    assert.equal(h.db.webhookReceipts, undefined);
+    assert.deepEqual(h.db.webhooks, {});
+    assert.equal(h.calls.capture, 0);
+    assert.equal(h.calls.void, 0);
+  }));
+
+test("command diagnostics retain sanitized operator correlation privately", async () =>
+  withSandboxEnvironment(async () => {
+    const h = sandboxHarness();
+    h.fakeProvider.createOrder = async () => {
+      throw new PayPalError(
+        "private buyer raw error body",
+        "INSTRUMENT_DECLINED",
+        422,
+        false,
+        null,
+        "abc123def456",
+        {
+          name: "UNPROCESSABLE_ENTITY",
+          issueCodes: ["INSTRUMENT_DECLINED", "private-buyer@example.invalid"],
+        },
+      );
+    };
+    const created = await h.service.start(
+      { id: h.contract.id },
+      "none",
+      "owner",
+    );
+    await h.service.processJobs();
+    const run = h.db.runs[created.id]!;
+    const command = (
+      run.live as { commands: { create: { diagnostics: unknown } } }
+    ).commands.create;
+    assert.deepEqual(command.diagnostics, {
+      providerName: "UNPROCESSABLE_ENTITY",
+      issueCodes: ["INSTRUMENT_DECLINED"],
+      providerDebugId: "abc123def456",
+      httpStatus: 422,
+    });
+    const exposed = JSON.stringify(publicRun(run));
+    assert.match(exposed, /INSTRUMENT_DECLINED/);
+    assert.doesNotMatch(
+      exposed,
+      /abc123def456|providerDebugId|diagnostics|private buyer|private-buyer/,
+    );
+    assert.doesNotMatch(JSON.stringify(command), /private buyer|private-buyer/);
+    assert.equal(h.calls.capture, 0);
+    assert.equal(h.calls.void, 0);
   }));

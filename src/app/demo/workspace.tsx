@@ -41,6 +41,8 @@ export function DemoWorkspace() {
   const { status } = useServiceStatus();
   const [mandate, setMandate] = useState(DEFAULT_MANDATE);
   const [contract, setContract] = useState<Contract | null>(null);
+  const [compilationId, setCompilationId] = useState<string | undefined>();
+  const [compilerReceipt, setCompilerReceipt] = useState<unknown>(null);
   const [constraintDraft, setConstraintDraft] = useState("");
   const [draftChanged, setDraftChanged] = useState(false);
   const [accessCode, setAccessCode] = useState("");
@@ -73,6 +75,16 @@ export function DemoWorkspace() {
           if (!active) return;
           setRun(data);
           setContract(data.contract);
+          setCompilerReceipt(data.compiler ?? null);
+          const priorReview = (
+            data.compiler as
+              { review?: { compilationId?: unknown } } | undefined
+          )?.review;
+          setCompilationId(
+            typeof priorReview?.compilationId === "string"
+              ? priorReview.compilationId
+              : undefined,
+          );
           setMandate(String(data.contract.mandate ?? DEFAULT_MANDATE));
           setConfirmed(Boolean(data.contract.confirmedAt));
           setEdit(false);
@@ -124,12 +136,17 @@ export function DemoWorkspace() {
     setBusy("compile");
     setError(null);
     setConfirmed(false);
+    setContract(null);
+    setCompilationId(undefined);
+    setCompilerReceipt(null);
     try {
-      const data = await api<{ contract: Contract; unresolved?: string[] }>(
-        "/api/v1/compile",
-        { mandate },
-      );
+      const data = await api<{
+        contract: Contract;
+        unresolved?: string[];
+        compilationId: string;
+      }>("/api/v1/compile", { mandate });
       setContract(data.contract);
+      setCompilationId(data.compilationId);
       setConstraintDraft(
         JSON.stringify(data.contract.constraints ?? [], null, 2),
       );
@@ -156,10 +173,20 @@ export function DemoWorkspace() {
     setBusy("confirm");
     setError(null);
     try {
-      const data = await api<{ contract: Contract }>("/api/v1/confirm", {
-        contract,
-      });
+      const data = await api<{ contract: Contract; compiler: unknown }>(
+        "/api/v1/confirm",
+        {
+          contract: {
+            schemaVersion: contract.schemaVersion,
+            mandate: contract.mandate,
+            constraints: contract.constraints,
+            needsResolution: contract.needsResolution,
+          },
+          ...(compilationId ? { compilationId } : {}),
+        },
+      );
       setContract(data.contract);
+      setCompilerReceipt(data.compiler);
       setConfirmed(true);
     } catch (err) {
       setError(
@@ -198,6 +225,8 @@ export function DemoWorkspace() {
   }
   function editMandate(value: string) {
     setMandate(value);
+    setCompilationId(undefined);
+    setCompilerReceipt(null);
     setConfirmed(false);
     setContract(null);
     setUnresolved([]);
@@ -209,6 +238,7 @@ export function DemoWorkspace() {
         throw new Error("Use a non-empty JSON array of constraints.");
       if (!contract) return;
       setContract({ ...contract, constraints });
+      setCompilerReceipt(null);
       setConfirmed(false);
       setDraftChanged(false);
       setError(null);
@@ -409,6 +439,21 @@ export function DemoWorkspace() {
                   </div>
                 ))}
               </dl>
+              {confirmed && compilerReceipt !== null && (
+                <button
+                  className="text-button"
+                  onClick={() =>
+                    setEvidence({
+                      title: "Compilation and review history",
+                      subtitle:
+                        "Server-recorded original candidate, confirmed candidate and changed paths. This history does not authorize payment.",
+                      data: compilerReceipt,
+                    })
+                  }
+                >
+                  <Braces size={14} /> View compilation and review history
+                </button>
+              )}
               <details className="contract-source-details">
                 <summary>Trace constraints to the original words</summary>
                 <dl>

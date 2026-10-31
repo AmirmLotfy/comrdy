@@ -3,7 +3,7 @@
     "start": 0,
     "seconds": 12,
     "title": "What payment success cannot prove",
-    "text": "Payment success alone cannot verify a product. This Sandbox payment completes beside a local test fixture changed from medium to small. The control creates no merchant order."
+    "text": "This Sandbox payment succeeded. The isolated test merchant recorded the wrong size. We deliberately changed its checkout after authorization. Payment success alone did not protect the purchase."
   },
   {
     "start": 12,

@@ -33,3 +33,9 @@ The public interface permits compile, confirm, start/read/stream, buyer-approved
 Local simulation uses serialized JSON storage and fixed fixtures. Hosted simulation requires PostgreSQL; Vercel never falls back to ephemeral filesystem state. It is useful for development and is visibly labeled; it is not payment or model qualification. Sandbox mode requires PostgreSQL and all provider configuration. Keep a persistent disk for bounded screenshots and an exported public release library; keep secrets and raw traces out of exports.
 
 The prepared Vercel deployment shares one canonical origin and database with the companion worker. See `VERCEL_DEPLOYMENT.md` for CLI configuration, retention budget and execution revision gates. Source consistency metadata is separate from provider truth.
+
+Compiler candidates now have opaque, owner-bound durable receipts. Confirmation records the original candidate, reviewed candidate, hashes and changed JSON-pointer paths; only the final confirmed contract controls execution. Public review history excludes the owner session identifier.
+
+Verified webhook receipts retain only resource references, event type and receipt time for up to7days/2048entries. Early unmatched receipts remain eligible for association. Association queues read-only provider reconciliation, never a financial action. Sanitized issue codes and provider debug IDs remain private command diagnostics; terminal public payment evidence omits approval URLs.
+
+The serialized state transaction skips rewriting an unchanged PostgreSQL payload. Idle worker polls and evidence reads therefore retain the existing row version; actual command/lease mutations still commit under the advisory lock. This bounds unnecessary write amplification for the small single-record lab without replacing its concurrency model.

@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Check, Minus } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Footer, MarketingNav } from "./_components/ui";
 import { TransactionDiagram } from "./_components/transaction-diagram";
-import { BrandMark } from "./_components/brand-mark";
 import { ScrollReveal } from "./_components/scroll-reveal";
 
 export default function Home() {
@@ -22,8 +21,9 @@ export default function Home() {
               Before the capture.
             </h1>
             <p className="overview-description">
-              Your agent found the right jacket. The merchant changed the size.
-              Would your checkout catch it?
+              Put your AI shopper through a controlled failure. Follow the
+              contract, inspect each observation, and see what earns permission
+              to capture.
             </p>
             <div className="overview-actions">
               <Link href="/demo" className="button brand large">
@@ -41,42 +41,26 @@ export default function Home() {
           </div>
           <div
             className="transaction-figure"
-            aria-label="Illustrative example: requested size M changes to size S, so capture is blocked"
+            aria-label="Illustrative transaction test bench: contract, controlled shopper, verification gate and evidence record"
           >
             <div className="figure-top">
-              <span>01 / VARIANT DRIFT</span>
-              <span>Illustrative example</span>
+              <span>COMRDY / TEST BENCH</span>
+              <span>Illustrative workflow</span>
             </div>
-            <div className="figure-contract">
-              <span>Confirmed contract</span>
-              <strong>Ocean Shell / Blue / One / ≤ $160</strong>
+            <div className="bench-heading">
+              <span className="bench-heading-rule" />
+              <div>
+                <h2>Follow the transaction.</h2>
+                <p>From customer intent to inspectable proof.</p>
+              </div>
             </div>
             <TransactionDiagram />
-            <dl className="figure-facts">
-              <div>
-                <dt>Delivered total</dt>
-                <dd>
-                  $148.00 <Check size={14} /> <span>Within budget</span>
-                </dd>
-              </div>
-              <div>
-                <dt>Requested size</dt>
-                <dd>
-                  M → S <Minus size={14} />{" "}
-                  <span className="failure-text">Outside contract</span>
-                </dd>
-              </div>
-            </dl>
-            <div className="figure-outcome">
-              <BrandMark className="outcome-brand" />
-              <div>
-                <strong>Capture blocked</strong>
-                <span>The amount passes. The purchase fails.</span>
-              </div>
-              <span className="figure-deny">DENY</span>
-            </div>
+            <Link href="/docs#evidence" className="bench-evidence-link">
+              <span>Inside the evidence record</span>
+              <ArrowUpRight size={15} />
+            </Link>
             <p className="figure-caption">
-              A designed example, not a recorded payment outcome.
+              Workflow illustration. No live agent or payment activity.
             </p>
           </div>
         </section>

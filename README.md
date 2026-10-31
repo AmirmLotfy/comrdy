@@ -27,3 +27,11 @@ The original product blueprint remains in `comrdy_blueprint/`. `docs/IMPLEMENTAT
 OpenAI and PayPal API keys stay on the server. Never put real payment credentials or personal buyer information into recordings. Fictional Northpath prices are test fixtures, not commercial offers.
 
 MIT licensed. This is an independent hackathon project, with no claimed PayPal endorsement.
+
+## Review the complete build
+
+The requirement-by-requirement audit is in [`docs/PLAN_COMPLETENESS.md`](docs/PLAN_COMPLETENESS.md). The original blueprint is historical; [`docs/IMPLEMENTATION_SCOPE.md`](docs/IMPLEMENTATION_SCOPE.md) defines the focused release. Exact current checks and external gates are in [`CURRENT_HANDOFF.md`](CURRENT_HANDOFF.md).
+
+The hero presents the contract, shopper, verification gate and evidence workflow. The lab retains the deliberate variant and shipping failures. Edited contracts keep their original compilation receipt and changed paths. An isolated operator-only control records a deliberately wrong-size merchant order only after exact Sandbox capture readback; it cannot be invoked from the public API.
+
+The editable165-second film, narration and final input checklist live in [`submission/video/`](submission/video/). A zero-cost local rehearsal can be produced with the documented scripts; it is visibly simulated and is not the final submission. Release rendering validates real media, matching execution evidence and reviewed captions/screenshots. Real provider qualification, hosted links and publication remain separate acceptance steps.

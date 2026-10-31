@@ -1,15 +1,37 @@
 import { mkdir, readFile, writeFile, rename } from "node:fs/promises";
 import { resolve } from "node:path";
 import postgres from "postgres";
+import type { ContractCandidate } from "../core/types";
+
+export interface CompilationReceipt {
+  id: string;
+  owner: string;
+  compiledAt: string;
+  originalCandidate: ContractCandidate;
+  originalCandidateHash: string;
+  compiler: Record<string, unknown>;
+}
+/** Minimal verified notification metadata. No raw provider body or buyer values. */
+export interface WebhookReceipt {
+  eventType: string;
+  resourceId: string | null;
+  orderId: string | null;
+  authorizationId: string | null;
+  receivedAt: string;
+}
 export interface Database {
   contracts: Record<
     string,
     { owner: string; contract: unknown; compiler?: unknown }
   >;
   runs: Record<string, StoredRun>;
+  /** True only after association; false remains eligible for a later match. */
   webhooks: Record<string, boolean>;
+  webhookReceipts?: Record<string, WebhookReceipt>;
   quotas?: Record<string, number>;
+  /** Historical hash-indexed metadata; never accepted as an edited-candidate receipt. */
   compilations?: Record<string, unknown>;
+  compilationReceipts?: Record<string, CompilationReceipt>;
 }
 export interface StoredRun {
   id: string;
@@ -63,7 +85,10 @@ export async function transaction<T>(
       const rows =
         await tx`SELECT payload FROM comrdy_state WHERE key='main' FOR UPDATE`;
       const db = (rows[0]?.payload as Database | undefined) ?? empty();
+      const previousPayload = JSON.stringify(db);
       const result = await fn(db);
+      // Idle worker polls and evidence reads must not rewrite the full JSON state.
+      if (rows[0] && JSON.stringify(db) === previousPayload) return result;
       await tx`INSERT INTO comrdy_state (key,payload) VALUES ('main',${tx.json(db as never)}) ON CONFLICT(key) DO UPDATE SET payload=excluded.payload,updated_at=now()`;
       return result;
     })) as T;
@@ -105,7 +130,15 @@ export function publicRun(run: StoredRun) {
     snapshots: run.snapshots,
     events: run.events,
     decision: run.decision,
-    payment: run.payment,
+    payment: {
+      status: run.payment.status,
+      authorizationId: run.payment.authorizationId,
+      captureId: run.payment.captureId,
+      ...(run.payment.orderId ? { orderId: run.payment.orderId } : {}),
+      ...(run.status === "awaiting_approval" && run.payment.approvalUrl
+        ? { approvalUrl: run.payment.approvalUrl }
+        : {}),
+    },
     createdAt: run.createdAt,
     ...(run.execution ? { execution: run.execution } : {}),
     ...(run.workerExecutions ? { workerExecutions: run.workerExecutions } : {}),

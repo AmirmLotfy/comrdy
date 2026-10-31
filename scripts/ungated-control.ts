@@ -1,10 +1,25 @@
 import nextEnv from "@next/env";
-import { mkdir, readFile, writeFile, rename, rmdir } from "node:fs/promises";
+import { mkdir, readFile, rename, rmdir, open } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { PayPalSandboxAdapter } from "../src/providers/paypal";
-import { createCanonicalState } from "../src/core/fixtures";
-import assert from "node:assert/strict";
-import { assertQualifiedCapture } from "./lib/qualification";
+import type { PayPalOrder } from "../src/providers/paypal";
+import {
+  approveControl,
+  assertCleanControlExecution,
+  claimControlCommand,
+  controlCreatePayload,
+  createControlRecord,
+  mutateControlCheckout,
+  observeControlAuthorization,
+  observeControlOrder,
+  recordControlCommand,
+  settleControl,
+  validateControlRecord,
+  type ControlOperation,
+  type ControlRecord,
+  type ControlExecution,
+} from "../src/core/control";
+
 nextEnv.loadEnvConfig(process.cwd());
 if (
   process.env.PAYPAL_ENV !== "sandbox" ||
@@ -12,171 +27,198 @@ if (
   !process.env.PAYPAL_MERCHANT_ID
 )
   throw new Error(
-    "Operator-only Sandbox control requires PAYPAL_ENV=sandbox, ALLOW_UNGATED_CONTROL=true and the expected PAYPAL_MERCHANT_ID. Never expose this script through the web application.",
+    "Operator-only control requires PAYPAL_ENV=sandbox, ALLOW_UNGATED_CONTROL=true and PAYPAL_MERCHANT_ID. Never expose it through the public application.",
   );
 const phase = process.argv[2];
 if (!["prepare", "complete", "inspect"].includes(phase))
   throw new Error(
     "Usage: npx tsx scripts/ungated-control.ts prepare|complete|inspect",
   );
+let execution: ControlExecution | undefined;
+if (phase === "prepare" || phase === "complete") {
+  if (
+    process.env.NODE_ENV !== "production" ||
+    process.env.APP_MODE !== "sandbox"
+  )
+    throw new Error(
+      "Control prepare/complete requires NODE_ENV=production APP_MODE=sandbox and a clean build receipt. inspect remains read-only.",
+    );
+  const { assertWorkerSource } = await import("../src/server/worker-source");
+  const { executionProvenance } = await import("../src/server/provenance");
+  assertWorkerSource();
+  execution = executionProvenance();
+  assertCleanControlExecution(execution);
+}
 const api = new PayPalSandboxAdapter({
   clientId: process.env.PAYPAL_CLIENT_ID!,
   clientSecret: process.env.PAYPAL_CLIENT_SECRET!,
 });
 const directory = ".data/control";
 await mkdir(directory, { recursive: true });
-const lock = directory + "/lock";
-await mkdir(lock); // exclusive operator process; stale locks require inspection
+await mkdir(directory + "/lock"); // exclusive operator process; inspect stale locks manually
 try {
   const filename = directory + "/evidence.json";
-  let record: any;
+  let record: ControlRecord | undefined;
   try {
-    record = JSON.parse(await readFile(filename, "utf8"));
+    const value: unknown = JSON.parse(await readFile(filename, "utf8"));
+    validateControlRecord(value);
+    record = value;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
   const save = async () => {
-    await writeFile(filename + ".tmp", JSON.stringify(record, null, 2), {
-      mode: 0o600,
-    });
-    await rename(filename + ".tmp", filename);
-  };
-  const write = async (kind: string, request: () => Promise<unknown>) => {
-    if (record.commands[kind])
-      throw new Error(
-        "Command already dispatched; inspect provider truth before any further action.",
-      );
-    record.commands[kind] = { sentAt: new Date().toISOString() };
-    await save();
+    const file = await open(filename + ".tmp", "w", 0o600);
     try {
-      const result = await request();
-      record.commands[kind].result = result ?? null;
+      await file.writeFile(JSON.stringify(record, null, 2));
+      await file.sync();
+    } finally {
+      await file.close();
+    }
+    await rename(filename + ".tmp", filename);
+    const dir = await open(directory, "r");
+    try {
+      await dir.sync();
+    } finally {
+      await dir.close();
+    }
+  };
+  const dispatch = async <T>(
+    kind: ControlOperation,
+    payload: unknown,
+    perform: (actionId: string) => Promise<T>,
+  ): Promise<T> => {
+    record = claimControlCommand(
+      record!,
+      kind,
+      payload,
+      new Date().toISOString(),
+    );
+    await save(); // durable identity and payload precede I/O
+    const actionId = record.commands[kind]!.actionId;
+    try {
+      const result = await perform(actionId);
+      record = recordControlCommand(record!, kind, result, "completed");
       await save();
       return result;
     } catch (error) {
-      record.status = "outcome_uncertain";
-      await save();
+      if (record!.commands[kind]!.state === "sent") {
+        record = recordControlCommand(record!, kind, null, "unknown");
+        await save();
+      }
       throw error;
     }
+  };
+  const readback = async () => {
+    const createResult = record!.commands.create?.result as PayPalOrder | null;
+    const orderId = record!.providerOrder?.id ?? createResult?.id;
+    if (!orderId)
+      throw new Error(
+        "Creation has no known order ID. Inspect PayPal manually; this control never creates a replacement purchase.",
+      );
+    const order = await api.getOrder(orderId);
+    record = observeControlOrder(record!, order);
+    await save();
+    if (record.commands.authorize && order.authorizationIds.length === 1) {
+      const authorization = await api.getAuthorization(
+        order.authorizationIds[0]!,
+      );
+      record = observeControlAuthorization(record, order, authorization);
+      await save();
+      if (record.commands.capture && order.captureIds.length === 1) {
+        const capture = await api.getCapture(order.captureIds[0]!);
+        record = settleControl(
+          record,
+          order,
+          authorization,
+          capture,
+          new Date().toISOString(),
+        );
+        await save();
+      }
+    }
+    return order;
   };
   if (phase === "prepare") {
     if (record)
       throw new Error(
-        "An isolated control already exists. Inspect it; this script will not create a second purchase.",
+        "An isolated control already exists. Preserve it and inspect; a second purchase is not permitted.",
       );
-    const id = randomUUID();
-    record = {
-      id,
-      kind: "operator-only-fixture-mutation-sandbox-payment-control",
-      evidenceLimit:
-        "A real Sandbox payment beside a deliberately mutated local merchant fixture. No shopper, Northpath cart or merchant order is created; this is not wrong-size purchase or fulfillment evidence.",
-      status: "creating",
-      commands: {},
-      originalMerchantState: createCanonicalState("none"),
-    };
-    await save();
-    const base = process.env.APP_URL || "http://localhost:3000";
-    const order = await write("create", () =>
-      api.createOrder({
-        actionId: id + "-create",
-        caseId: id,
-        amount: { amountMinor: 14800, currency: "USD" },
-        payeeId: process.env.PAYPAL_MERCHANT_ID,
-        returnUrl: new URL("/docs?control=approved", base).href,
-        cancelUrl: new URL("/docs?control=canceled", base).href,
-      }),
+    record = createControlRecord(
+      randomUUID(),
+      process.env.PAYPAL_MERCHANT_ID!,
+      new Date().toISOString(),
+      execution!,
     );
-    record.order = order;
-    record.status = "awaiting_approval";
     await save();
+    const payload = controlCreatePayload(
+      record,
+      process.env.APP_URL || "http://localhost:3000",
+    );
+    const order = await dispatch("create", payload, (actionId) =>
+      api.createOrder({ ...payload, actionId }),
+    );
+    record = observeControlOrder(record!, await api.getOrder(order.id));
+    await save();
+    if (!record.providerOrder!.approvalUrl)
+      throw new Error(
+        "No Sandbox approval URL was returned. Inspect this existing control.",
+      );
     console.log(
-      "Approve this isolated control in your Sandbox buyer browser, then run complete. Approval URL: " +
-        record.order.approvalUrl,
+      "Approve this isolated control in the Sandbox buyer browser, then run complete. Approval URL: " +
+        record.providerOrder!.approvalUrl,
     );
   } else {
-    if (!record?.order?.id)
+    if (!record)
+      throw new Error("No isolated control exists. Use prepare once.");
+    if (record.payeeId !== process.env.PAYPAL_MERCHANT_ID)
       throw new Error(
-        "No known provider order. Inspect PayPal dashboard before retrying creation.",
+        "Configured merchant changed; preserve and inspect the existing control.",
       );
-    const order = await api.getOrder(record.order.id);
-    record.observedOrder = order;
-    if (phase === "inspect") {
-      if (order.authorizationIds.length === 1)
-        record.observedAuthorization = await api.getAuthorization(
-          order.authorizationIds[0],
-        );
-      if (order.captureIds.length === 1)
-        record.observedCapture = await api.getCapture(order.captureIds[0]);
-      await save();
-      console.log(
-        JSON.stringify({
-          status: record.status,
-          order: order.status,
-          authorization: record.observedAuthorization?.status,
-          capture: record.observedCapture?.status,
-        }),
-      );
-    } else {
+    if (phase === "complete") {
+      assertCleanControlExecution(record.execution);
       if (
-        record.status !== "awaiting_approval" ||
-        order.status !== "APPROVED" ||
-        order.customId !== record.id
+        record.execution.revision !== execution!.revision ||
+        record.execution.sourceDigest !== execution!.sourceDigest
       )
         throw new Error(
-          "A fresh, matching buyer-approved order is required. Use inspect for previously dispatched commands.",
+          "Control completion must use the original clean execution revision and source. Preserve this record and use inspect for reconciliation.",
         );
-      assert.equal(order.payeeId, process.env.PAYPAL_MERCHANT_ID);
-      assert.deepEqual(order.amount, { amountMinor: 14800, currency: "USD" });
-      const authorized: any = await write("authorize", () =>
-        api.authorize({
-          orderId: order.id,
-          actionId: record.id + "-authorize",
-        }),
-      );
-      if (authorized.authorizationIds.length !== 1)
-        throw new Error("Authorization is ambiguous; inspect provider.");
-      record.mutatedMerchantState = createCanonicalState("variant");
-      record.disclosedFault =
-        "Local fixture M → S after authorization, same $148 price. No merchant order exists and no protection gate is invoked in this isolated payment control.";
-      await save();
-      const captured: any = await write("capture", () =>
-        api.capture({
-          authorizationId: authorized.authorizationIds[0],
-          amount: { amountMinor: 14800, currency: "USD" },
-          actionId: record.id + "-capture",
-        }),
-      );
-      record.status = "needs_reconciliation";
-      await save();
-      record.observedCapture = await api.getCapture(captured.id);
-      if (record.observedCapture.status === "COMPLETED") {
-        record.observedOrder = await api.getOrder(order.id);
-        record.observedAuthorization = await api.getAuthorization(
-          authorized.authorizationIds[0],
+      if (record.commands.authorize || record.commands.capture)
+        throw new Error(
+          "A financial command was already dispatched. Use inspect; complete never retries a payment.",
         );
-        await save();
-        assertQualifiedCapture({
-          order: record.observedOrder,
-          authorization: record.observedAuthorization,
-          capture: record.observedCapture,
-          caseId: record.id,
-          payeeId: process.env.PAYPAL_MERCHANT_ID!,
-        });
-      }
-      record.status =
-        record.observedCapture.status === "COMPLETED"
-          ? "payment_control_capture_completed"
-          : "needs_reconciliation";
+      const order = await readback();
+      record = approveControl(record!, order, new Date().toISOString());
       await save();
-      console.log(
-        JSON.stringify({
-          status: record.status,
-          captureId: captured.id,
-          evidence: filename,
-        }),
+      await dispatch("authorize", { orderId: order.id }, (actionId) =>
+        api.authorize({ orderId: order.id, actionId }),
       );
-    }
+      await readback();
+      record = mutateControlCheckout(record!, new Date().toISOString());
+      await save();
+      const payload = {
+        authorizationId: record.authorization!.id,
+        amount: { amountMinor: 14800, currency: "USD" },
+      };
+      await dispatch("capture", payload, (actionId) =>
+        api.capture({ ...payload, actionId }),
+      );
+      await readback();
+    } else await readback(); // inspect makes GETs only, even when finalizing the local merchant order
+    console.log(
+      JSON.stringify({
+        status: record!.status,
+        providerOrderId: record!.providerOrder?.id,
+        authorization: record!.authorization?.status,
+        capture: record!.capture?.status,
+        merchantOrderId: record!.merchantOrder?.id,
+        merchantSize: record!.merchantOrder?.item.size,
+        gateApplied: false,
+        evidence: filename,
+        evidenceLimit: record!.evidenceLimit,
+      }),
+    );
   }
 } finally {
-  await rmdir(lock);
+  await rmdir(directory + "/lock");
 }

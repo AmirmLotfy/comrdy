@@ -38,7 +38,7 @@ for (const [index, scene] of scenes.entries()) {
     "-i",
     source,
     "-af",
-    `atempo=${speed},loudnorm=I=-16:TP=-1.5:LRA=11,apad,atrim=duration=${scene.seconds}`,
+    `atempo=${speed},loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000,apad,atrim=end_sample=${scene.seconds * 48000},asetpts=PTS-STARTPTS`,
     "-ar",
     "48000",
     "-ac",
@@ -75,6 +75,10 @@ execFileSync("ffmpeg", [
   "copy",
   "public/media/narration/final.wav",
 ]);
+await writeFile(
+  "artifacts/narration-DRAFT.json",
+  JSON.stringify(captions, null, 2),
+);
 const time = (n: number, sep: string) => {
   const ms = Math.round(n * 1000);
   return `${String(Math.floor(ms / 3600000)).padStart(2, "0")}:${String(Math.floor(ms / 60000) % 60).padStart(2, "0")}:${String(Math.floor(ms / 1000) % 60).padStart(2, "0")}${sep}${String(ms % 1000).padStart(3, "0")}`;

@@ -1,5 +1,4 @@
 {
-  "qualified": false,
   "release": "REPLACE_WITH_SOURCE_COMMIT",
   "providerRunIds": [],
   "narration": "media/narration/final.wav",
@@ -8,7 +7,7 @@
       "file": "media/01-control.mp4",
       "start": 0,
       "seconds": 12,
-      "caption": "Sandbox payment + local fixture mutation \u00b7 No merchant order"
+      "caption": "Isolated merchant control \u00b7 Completed Sandbox capture \u00b7 Disclosed size fault"
     },
     {
       "file": "media/02-contract.mp4",
@@ -46,5 +45,49 @@
       "seconds": 20,
       "caption": "COMRDY \u00b7 Test the purchase against the promise"
     }
-  ]
+  ],
+  "mode": "release",
+  "captions": [],
+  "captionFile": "media/captions-final.vtt",
+  "screenshots": [
+    {
+      "file": "media/release/01.png",
+      "label": "Homepage",
+      "reviewed": false
+    },
+    {
+      "file": "media/release/02.png",
+      "label": "Confirmed contract",
+      "reviewed": false
+    },
+    {
+      "file": "media/release/03.png",
+      "label": "Variant denial",
+      "reviewed": false
+    },
+    {
+      "file": "media/release/04.png",
+      "label": "Provider-confirmed void",
+      "reviewed": false
+    },
+    {
+      "file": "media/release/05.png",
+      "label": "Recovery capture",
+      "reviewed": false
+    },
+    {
+      "file": "media/release/06.png",
+      "label": "Evidence and results",
+      "reviewed": false
+    }
+  ],
+  "links": {
+    "demo": "",
+    "source": ""
+  },
+  "reviews": {
+    "captions": false,
+    "redaction": false,
+    "intentOutputs": false
+  }
 }

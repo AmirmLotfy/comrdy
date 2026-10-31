@@ -5,3 +5,5 @@ Code and submission preparation: OpenAI Codex, reviewed through local automated 
 UI icons: Lucide (ISC). Typeface: Geist (SIL Open Font License, distributed through Next font integration). Northpath Supply and Ocean Shell are fictional demo entities. Product artwork is original inline vector illustration. No real customer, merchant adoption, savings, or production-payment claim is implied.
 
 No final narration or provider footage has been generated yet. Replace this sentence with actual production provenance after qualification. Keep dependency license files and any later asset licenses with the release.
+
+The local rehearsal uses the macOS Samantha system voice, generated locally with `say`, not the planned final Cedar narration. It is labeled draft/simulation throughout and uses actual local UI recordings. The original C/gate logo, workflow rail, film layout and thumbnail are editable vector/code assets. Refero references informed layout/density; no third-party screenshots or artwork are used in the film or product. See `docs/DESIGN_DIRECTION.md` for reference links.

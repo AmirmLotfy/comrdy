@@ -3,81 +3,93 @@
 import { useState } from "react";
 import { RotateCcw } from "lucide-react";
 
-/** A finite illustrative trace; it never describes or performs a payment. */
+const stages = [
+  {
+    title: "Confirmed contract",
+    detail: "Human-reviewed purchase constraints",
+    note: "INPUT",
+  },
+  {
+    title: "Controlled shopper",
+    detail: "Agent actions + merchant observations",
+    note: "EXECUTE",
+  },
+  {
+    title: "Verification gate",
+    detail: "Every hard constraint must pass",
+    note: "CHECK",
+  },
+  {
+    title: "Evidence record",
+    detail: "Contract, observations and decision",
+    note: "INSPECT",
+  },
+];
+
+/** A finite explanatory trace. No agent, merchant or payment calls are made. */
 export function TransactionDiagram() {
   const [iteration, setIteration] = useState(0);
   return (
     <div className="transaction-diagram">
-      <svg
-        key={iteration}
-        className="transaction-svg"
-        viewBox="0 0 500 270"
-        role="img"
-        aria-label="Illustration: confirmed size M changes to S. The contract gate blocks capture."
-      >
-        <defs>
-          <pattern
-            id="signal-grid"
-            width="25"
-            height="25"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M25 0H0V25"
-              fill="none"
-              stroke="currentColor"
-              strokeOpacity=".08"
-            />
-          </pattern>
-        </defs>
-        <rect width="500" height="270" fill="url(#signal-grid)" />
-        <path
-          d="M35 54V37H52M448 37H465V54M35 220V237H52M448 237H465V220"
-          stroke="currentColor"
-          strokeOpacity=".35"
-          fill="none"
-        />
-        <text x="62" y="69" className="diagram-label">
-          CONFIRMED
-        </text>
-        <text x="290" y="69" className="diagram-label">
-          FINAL MERCHANT STATE
-        </text>
-        <text x="57" y="164" className="diagram-size">
-          M
-        </text>
-        <text x="292" y="164" className="diagram-size diagram-size-drift">
-          S
-        </text>
-        <path d="M155 126H267" className="diagram-wire" />
-        <path d="M155 126H267" pathLength="1" className="diagram-trace" />
-        <path d="M259 120L267 126L259 132" className="diagram-arrow" />
-        <text x="172" y="112" className="diagram-annotation">
-          variant drift
-        </text>
-        <path d="M333 178V211H392" className="diagram-wire" />
-        <path
-          d="M333 178V211H392"
-          pathLength="1"
-          className="diagram-trace diagram-trace-late"
-        />
-        <path d="M404 192V230M416 192V230" className="diagram-barrier" />
-        <path d="M430 211H463" className="diagram-wire diagram-blocked-wire" />
-        <circle cx="392" cy="211" r="4" className="diagram-stop" />
-        <text x="62" y="211" className="diagram-annotation">
-          Original intent stays locked
-        </text>
-        <text x="373" y="254" className="diagram-label diagram-blocked-label">
-          CAPTURE BLOCKED
-        </text>
-      </svg>
-      <button
-        className="diagram-replay"
-        onClick={() => setIteration((value) => value + 1)}
-      >
-        <RotateCcw size={12} />
-        Replay illustration
-      </button>
+      <div className="test-bench">
+        <svg
+          key={iteration}
+          className="bench-rail"
+          viewBox="0 0 72 352"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path className="diagram-wire" d="M31 42V306" />
+          <path className="bench-control-wire" d="M31 42H61V218H31" />
+          <path className="diagram-trace" pathLength="1" d="M31 42V306" />
+          <path
+            className="diagram-trace bench-control-trace"
+            pathLength="1"
+            d="M31 42H61V218H31"
+          />
+          <g className="bench-node">
+            <path d="M21 29H36L42 35V54H21Z" />
+            <path d="M35 29V36H42M26 42H36M26 47H33" />
+          </g>
+          <g className="bench-node">
+            <path d="M19 119H43V142H19Z" />
+            <path d="M19 125H43M25 130L29 134L25 138M33 138H37" />
+          </g>
+          <g className="bench-gate">
+            <path d="M19 205H28V231H19M43 205H34V231H43" />
+            <path d="M25 218H37" />
+          </g>
+          <g className="bench-node bench-evidence">
+            <path d="M20 294H42V319H20Z" />
+            <path d="M25 301H37M25 307H37M25 313H33" />
+          </g>
+        </svg>
+        <ol className="bench-stages">
+          {stages.map((stage, index) => (
+            <li
+              key={stage.note}
+              className={index === 2 ? "bench-stage-gate" : ""}
+            >
+              <div>
+                <span className="bench-stage-index">0{index + 1}</span>
+                <span className="bench-stage-note">{stage.note}</span>
+              </div>
+              <h3>{stage.title}</h3>
+              <p>{stage.detail}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="bench-controls">
+        <span>One contract. A traceable decision.</span>
+        <button
+          className="diagram-replay"
+          onClick={() => setIteration((value) => value + 1)}
+        >
+          <RotateCcw size={12} />
+          Replay illustration
+        </button>
+      </div>
     </div>
   );
 }

@@ -62,7 +62,109 @@ const OrderSchema = z
   })
   .passthrough();
 
+const PROVIDER_ERROR_NAMES = new Set([
+  "INVALID_REQUEST",
+  "AUTHENTICATION_FAILURE",
+  "NOT_AUTHORIZED",
+  "RESOURCE_NOT_FOUND",
+  "RESOURCE_CONFLICT",
+  "UNPROCESSABLE_ENTITY",
+  "INTERNAL_SERVER_ERROR",
+  "INTERNAL_SERVICE_ERROR",
+  "SERVICE_UNAVAILABLE",
+  "RATE_LIMIT_REACHED",
+  "VALIDATION_ERROR",
+  "UNSUPPORTED_MEDIA_TYPE",
+  "NOT_ACCEPTABLE",
+]);
+// Deliberately finite: unknown future issue names fall back to the safe error
+// category rather than allowing arbitrary provider strings into public events.
+const PROVIDER_ISSUE_CODES = new Set([
+  "AUTHORIZATION_ALREADY_CAPTURED",
+  "AUTHORIZATION_AMOUNT_EXCEEDED",
+  "AUTHORIZATION_CANNOT_BE_VOIDED",
+  "AUTHORIZATION_DENIED",
+  "AUTHORIZATION_EXPIRED",
+  "AUTHORIZATION_VOIDED",
+  "CAPTURE_AMOUNT_EXCEEDED",
+  "CAPTURE_STATUS_NOT_VALID",
+  "DUPLICATE_INVOICE_ID",
+  "INSTRUMENT_DECLINED",
+  "TRANSACTION_REFUSED",
+  "ORDER_ALREADY_AUTHORIZED",
+  "ORDER_ALREADY_CAPTURED",
+  "ORDER_NOT_APPROVED",
+  "ORDER_COMPLETED_OR_VOIDED",
+  "PAYER_ACTION_REQUIRED",
+  "PAYEE_ACCOUNT_INVALID",
+  "PAYEE_ACCOUNT_RESTRICTED",
+  "PAYEE_ACCOUNT_LOCKED_OR_CLOSED",
+  "PERMISSION_DENIED",
+  "INVALID_RESOURCE_ID",
+  "INVALID_PARAMETER_SYNTAX",
+  "INVALID_PARAMETER_VALUE",
+  "MISSING_REQUIRED_PARAMETER",
+  "AMOUNT_MISMATCH",
+  "ITEM_TOTAL_MISMATCH",
+  "TAX_TOTAL_MISMATCH",
+  "CURRENCY_NOT_SUPPORTED",
+  "MAX_NUMBER_OF_PAYMENT_ATTEMPTS_EXCEEDED",
+  "PREVIOUS_REQUEST_IN_PROGRESS",
+]);
+function safeDebugId(value: unknown): string | null {
+  return typeof value === "string" && /^[a-fA-F0-9]{8,64}$/.test(value)
+    ? value
+    : null;
+}
+function safeIssues(values: readonly unknown[]): string[] {
+  return [
+    ...new Set(
+      values
+        .slice(0, 16)
+        .filter(
+          (value): value is string =>
+            typeof value === "string" &&
+            value.length <= 80 &&
+            PROVIDER_ISSUE_CODES.has(value),
+        ),
+    ),
+  ].slice(0, 8);
+}
+export interface PayPalDiagnostics {
+  name: string;
+  issueCodes: string[];
+  /** Private operator correlation value; never include in public run events. */
+  debugId: string | null;
+}
+/** Never retain messages, fields, values, links, payer objects or the raw body. */
+export function normalizePayPalDiagnostics(body: unknown): PayPalDiagnostics {
+  const value =
+    body && typeof body === "object" && !Array.isArray(body)
+      ? (body as Record<string, unknown>)
+      : {};
+  const name =
+    typeof value.name === "string" && PROVIDER_ERROR_NAMES.has(value.name)
+      ? value.name
+      : "PROVIDER_ERROR";
+  const issues = Array.isArray(value.details)
+    ? value.details
+        .slice(0, 16)
+        .map((detail: unknown) =>
+          detail && typeof detail === "object" && !Array.isArray(detail)
+            ? (detail as Record<string, unknown>).issue
+            : null,
+        )
+    : [];
+  return {
+    name,
+    issueCodes: safeIssues(issues),
+    debugId: safeDebugId(value.debug_id),
+  };
+}
+
 export class PayPalError extends Error {
+  readonly issueCodes: readonly string[];
+  readonly providerName: string | null;
   constructor(
     message: string,
     readonly code: string,
@@ -70,9 +172,17 @@ export class PayPalError extends Error {
     readonly outcomeUnknown: boolean,
     readonly requestId: string | null = null,
     readonly debugId: string | null = null,
+    diagnostics?: Pick<PayPalDiagnostics, "name" | "issueCodes">,
   ) {
     super(message);
     this.name = "PayPalError";
+    this.debugId = safeDebugId(debugId);
+    Object.defineProperty(this, "debugId", { enumerable: false });
+    this.issueCodes = Object.freeze(safeIssues(diagnostics?.issueCodes ?? []));
+    this.providerName =
+      diagnostics && PROVIDER_ERROR_NAMES.has(diagnostics.name)
+        ? diagnostics.name
+        : null;
   }
 }
 export interface PayPalOrder {
@@ -275,22 +385,16 @@ export class PayPalSandboxAdapter {
         );
       }
       if (!response.ok) {
-        const error = z
-          .object({
-            name: z.string().optional(),
-            debug_id: z.string().optional(),
-          })
-          .safeParse(body);
+        const diagnostics = normalizePayPalDiagnostics(body);
         if (response.status === 401) this.token = null;
         throw new PayPalError(
           `PayPal Sandbox request failed (${response.status}).`,
-          error.success
-            ? (error.data.name ?? "PROVIDER_ERROR")
-            : "PROVIDER_ERROR",
+          diagnostics.issueCodes[0] ?? diagnostics.name,
           response.status,
           financial && (response.status >= 500 || response.status === 409),
           requestId,
-          error.success ? (error.data.debug_id ?? null) : null,
+          diagnostics.debugId,
+          diagnostics,
         );
       }
       return body;

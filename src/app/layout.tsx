@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: "/brand/comrdy-og.png",
         width: 1200,
         height: 630,
-        alt: "COMRDY transaction assurance: requested size M changes to S, so capture is blocked. Illustrative example.",
+        alt: "COMRDY transaction test bench: confirmed contract, controlled shopper, verification gate and inspectable evidence. Illustrative workflow.",
       },
     ],
   },

@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { transaction } from "../src/server/store";
 import { PayPalSandboxAdapter } from "../src/providers/paypal";
 import { assertQualifiedCapture } from "./lib/qualification";
+import { assertLatestConsecutiveRuns } from "./lib/consecutive";
 import { verifyContractHash } from "../src/core/invariants";
 nextEnv.loadEnvConfig(process.cwd());
 const ids = process.argv.slice(2);
@@ -57,6 +58,13 @@ assert.equal(
   new Set(executions.map((execution) => execution.revision)).size,
   1,
   "All release runs must execute the same commit",
+);
+await transaction((db) =>
+  assertLatestConsecutiveRuns(
+    Object.values(db.runs),
+    ids,
+    executions[0]!.revision!,
+  ),
 );
 const results = [];
 for (const fault of ["none", "variant", "shipping"])
@@ -138,8 +146,9 @@ const report = {
   passed: results.filter((r) => r.passed).length,
   total: 9,
   execution: executions[0],
+  consecutive: true,
   selection:
-    "Nine operator-selected original runs from one recorded clean revision; consecutive execution requires a separate release receipt.",
+    "Latest three original attempts per scenario on the clean release revision, including failed and unfinished attempts in the selection boundary.",
   results,
 };
 await mkdir("artifacts", { recursive: true });

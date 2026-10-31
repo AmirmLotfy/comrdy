@@ -29,7 +29,11 @@ import type {
 import { requireSandbox } from "./config";
 import { runShopper } from "./shopper";
 import { publicRun, transaction } from "./store";
-import type { StoredRun } from "./store";
+import type { Database, StoredRun, WebhookReceipt } from "./store";
+
+// Bounded demo storage: seven days of the 20-runs/day quota with lifecycle-event headroom.
+export const WEBHOOK_RECEIPT_LIMIT = 2048;
+export const WEBHOOK_RECEIPT_RETENTION_MS = 7 * 24 * 60 * 60_000;
 
 type Provider = Pick<
   PayPalSandboxAdapter,
@@ -56,6 +60,13 @@ interface Command {
   updatedAt: string;
   result?: unknown;
   errorCode?: string;
+  /** Private operator diagnostics, excluded by the publicRun allowlist. */
+  diagnostics?: {
+    providerName: string | null;
+    issueCodes: string[];
+    providerDebugId: string | null;
+    httpStatus: number | null;
+  };
 }
 interface LiveState {
   commands: Partial<Record<OperationKind, Command>>;
@@ -230,6 +241,7 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
         attempts: (previous?.attempts ?? 0) + 1,
         createdAt: previous?.createdAt ?? timestamp(),
         updatedAt: timestamp(),
+        ...(previous?.diagnostics ? { diagnostics: previous.diagnostics } : {}),
       };
       run.operations[kind] = stableRequestId(kind, actionId);
       pushEvent(
@@ -261,6 +273,14 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
             ? "failed"
             : "unknown";
         op.errorCode = safeError(error);
+        if (error instanceof PayPalError) {
+          op.diagnostics = {
+            providerName: error.providerName,
+            issueCodes: [...error.issueCodes],
+            providerDebugId: error.debugId,
+            httpStatus: error.status,
+          };
+        }
         op.updatedAt = timestamp();
         const settlementUnresolved = kind === "capture" || kind === "void";
         run.status =
@@ -1068,6 +1088,9 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
     config();
     const leaseToken = randomUUID();
     const job = await tx((db) => {
+      // Provider response IDs may have arrived after the verified notification.
+      // Revisit unmatched receipts before choosing any reconciliation work.
+      associatePendingWebhooks(db);
       const now = clock().getTime();
       for (const run of Object.values(db.runs).filter(
         (r) => r.mode === "sandbox",
@@ -1209,6 +1232,81 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
       return publicRun(run);
     });
   }
+  function pruneWebhookReceipts(db: Database) {
+    const cutoff = clock().getTime() - WEBHOOK_RECEIPT_RETENTION_MS;
+    db.webhookReceipts ??= {};
+    for (const [id, receipt] of Object.entries(db.webhookReceipts)) {
+      if (
+        !Number.isFinite(Date.parse(receipt.receivedAt)) ||
+        Date.parse(receipt.receivedAt) <= cutoff
+      ) {
+        delete db.webhookReceipts[id];
+        delete db.webhooks[id];
+      }
+    }
+    const chronological = Object.entries(db.webhookReceipts).sort(
+      ([, a], [, b]) => Date.parse(a.receivedAt) - Date.parse(b.receivedAt),
+    );
+    for (const [id] of chronological.slice(
+      0,
+      Math.max(0, chronological.length - WEBHOOK_RECEIPT_LIMIT),
+    )) {
+      delete db.webhookReceipts[id];
+      delete db.webhooks[id];
+    }
+    // Old boolean-only entries have no timestamps. Bound those too, without evicting retained receipts.
+    const legacy = Object.keys(db.webhooks).filter(
+      (id) => !db.webhookReceipts![id],
+    );
+    for (const id of legacy.slice(
+      0,
+      Math.max(0, Object.keys(db.webhooks).length - WEBHOOK_RECEIPT_LIMIT),
+    ))
+      delete db.webhooks[id];
+  }
+
+  function associateWebhookReceipt(
+    db: Database,
+    eventId: string,
+    receipt: WebhookReceipt,
+  ): string | null {
+    if (db.webhooks[eventId] === true) return null;
+    const ids = [
+      receipt.resourceId,
+      receipt.orderId,
+      receipt.authorizationId,
+    ].filter((id): id is string => Boolean(id));
+    const matches = Object.values(db.runs).filter(
+      (run) =>
+        run.mode === "sandbox" &&
+        [
+          run.payment.orderId,
+          run.payment.authorizationId,
+          run.payment.captureId,
+        ].some((id) => Boolean(id) && ids.includes(id!)),
+    );
+    // Ambiguous bindings are not associated to an arbitrary run.
+    if (matches.length !== 1) return null;
+    const run = matches[0]!;
+    if (
+      !run.lastWebhookAt ||
+      Date.parse(String(run.lastWebhookAt)) < Date.parse(receipt.receivedAt)
+    )
+      run.lastWebhookAt = receipt.receivedAt;
+    pushEvent(run, timestamp(), "Verified PayPal webhook", receipt.eventType);
+    // Notification metadata is never payment truth and never grants settlement permission.
+    // processJobs consumes this flag through reconcile(..., false), preserving active leases.
+    live(run).pendingWebhook = true;
+    db.webhooks[eventId] = true;
+    return run.id;
+  }
+
+  function associatePendingWebhooks(db: Database) {
+    pruneWebhookReceipts(db);
+    for (const [id, receipt] of Object.entries(db.webhookReceipts ?? {}))
+      associateWebhookReceipt(db, id, receipt);
+  }
+
   async function webhook(
     rawBody: string,
     headers: Headers | Record<string, string | undefined>,
@@ -1223,64 +1321,54 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
       }))
     )
       throw new Error("Webhook signature verification failed.");
+    const resourceId = z.string().regex(/^[a-zA-Z0-9_-]{1,128}$/);
     const event = z
       .object({
-        id: z.string().min(1),
-        event_type: z.string().min(1),
-        resource: z
-          .object({
-            id: z.string().optional(),
-            supplementary_data: z
-              .object({
-                related_ids: z
-                  .object({
-                    order_id: z.string().optional(),
-                    authorization_id: z.string().optional(),
-                  })
-                  .optional(),
-              })
-              .optional(),
-          })
-          .passthrough(),
+        id: resourceId.refine(
+          (id) => !Object.getOwnPropertyNames(Object.prototype).includes(id),
+          "Invalid event identifier",
+        ),
+        event_type: z.string().regex(/^[A-Z][A-Z0-9_.-]{0,127}$/),
+        resource: z.object({
+          id: resourceId.optional(),
+          supplementary_data: z
+            .object({
+              related_ids: z
+                .object({
+                  order_id: resourceId.optional(),
+                  authorization_id: resourceId.optional(),
+                })
+                .optional(),
+            })
+            .optional(),
+        }),
       })
       .parse(JSON.parse(rawBody));
-    const receipt = await tx((db) => {
-      if (db.webhooks[event.id] === true)
-        return { duplicate: true as const, runId: null };
-      db.webhooks[event.id] = false;
-      const related = event.resource.supplementary_data?.related_ids;
-      const run = Object.values(db.runs).find(
-        (r) =>
-          r.mode === "sandbox" &&
-          [r.payment.orderId, r.payment.authorizationId, r.payment.captureId]
-            .filter(Boolean)
-            .some(
-              (id) =>
-                id === event.resource.id ||
-                id === related?.order_id ||
-                id === related?.authorization_id,
-            ),
-      );
-      if (run) {
-        run.lastWebhookAt = timestamp();
-        pushEvent(
-          run,
-          timestamp(),
-          "Verified PayPal webhook",
-          event.event_type,
-        );
-        if (
-          live(run).commands.capture ||
-          live(run).commands.void ||
-          live(run).commands.authorize
-        )
-          live(run).pendingWebhook = true;
+    const result = await tx((db) => {
+      pruneWebhookReceipts(db);
+      const prior = db.webhookReceipts![event.id];
+      const duplicate = Boolean(prior) || db.webhooks[event.id] === true;
+      if (!prior) {
+        const related = event.resource.supplementary_data?.related_ids;
+        db.webhookReceipts![event.id] = {
+          eventType: event.event_type,
+          resourceId: event.resource.id ?? null,
+          orderId: related?.order_id ?? null,
+          authorizationId: related?.authorization_id ?? null,
+          receivedAt: timestamp(),
+        };
+        // A legacy consumed flag alone cannot prove association. Upgrade a newly verified redelivery safely.
+        db.webhooks[event.id] = false;
       }
-      db.webhooks[event.id] = true;
-      return { duplicate: false as const, runId: run?.id ?? null };
+      const runId = associateWebhookReceipt(
+        db,
+        event.id,
+        db.webhookReceipts![event.id]!,
+      );
+      pruneWebhookReceipts(db);
+      return { duplicate, runId };
     });
-    // Durable receipt is acknowledged promptly. The worker retrieves provider truth later.
-    return { accepted: true, ...receipt };
+    return { accepted: true, ...result };
   }
   return {
     compile,

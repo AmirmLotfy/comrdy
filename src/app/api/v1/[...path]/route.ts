@@ -182,7 +182,9 @@ async function handle(
       if (route === "compile")
         return respond(await service.compile(body.mandate, owner));
       if (route === "confirm")
-        return respond(await service.confirm(body.contract, owner));
+        return respond(
+          await service.confirm(body.contract, owner, body.compilationId),
+        );
       if (route === "runs")
         return respond(
           await service.start(body.contract, body.fault ?? "none", owner),
