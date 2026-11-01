@@ -1,5 +1,13 @@
 # COMRDY current handoff — November 1, 2026
 
+## Owner approval received — final publication rendering
+
+Current checkout `main` at `3c4d36f04b74947b2255b2a760143e8ce7debf05` plus pending review/docs updates. User explicitly answered **Reviewed and approved** to the complete caption/privacy/six-screenshot/20-output packet, with disclosed limitations, and authorized the same film without review watermark and YouTube publication. `artifacts/publication-approval.json` and public-source `submission/RELEASE_REVIEW.json` bind the approved preview/composition/ledger/intent/mix/screenshot hashes. Original review receipt remains an accurate pre-approval snapshot; do not rewrite it. The release manifest now has true review flags based on that actual user response.
+
+Specialist `/root/final_master` owns only guarded final rendering, probes/audio measurement, sample frames and final master receipt; heavy slot belongs to it (session70858). No source changes or external publication delegated. Root owns browser/docs/publication. Full final render uses unchanged composition and approved audio, omitting only the review mark. Devpost story was saved with approved semantic review status; source technical caveats retained. YouTube upload dialog is prepared but no file uploaded yet.
+
+At final upload/finalization the browser displays YouTube's terms notice and Devpost's explicit Official Rules/Terms checkbox. Obtain a concrete action-time agreement confirmation for the final prepared publication/submission if required; no final terms acceptance is recorded yet. Existing user personal eligibility declarations remain untouched. Browser2 tabs1PayPalexpired(user-owned),2Devpostadditionalinfo,3projectpreview,4YouTubeupload. CUA runtime reset recovered a stale browser.user compatibility error; accounts stayed signed in. No new credentials needed.
+
 ## Publication preparation checkpoint — review copy ready, human review pending
 
 Root coordinator retains ownership in `/Users/frameless/Desktop/Comrdy`, branch `main`, HEAD `d9a3d4ccb9a6535c43d52626e0cb7453d3e48e95`. This section supersedes older pending-publication and screenshot statements. Vercel and Render worker are live on d9a3d4c; public evidence and qualification links were verified without operator access. Actual financial/intent evidence remains frozen to 03c1451, with the same executable source digest as deployed d9. Do not rewrite run provenance.
