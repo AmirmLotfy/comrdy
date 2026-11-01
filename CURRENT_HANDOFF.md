@@ -1,5 +1,17 @@
 # COMRDY current handoff — November 1, 2026
 
+## Latest checkpoint — provider rollout and intent-v2
+
+This section supersedes older pending-account statements below. Public simulation is verified at https://comrdy.vercel.app (deployment dpl_FuudpKBXMxz9Hf5gp3p72LeZZnqx, execution e54b212). Public MIT source is https://github.com/AmirmLotfy/comrdy. The taller responsive hero and reduced-motion-aware blue/cyan gradient were committed at b7eafa8; desktop/mobile checks found no horizontal overflow at1440/1280/390/320px (`artifacts/hero-gradient-checks.json`).
+
+PayPal merchant identity and canonical Sandbox webhook are now configured privately. Webhook creation/readback succeeded; actual delivery remains unqualified. Render worker `comrdy-worker` (`srv-dbj93gflk1mc738jbn0g`) is live at b7eafa8, migrations complete, auto-deploy OFF, Virginia,512MB/$7month,1GB private disk/$0.25month at `/var/data`. Together with the existing $6.30 database, recurring cost is $13.55/month before the approved $50 credit. OpenAI/PayPal/KERNEL/database/access-code configuration was privately installed on worker and Vercel; Vercel's next deployment uses Sandbox mode, while its current public deployment remains simulation. No actual shopper/payment has executed. KERNEL Developer free+usage includes the required browser functionality after enhanced trial; retain evidence locally because provider replay retention is limited.
+
+First real OpenAI corpus:18/20 (7/8 executable,11/12 expected clarification). Preserved `artifacts/intent-qualification-initial-18of20.json`. One safe false clarification came from a paraphrased source excerpt; one missing-currency request incorrectly inferred USD. Intent-v2 adds exact shared-excerpt guidance, catalog size aliases, a deterministic explicit-USD guard, original raw model output and prompt-version provenance. All96 automated tests passed,zero skipped,including hosted PostgreSQL (`artifacts/compiler-v2-tests.tap`). These financial tests remain mocked. Next: clean commit/build, one live corpus rerun, same-revision worker/web rollout, then buyer-approved Sandbox qualification. Do not describe provider access or idle worker health as transaction acceptance.
+
+Devpost draft1276140/project1521664 title and pitch saved; not submitted. User filled eligibility fields and reports YouTube sign-in complete; five personal feedback/learning answers still appeared blank on readback and were requested. User is generating seven voiceover clips. Final live footage, media review, public video and finalization remain pending. Never navigate away from an unsaved user form without preserving it.
+
+Local preview session15045 serves the b7 build on port3000; verify ownership before stopping. No local worker. Compiler specialist finished and released ownership. No successor/automation created. Credentials remain ignored/private; do not copy them into handoffs or screenshots.
+
 Workspace `/Users/frameless/Desktop/Comrdy`, branch `main`. This milestone began at `17c2f00538b4315951a93247c53a18241619a63c`. Coordinator owns release/configuration; specialists delivered disjoint readiness/hero and store/judge changes. No successor, goal or automation. Resolve final revision with git and ignored release receipts.
 
 ## Current direction and delivered work

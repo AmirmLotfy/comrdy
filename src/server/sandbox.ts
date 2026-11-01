@@ -316,6 +316,8 @@ export function createSandboxService(dependencies: SandboxDependencies = {}) {
       mode: "sandbox" as const,
       compiler: {
         execution: executionProvenance(),
+        promptVersion: result.promptVersion,
+        rawCandidate: result.rawCandidate,
         model: result.model,
         responseId: result.responseId,
         usage: result.usage,

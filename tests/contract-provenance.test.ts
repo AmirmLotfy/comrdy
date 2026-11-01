@@ -13,6 +13,7 @@ import {
 } from "../src/core/fixtures";
 import { sha256 } from "../src/core/hash";
 import { verifyContractHash } from "../src/core/invariants";
+import { COMPILER_PROMPT_VERSION } from "../src/providers/compiler";
 
 const OWNER = "private-owner-session";
 const NOW = "2026-11-01T12:00:00.000Z";
@@ -65,7 +66,7 @@ test("edited candidate retains its owner-bound original compiler receipt without
   assert.equal(modelCalls(), 1);
   assert.equal(confirmed.compiler.model, "test-model");
   assert.equal(confirmed.compiler.responseId, "mock-compiler-response");
-  assert.equal(confirmed.compiler.promptVersion, "intent-v1");
+  assert.equal(confirmed.compiler.promptVersion, COMPILER_PROMPT_VERSION);
   assert.deepEqual(review.originalCandidate, original);
   assert.equal(review.originalCandidateHash, sha256(original));
   assert.deepEqual(review.finalCandidate, candidate);

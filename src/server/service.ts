@@ -5,6 +5,7 @@ import { transaction, publicRun, type StoredRun } from "./store";
 import { releaseLibrary } from "./library";
 import { status } from "./config";
 import { executionProvenance } from "./provenance";
+import { COMPILER_PROMPT_VERSION } from "../providers/compiler";
 import {
   createCanonicalContract,
   createCanonicalSnapshot,
@@ -80,7 +81,8 @@ export function createContractService(
         compiler: {
           ...compiled.compiler,
           source: "ai-compiler",
-          promptVersion: "intent-v1",
+          promptVersion:
+            compiled.compiler.promptVersion ?? COMPILER_PROMPT_VERSION,
         },
       };
     } else {
