@@ -4,6 +4,16 @@ A transaction test lab for engineers building AI checkout.
 
 **A payment can succeed and still be the wrong purchase.**
 
+## Recorded Sandbox qualification
+
+The hosted [demo](https://comrdy.vercel.app) and [public MIT source](https://github.com/AmirmLotfy/comrdy) use qualified executable revision `03c145157878602971c7f4bbd30555c512fade35`. On that frozen source, independent provider retrieval qualified the latest three original attempts per scenario: **3 valid captures, 3 variant denials with confirmed voids and 3 shipping denials with confirmed voids — 9/9**. One bounded recovery preserved the confirmed contract, obtained fresh approval and completed a $148 capture bound to the correct size-M merchant order.
+
+The live intent corpus met **20/20 automated expectations: 8/8 executable cases and 12/12 expected clarifications**. Assistant review covered all outputs; human semantic review is pending. One blocked subscription request marks requested color/size as soft, so this result is not perfect semantic preservation or general model accuracy.
+
+Five concurrent duplicate approval commands after a completed purchase preserved one capture and one merchant order. A worker restart while awaiting buyer approval resumed successfully. An actual out-of-order webhook pair delivered VOIDED before CREATED and left the authorization VOIDED with no capture. These checks do not qualify lost provider responses or interruptions during capture; duplicate webhook delivery remains mock-tested only.
+
+Reviewed export files are prepared in [`public/release/`](public/release/): [`qualification.json`](public/release/qualification.json), [`evidence.json`](public/release/evidence.json), [`control.json`](public/release/control.json), [`payment-readbacks.json`](public/release/payment-readbacks.json) and [`intent-outputs.json`](public/release/intent-outputs.json). Their hosted publication and anonymous access still need verification. The final authentic film, six reviewed screenshots, human review and public YouTube/Devpost submission remain pending. See [`CURRENT_HANDOFF.md`](CURRENT_HANDOFF.md) for exact receipts and ownership.
+
 ## Explore the product
 
 - `/judges`: a guided review and searchable AG Grid workbench of actual accessible evidence. Test verdict, authorization, capture and merchant order remain separate.
@@ -28,7 +38,7 @@ Buyer approval is a separate human step. Captures must reference confirmed inten
 
 ## Deployment
 
-The website and API are prepared for Vercel CLI, with the durable worker and PostgreSQL kept as companion services. Run `npm run deploy:check` for a secret-free local preflight. [Deployment guide](docs/VERCEL_DEPLOYMENT.md) documents configuration, staged deployment, revision checks and remaining hosted acceptance.
+Vercel hosts the website/API; a persistent Render worker and managed PostgreSQL provide durable execution. Qualified web and worker provenance match the frozen executable revision above. Run `npm run deploy:check` for a secret-free local preflight before later deployments. [Deployment guide](docs/VERCEL_DEPLOYMENT.md) documents configuration, staged deployment and revision checks. Prepared evidence/media exports require their own publication and signed-out verification.
 
 ## Source and evidence
 
@@ -44,4 +54,4 @@ The requirement-by-requirement audit is in [`docs/PLAN_COMPLETENESS.md`](docs/PL
 
 The hero presents the contract, shopper, verification gate and evidence workflow. The lab retains the deliberate variant and shipping failures. Edited contracts keep their original compilation receipt and changed paths. An isolated operator-only control records a deliberately wrong-size merchant order only after exact Sandbox capture readback; it cannot be invoked from the public API.
 
-The editable165-second film, narration and final input checklist live in [`submission/video/`](submission/video/). A zero-cost local rehearsal can be produced with the documented scripts; it is visibly simulated and is not the final submission. Release rendering validates real media, matching execution evidence and reviewed captions/screenshots. Real provider qualification, hosted links and publication remain separate acceptance steps.
+The editable 165-second film, narration and final input checklist live in [`submission/video/`](submission/video/). The supplied audio mix is approved for clarity/music level only; authentic film recording is underway. The local rehearsal is visibly simulated and is not the final submission. Release rendering validates media, matching execution evidence and declared caption/screenshot reviews; actual human review, encoded-master acceptance and publication remain separate steps. Earlier 103/103 automated tests used mocked financial responses at `7df484fd56c97bbefd9972b2ab24be4952298296`; final-source type checking/build do not turn that earlier suite into a final-revision rerun.

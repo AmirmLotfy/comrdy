@@ -7,37 +7,37 @@
   },
   {
     "start": 12,
-    "seconds": 23,
+    "seconds": 25,
     "title": "Commerce Ready",
     "text": "COMRDY means Commerce Ready. It is a transaction test lab for engineers building AI checkout. Start with the customer's instruction: one blue Ocean Shell, medium, under one hundred sixty dollars delivered. No substitutions or subscriptions. AI compiles the request. The buyer reviews the source phrases, resolves ambiguity, and confirms the contract."
   },
   {
-    "start": 35,
-    "seconds": 25,
+    "start": 37,
+    "seconds": 22,
     "title": "A controlled checkout fault",
     "text": "Our shopping agent opens Northpath, a controlled test store. It selects the product and builds a cart totaling one hundred forty-eight dollars. The buyer approves through PayPal Sandbox. Then we deliberately change the checkout after authorization. The price stays the same. The size does not. This is a disclosed fault injection."
   },
   {
-    "start": 60,
-    "seconds": 30,
+    "start": 59,
+    "seconds": 28,
     "title": "Intent Lineage and the payment boundary",
     "text": "Intent Lineage reveals the first divergence from the confirmed request. The deterministic gate checks the merchant again, including its revision, the authorization, the amount, and every hard constraint. The wrong size blocks capture. COMRDY requests a void and retrieves the authorization's status. Missing evidence also blocks. The test verdict and the payment outcome remain separate, so uncertainty cannot look like success."
   },
   {
-    "start": 90,
-    "seconds": 35,
+    "start": 87,
+    "seconds": 32,
     "title": "One bounded recovery",
     "text": "Recovery has a strict boundary. Restore the requested medium, preserve the original contract, and create one fresh attempt. The buyer approves again. All constraints are rechecked before capturing one hundred forty-eight dollars. Only a completed capture can produce the merchant order. If recovery fails, it stops. Durable command identities and reconciliation protect retries from becoming another purchase. This demonstrates correction of a controlled fault, with an inspectable record of both attempts."
   },
   {
-    "start": 125,
-    "seconds": 20,
+    "start": 119,
+    "seconds": 23,
     "title": "Executable readiness coverage",
     "text": "The readiness bench goes beyond a single demo. Execute twelve synthetic cases against the same verification engine: budget boundaries, quantity changes, missing facts, stale evidence, and payment bindings. Change the inputs, compare decisions, and export a reproducible report. These are deterministic tests, not provider qualification."
   },
   {
-    "start": 145,
-    "seconds": 20,
+    "start": 142,
+    "seconds": 23,
     "title": "Evidence an engineer can inspect",
     "text": "The judge workbench brings the evidence together. Filter runs, inspect the original and recovery, and see what was actually observed. Saved playback makes no payments. COMRDY helps engineering teams reproduce checkout failures before changing an agent or integration. Commerce Ready. Test the purchase against the promise."
   }

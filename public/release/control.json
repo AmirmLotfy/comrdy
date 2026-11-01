@@ -1,0 +1,131 @@
+{
+  "checkout": {
+    "amount": {
+      "amountMinor": 14800,
+      "currency": "USD"
+    },
+    "hash": "e2fb00e9e969a515dca819eed39a07c18c5800c19d0f2c80e19f486ed1bc5724",
+    "id": "009c7e0e-40c6-4559-a8f7-b4125e182225-checkout-2",
+    "item": {
+      "color": "blue",
+      "productId": "ocean-shell",
+      "quantity": 1,
+      "size": "S",
+      "sku": "NP-OS-BLU-S"
+    },
+    "revision": "2"
+  },
+  "contract": {
+    "hash": "78e4bf074ef45700b4289f002c5c0a6777630a2f832ee862f994674ec77b6c5f",
+    "id": "009c7e0e-40c6-4559-a8f7-b4125e182225-contract"
+  },
+  "counterfactual": {
+    "contractHash": "78e4bf074ef45700b4289f002c5c0a6777630a2f832ee862f994674ec77b6c5f",
+    "decision": "DENY",
+    "snapshotHash": "e2fb00e9e969a515dca819eed39a07c18c5800c19d0f2c80e19f486ed1bc5724"
+  },
+  "environment": "sandbox",
+  "evidenceLimit": "Isolated operator-only controlled merchant order after Sandbox capture. No AI browser execution, physical shipment or real-world fulfillment is claimed. A receipt hash is an integrity checksum, not a PayPal signature.",
+  "execution": {
+    "builtAt": "2026-11-01T02:43:04.154Z",
+    "dirty": false,
+    "revision": "03c145157878602971c7f4bbd30555c512fade35",
+    "sourceDigest": "40c8e8c5b6479ace616f8c426179ca44f1b19278a7abcae0f45ce9df6a42af4f"
+  },
+  "executionRevision": "03c145157878602971c7f4bbd30555c512fade35",
+  "exportedAt": "2026-11-01T03:03:38.488Z",
+  "hash": "4c080d01ddb1366371db429164e581671817c806a8340b81f603d8dc224411b3",
+  "id": "009c7e0e-40c6-4559-a8f7-b4125e182225",
+  "kind": "reviewed-ungated-control-receipt",
+  "merchantOrder": {
+    "amount": {
+      "amountMinor": 14800,
+      "currency": "USD"
+    },
+    "authorizationId": "3CJ03795Y61178729",
+    "captureId": "6DM59439BM4556937",
+    "caseId": "009c7e0e-40c6-4559-a8f7-b4125e182225",
+    "checkoutHash": "e2fb00e9e969a515dca819eed39a07c18c5800c19d0f2c80e19f486ed1bc5724",
+    "checkoutRevision": "2",
+    "contractHash": "78e4bf074ef45700b4289f002c5c0a6777630a2f832ee862f994674ec77b6c5f",
+    "createdAt": "2026-11-01T02:44:16.836Z",
+    "environment": "sandbox",
+    "id": "northpath-control-009c7e0e-40c6-4559-a8f7-b4125e182225",
+    "item": {
+      "color": "blue",
+      "productId": "ocean-shell",
+      "quantity": 1,
+      "size": "S",
+      "sku": "NP-OS-BLU-S"
+    },
+    "merchantId": "northpath-isolated-control",
+    "providerOrderId": "8WU89207A21825542"
+  },
+  "mutation": {
+    "appliedAt": "2026-11-01T02:44:12.399Z",
+    "fromHash": "37a6d713bee3195d430e2311490e349447cb049fbafdd0e776d19ce7be9cdfd6",
+    "gateApplied": false,
+    "kind": "deliberate-medium-to-small",
+    "toHash": "e2fb00e9e969a515dca819eed39a07c18c5800c19d0f2c80e19f486ed1bc5724"
+  },
+  "originalCheckout": {
+    "amount": {
+      "amountMinor": 14800,
+      "currency": "USD"
+    },
+    "hash": "37a6d713bee3195d430e2311490e349447cb049fbafdd0e776d19ce7be9cdfd6",
+    "id": "009c7e0e-40c6-4559-a8f7-b4125e182225-checkout-1",
+    "item": {
+      "color": "blue",
+      "productId": "ocean-shell",
+      "quantity": 1,
+      "size": "M",
+      "sku": "NP-OS-BLU-M"
+    },
+    "revision": "1"
+  },
+  "provider": {
+    "authorization": {
+      "amount": {
+        "amountMinor": 14800,
+        "currency": "USD"
+      },
+      "id": "3CJ03795Y61178729",
+      "orderId": "8WU89207A21825542",
+      "payeeId": "JGPRYKMYZJCNU",
+      "status": "CAPTURED"
+    },
+    "capture": {
+      "amount": {
+        "amountMinor": 14800,
+        "currency": "USD"
+      },
+      "authorizationId": "3CJ03795Y61178729",
+      "finalCapture": true,
+      "id": "6DM59439BM4556937",
+      "orderId": "8WU89207A21825542",
+      "status": "COMPLETED"
+    },
+    "order": {
+      "amount": {
+        "amountMinor": 14800,
+        "currency": "USD"
+      },
+      "authorizationIds": [
+        "3CJ03795Y61178729"
+      ],
+      "captureIds": [
+        "6DM59439BM4556937"
+      ],
+      "customId": "009c7e0e-40c6-4559-a8f7-b4125e182225",
+      "id": "8WU89207A21825542",
+      "intent": "AUTHORIZE",
+      "payeeId": "JGPRYKMYZJCNU",
+      "referenceId": "1",
+      "status": "COMPLETED"
+    }
+  },
+  "schemaVersion": "1.0",
+  "settlementObservedAt": "2026-11-01T02:44:16.836Z",
+  "status": "control_completed"
+}

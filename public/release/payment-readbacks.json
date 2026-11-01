@@ -1,0 +1,361 @@
+{
+  "kind": "provider-retrieved-release-scenarios",
+  "generatedAt": "2026-11-01T03:01:09.987Z",
+  "passed": 9,
+  "total": 9,
+  "execution": {
+    "dirty": false,
+    "builtAt": "2026-11-01T02:40:07.605Z",
+    "revision": "03c145157878602971c7f4bbd30555c512fade35",
+    "sourceDigest": "40c8e8c5b6479ace616f8c426179ca44f1b19278a7abcae0f45ce9df6a42af4f"
+  },
+  "consecutive": true,
+  "selection": "Latest three original attempts per scenario on the clean release revision, including failed and unfinished attempts in the selection boundary.",
+  "results": [
+    {
+      "id": "eb1c1706-7093-4ce8-a3dd-a0c612d2b4b7",
+      "fault": "variant",
+      "passed": true,
+      "order": {
+        "id": "07434912NV2553829",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "eb1c1706-7093-4ce8-a3dd-a0c612d2b4b7",
+        "referenceId": "1",
+        "authorizationIds": [
+          "0KG80416X45498149"
+        ],
+        "captureIds": [],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "0KG80416X45498149",
+        "status": "VOIDED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "07434912NV2553829",
+        "expiresAt": "2026-11-30T02:45:27Z"
+      }
+    },
+    {
+      "id": "6b51ed86-fa2c-46da-8a90-82e77b4e49fc",
+      "fault": "variant",
+      "passed": true,
+      "order": {
+        "id": "3X9294324J536510Y",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "6b51ed86-fa2c-46da-8a90-82e77b4e49fc",
+        "referenceId": "1",
+        "authorizationIds": [
+          "2CS97770XE284121R"
+        ],
+        "captureIds": [],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "2CS97770XE284121R",
+        "status": "VOIDED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "3X9294324J536510Y",
+        "expiresAt": "2026-11-30T02:47:37Z"
+      }
+    },
+    {
+      "id": "602036e1-0bda-473f-b409-5daf2cef22fb",
+      "fault": "variant",
+      "passed": true,
+      "order": {
+        "id": "7A701046JM270892Y",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "602036e1-0bda-473f-b409-5daf2cef22fb",
+        "referenceId": "1",
+        "authorizationIds": [
+          "0F037060K8042524W"
+        ],
+        "captureIds": [],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "0F037060K8042524W",
+        "status": "VOIDED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "7A701046JM270892Y",
+        "expiresAt": "2026-11-30T02:49:02Z"
+      }
+    },
+    {
+      "id": "cf5c40bb-c2ad-466b-be4f-6c39e5e1539c",
+      "fault": "shipping",
+      "passed": true,
+      "order": {
+        "id": "2GM34049CV9514548",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "cf5c40bb-c2ad-466b-be4f-6c39e5e1539c",
+        "referenceId": "1",
+        "authorizationIds": [
+          "7A464753L30535038"
+        ],
+        "captureIds": [],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "7A464753L30535038",
+        "status": "VOIDED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "2GM34049CV9514548",
+        "expiresAt": "2026-11-30T02:50:04Z"
+      }
+    },
+    {
+      "id": "49d67b55-b077-4def-b703-e50ef5d89e40",
+      "fault": "shipping",
+      "passed": true,
+      "order": {
+        "id": "50M41158UJ2094348",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "49d67b55-b077-4def-b703-e50ef5d89e40",
+        "referenceId": "1",
+        "authorizationIds": [
+          "2NH79117YV226110H"
+        ],
+        "captureIds": [],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "2NH79117YV226110H",
+        "status": "VOIDED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "50M41158UJ2094348",
+        "expiresAt": "2026-11-30T02:54:39Z"
+      }
+    },
+    {
+      "id": "f39f74c4-968d-43d2-b934-a79fadf19da4",
+      "fault": "shipping",
+      "passed": true,
+      "order": {
+        "id": "5HU978502R3363032",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "f39f74c4-968d-43d2-b934-a79fadf19da4",
+        "referenceId": "1",
+        "authorizationIds": [
+          "36552139NG438300W"
+        ],
+        "captureIds": [],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "36552139NG438300W",
+        "status": "VOIDED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "5HU978502R3363032",
+        "expiresAt": "2026-11-30T02:55:29Z"
+      }
+    },
+    {
+      "id": "f6eee69b-2dd5-4314-85c8-2773cf468b99",
+      "fault": "none",
+      "passed": true,
+      "order": {
+        "id": "4MJ11090G6380104J",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "f6eee69b-2dd5-4314-85c8-2773cf468b99",
+        "referenceId": "1",
+        "authorizationIds": [
+          "8EU733084C322835A"
+        ],
+        "captureIds": [
+          "8FU56986CK5345727"
+        ],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "8EU733084C322835A",
+        "status": "CAPTURED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "4MJ11090G6380104J",
+        "expiresAt": "2026-11-30T02:56:56Z"
+      },
+      "capture": {
+        "id": "8FU56986CK5345727",
+        "status": "COMPLETED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "finalCapture": true,
+        "orderId": "4MJ11090G6380104J",
+        "authorizationId": "8EU733084C322835A"
+      }
+    },
+    {
+      "id": "845cad6c-acb1-4259-8459-01e50eb62ea6",
+      "fault": "none",
+      "passed": true,
+      "order": {
+        "id": "0SD50833X7874950C",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "845cad6c-acb1-4259-8459-01e50eb62ea6",
+        "referenceId": "1",
+        "authorizationIds": [
+          "8EB61309MM621533B"
+        ],
+        "captureIds": [
+          "1HX62327B10843530"
+        ],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "8EB61309MM621533B",
+        "status": "CAPTURED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "0SD50833X7874950C",
+        "expiresAt": "2026-11-30T02:58:35Z"
+      },
+      "capture": {
+        "id": "1HX62327B10843530",
+        "status": "COMPLETED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "finalCapture": true,
+        "orderId": "0SD50833X7874950C",
+        "authorizationId": "8EB61309MM621533B"
+      }
+    },
+    {
+      "id": "e8c532c3-feb0-4f72-8048-a754744b67dc",
+      "fault": "none",
+      "passed": true,
+      "order": {
+        "id": "0BS45682RN039033A",
+        "status": "COMPLETED",
+        "intent": "AUTHORIZE",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "customId": "e8c532c3-feb0-4f72-8048-a754744b67dc",
+        "referenceId": "1",
+        "authorizationIds": [
+          "16C620954G573835P"
+        ],
+        "captureIds": [
+          "6FT130000U986013Y"
+        ],
+        "approvalUrl": null
+      },
+      "contractHash": "72d36c1c91e768ed290ab3b8d1bec1bc6e8e0cec763d6c8183211977d9f8b295",
+      "authorization": {
+        "id": "16C620954G573835P",
+        "status": "CAPTURED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "payeeId": "JGPRYKMYZJCNU",
+        "orderId": "0BS45682RN039033A",
+        "expiresAt": "2026-11-30T02:59:29Z"
+      },
+      "capture": {
+        "id": "6FT130000U986013Y",
+        "status": "COMPLETED",
+        "amount": {
+          "amountMinor": 14800,
+          "currency": "USD"
+        },
+        "finalCapture": true,
+        "orderId": "0BS45682RN039033A",
+        "authorizationId": "16C620954G573835P"
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 **Tagline:** Commerce Ready: test whether an AI checkout buys what the customer actually asked for.
 
-This copy is prepared for the qualified release. Replace the marked result/link fields with actual receipts before pasting into Devpost. Do not submit the local rehearsal as provider evidence.
+Prepared submission copy for executable source `03c145157878602971c7f4bbd30555c512fade35`. The measured Sandbox results below are recorded; the final film, public evidence publication and authenticated Devpost submission are still pending. Do not submit the local rehearsal as provider evidence.
 
 ## Inspiration
 
@@ -28,7 +28,7 @@ TypeScript and Next.js serve the test lab and controlled storefront. OpenAI Resp
 
 PayPal Orders v2 and Payments v2 provide Sandbox order creation, buyer approval, authorization, exact-amount capture, void and readback. Operation identities are persisted before network requests. PostgreSQL transactions and leases coordinate the web process and persistent worker. Retries reuse the original economic identity; ambiguous outcomes are reconciled before another action. Verified webhooks trigger readback rather than authorizing a new payment.
 
-Vercel hosts the web/API deployment; a persistent companion worker shares the database and retains private browser evidence. The source, worker and exported evidence record their revision. [Verify actual final hosting before submission.]
+Vercel hosts the web/API deployment; a persistent Render worker shares managed PostgreSQL and retains private browser evidence. The qualified web and worker execute clean source `03c145157878602971c7f4bbd30555c512fade35`; evidence records its execution revision separately from later documentation and media packaging.
 
 ## Challenges we ran into
 
@@ -40,7 +40,11 @@ Network uncertainty was another challenge. A timeout cannot tell us whether a pr
 
 We built a complete, inspectable workflow around two deliberate merchant faults, one constrained recovery, and a clear distinction between test verdict and payment state. The interface keeps the first divergence visible on phones as well as desktop.
 
-**Insert measured release results here:** live compiler corpus [passed]/20; three consecutive runs for each payment scenario [passed]/9; recovery [passed]/[total]; duplicate/restart/webhook checks [passed]/[total]. Include the actual clean source revision and receipt links. Local checks belong in a separate paragraph and must be labeled as mocks or local PostgreSQL/browser checks.
+On that frozen source, provider retrieval qualified the latest three original attempts in each scenario: **3/3 valid captures, 3/3 variant denials with confirmed voids, and 3/3 shipping denials with confirmed voids — 9/9 total**. One separately recorded recovery preserved the original confirmed contract, used a fresh order, authorization and buyer approval, and completed a $148 capture bound to the correct size-M merchant order.
+
+The live compiler corpus met its automated expectations in **20/20 cases: 8/8 executable preservation cases and 12/12 expected clarifications**. Assistant inspection covered every raw and final output. One blocked subscription request marks the requested blue/medium variant as soft; it remains blocked for unsupported subscription and recurrence. Human semantic review is pending. These finite checks are not a claim of universal accuracy or perfect semantic preservation.
+
+Five concurrent duplicate approval requests against an already completed run preserved one capture and one merchant order (**5/5**). A worker restart while another run awaited buyer approval resumed successfully. This restart did not exercise a lost provider response or an interruption during capture. Broader live interrupted-response and duplicate/out-of-order webhook qualification remains unestablished; local tests do not fill that gap.
 
 ## What we learned
 
@@ -56,15 +60,19 @@ Implementation began November 1, 2026. The earlier blueprint is design history, 
 
 Northpath Supply and Ocean Shell are fictional. All payments are Sandbox payments. No real customer savings, production deployment adoption or general repair capability is claimed. Codex assisted implementation and production; runtime AI and synthetic film narration are disclosed in the app/film and `ATTRIBUTION.md`.
 
-## Current measured checks (November 1)
+## Validation scope and evidence (November 1)
 
-91/91 repository tests passed with PostgreSQL concurrency enabled against the dedicated Render database. The read-only verification collection passed 38/38 assertions across 15 requests. The deterministic suite matched 12/12 expectations (2 ALLOW, 8 DENY, 2 REVIEW). These are local execution and synthetic/mocked financial checks, not live PayPal qualification. OpenAI model access, KERNEL API access and PayPal Sandbox authentication have been checked separately; no successful payment is implied.
+The earlier automated suite passed 103/103 at source `7df`, including hosted PostgreSQL checks with financial operations mocked. The final `03c1451` UI passed type checking and a production build; the full earlier suite was not rerun at that final revision. The readiness bench previously matched 12/12 synthetic expectations: 2 ALLOW, 8 DENY and 2 REVIEW. These checks remain separate from the actual frozen-source Sandbox samples above.
 
-## Fields to complete at the final account stage
+Local qualification records are `artifacts/payment-qualification.json`, `artifacts/intent-qualification.json`, `artifacts/sandbox-recovery-03c1451.json` and `artifacts/live-duplicate-approval.json`. The recovery is `05d9de46-0882-4c64-bfa6-f2b48c43a7bb`, parent `eb1c1706-7093-4ce8-a3dd-a0c612d2b4b7`. The restart observation belongs to run `f6eee69b-2dd5-4314-85c8-2773cf468b99`.
 
-- Hosted demo: [verified public HTTPS URL]
-- Source: [public repository with MIT license and matching release revision]
-- Video: [public YouTube URL, verified signed out, 165 seconds]
-- Instructions: use the public saved evidence immediately; fresh Sandbox runs require the documented buyer approval and operator access supplied to judges.
-- Team/personal eligibility and sponsor declarations: user completes accurately.
-- Submission receipt: authenticated status, finalization state, timestamp and submitted URLs retained in a completed copy of `submission/receipt.template.json`.
+The reviewed public receipt destinations are [qualification summary](https://comrdy.vercel.app/release/qualification.json), [protected evidence](https://comrdy.vercel.app/release/evidence.json) and [isolated control](https://comrdy.vercel.app/release/control.json). Publication and signed-out verification of these destinations remain pending; links alone do not establish that the exports are available or qualified. The isolated control is separate from protected payment runs and makes no shopper or shipment claim.
+
+## Submission links and remaining account steps
+
+- Hosted demo: [COMRDY](https://comrdy.vercel.app).
+- Source: [public MIT repository](https://github.com/AmirmLotfy/comrdy), qualified executable revision `03c145157878602971c7f4bbd30555c512fade35`.
+- Video URL: **pending** final authentic 165-second film, human review, public YouTube upload and signed-out verification.
+- Judge instructions: once the reviewed evidence export is published, inspect saved evidence without making payments. Fresh Sandbox runs require operator access and ordinary buyer approval; credentials are never included in public copy.
+- Team/personal eligibility and sponsor declarations remain the user's accurate declarations; this draft does not create or change them.
+- Submission timestamp: **pending** authenticated finalization of the existing Devpost entry. Retain submitted URLs, video/gallery readback and authenticated status in a completed copy of `submission/receipt.template.json`; a project page is not proof of submission.

@@ -1,0 +1,1689 @@
+{
+  "execution": {
+    "revision": "03c145157878602971c7f4bbd30555c512fade35",
+    "dirty": false,
+    "builtAt": "2026-11-01T02:43:04.154Z",
+    "sourceDigest": "40c8e8c5b6479ace616f8c426179ca44f1b19278a7abcae0f45ce9df6a42af4f"
+  },
+  "generatedAt": "2026-11-01T02:59:06.124Z",
+  "results": [
+    {
+      "id": "canonical",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "size M",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "pricing_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "no more than $160 USD delivered",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "substitution_occurred",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. No substitutions or subscriptions.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "paraphrase",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "One",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "delivered_total_cap",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "Maximum delivered price USD 160.",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "no_substitutions",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions and no recurring plan.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "subscription_disabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions and no recurring plan.",
+            "value": false
+          }
+        ],
+        "mandate": "One blue medium Ocean Shell, please. Maximum delivered price USD 160. No substitutions and no recurring plan.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "cents",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "size M",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "pricing_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most USD 148.01 including shipping and tax",
+            "value": {
+              "amountMinor": 14801,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "no_substitutions",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "no_subscriptions",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue Ocean Shell size M for at most USD 148.01 including shipping and tax. No substitutions or subscriptions.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "exact-boundary",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_color",
+            "op": "eq_ci",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "product_size",
+            "op": "eq_ci",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "delivered_total_cap",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "no more than USD 148 delivered",
+            "value": {
+              "amountMinor": 14800,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "no_substitutions",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "without substitutions or a subscription.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "no_subscription",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "without substitutions or a subscription.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Ocean Shell for no more than USD 148 delivered, without substitutions or a subscription.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "too-low",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_name",
+            "op": "eq",
+            "path": "product.name",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "Ocean Shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "inv_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "Delivered total must not exceed USD 147.99.",
+            "value": {
+              "amountMinor": 14799,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "no_substitution",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitution or subscription.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "no_subscription",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitution or subscription.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue Ocean Shell in medium. Delivered total must not exceed USD 147.99. No substitution or subscription.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "small",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_name",
+            "op": "eq",
+            "path": "product.name",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "Ocean Shell"
+          },
+          {
+            "hard": true,
+            "id": "product_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "product_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "size S",
+            "value": "S"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "inv_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "maximum USD 160 delivered",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "no_substitution",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions, no subscription.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "no_subscription",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions, no subscription.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue Ocean Shell, size S, maximum USD 160 delivered. No substitutions, no subscription.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "large",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_name",
+            "op": "eq",
+            "path": "product.name",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "Ocean Shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "size L",
+            "value": "L"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "pricing_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most USD 160 including all charges.",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "substitution_occurred",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "Do not substitute or subscribe.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "Do not substitute or subscribe.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue Ocean Shell size L for at most USD 160 including all charges. Do not substitute or subscribe.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "reordered",
+      "passed": true,
+      "expected": "executable",
+      "observed": "executable",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "product_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "delivered_budget",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "USD 160 is my entire delivered budget",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "subscription_disabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "substitution_disabled",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions.",
+            "value": false
+          }
+        ],
+        "mandate": "No subscriptions. No substitutions. USD 160 is my entire delivered budget for one blue medium Ocean Shell.",
+        "needsResolution": [],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "currency-missing",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "product_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "pricing_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most 160 delivered",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "substitution_occurred",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Ocean Shell for at most 160 delivered. No subscriptions or substitutions.",
+        "needsResolution": [
+          "Specify the currency for the delivered total cap of 160; the catalog's USD currency does not establish the buyer's intended currency.",
+          "Explicitly identify USD (US dollars) as the delivered-total currency in the buyer mandate; catalog currency, a bare dollar sign, or an amount alone is insufficient."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "budget-missing",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "product_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "substitution_prohibited",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "subscription_disabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Ocean Shell. No substitutions or subscriptions.",
+        "needsResolution": [
+          "Specify the intended currency; the mandate does not identify USD, US dollars, or US$.",
+          "Specify an exact hard cap for the delivered total, including its currency.",
+          "Explicitly identify USD (US dollars) as the delivered-total currency in the buyer mandate; catalog currency, a bare dollar sign, or an amount alone is insufficient.",
+          "An exact hard delivered-total limit and currency must be confirmed."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "ambiguous-size",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_name",
+            "op": "eq",
+            "path": "product.name",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "Ocean Shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq_ci",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "my usual size",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "inv_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most USD 160 delivered",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue Ocean Shell in my usual size for at most USD 160 delivered. No subscriptions.",
+        "needsResolution": [
+          "What size should be selected? “My usual size” cannot be resolved from the supplied catalog aliases."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "ambiguous-budget",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": false,
+            "id": "target_total",
+            "op": "money_eq",
+            "path": "pricing.total",
+            "severity": "medium",
+            "sourceText": "around USD 160",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "max_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": null,
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "no_substitution",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "subscription_disabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Ocean Shell for around USD 160, delivered. No substitutions or subscriptions.",
+        "needsResolution": [
+          "Specify an exact hard maximum delivered total in USD; the mandate says “around USD 160,” which does not establish an exact cap.",
+          "Clarify what price range or target should count as “around USD 160.”"
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "unsupported-product",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_name",
+            "op": "eq",
+            "path": "product.name",
+            "severity": "critical",
+            "sourceText": "Summit Boot",
+            "value": "Summit Boot"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "inv_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "maximum USD 160 delivered",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "substitution_occurred",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Summit Boot, maximum USD 160 delivered. No subscriptions or substitutions.",
+        "needsResolution": [
+          "The requested Summit Boot is not supported by the single-store environment, which supports only Ocean Shell; confirm whether to change the requested product.",
+          "The requested size medium cannot be resolved for Summit Boot because the supplied size alias mapping applies to Ocean Shell."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "unsupported-currency",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_name",
+            "op": "eq",
+            "path": "product.name",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "Ocean Shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq_ci",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq_ci",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "pricing_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "maximum EUR 160 delivered",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "substitution_occurred",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Ocean Shell, maximum EUR 160 delivered. No subscriptions or substitutions.",
+        "needsResolution": [
+          "The delivered-total cap is EUR 160, but this environment supports USD only. Specify an acceptable exact USD delivered-total cap; no conversion has been assumed.",
+          "Explicitly identify USD (US dollars) as the delivered-total currency in the buyer mandate; catalog currency, a bare dollar sign, or an amount alone is insufficient."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "quantity-two",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "two",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "delivered_total_cap",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most USD 300 delivered",
+            "value": {
+              "amountMinor": 30000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "subscription_disabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions.",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "no_substitution",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No subscriptions or substitutions.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy two blue medium Ocean Shells for at most USD 300 delivered. No subscriptions or substitutions.",
+        "needsResolution": [
+          "The requested quantity is two, but this environment supports only one physical Ocean Shell item. Resolve the quantity before proceeding."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "contradiction",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "size_m",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "must be size M",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "size_s",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "must be size S",
+            "value": "S"
+          },
+          {
+            "hard": true,
+            "id": "delivered_total_cap",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "Maximum USD 160 delivered",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "subscription_disabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue Ocean Shell. It must be size M and must be size S. Maximum USD 160 delivered. No subscriptions.",
+        "needsResolution": [
+          "The requested size is contradictory: it must be both M and S. Clarify which size is intended.",
+          "variant.attributes.size: contradictory hard rules size_m/size_s",
+          "variant.attributes.size: contradictory hard rules size_s/size_m"
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "deadline",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "delivered_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most USD 160 delivered",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "delivery_estimated_date",
+            "op": "date_lte",
+            "path": "delivery.estimatedDate",
+            "severity": "high",
+            "sourceText": "It must arrive tomorrow before noon.",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No subscriptions.",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Ocean Shell for at most USD 160 delivered. It must arrive tomorrow before noon. No subscriptions.",
+        "needsResolution": [
+          "Delivery timing cannot be resolved to a full ISO timestamp with an explicit timezone: clarify the calendar date meant by “tomorrow” and the timezone for “before noon”; the delivery promise is not supported by this environment."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "unsupported-color",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "red",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "inv_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most USD 160 delivered",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "substitution_prohibited",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "subscription_prohibited",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one red medium Ocean Shell for at most USD 160 delivered. No substitutions or subscriptions.",
+        "needsResolution": [
+          "The mandate requires red, but the catalog lists only blue for Ocean Shell. Confirm whether a red item is available or provide an alternative."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "subscription",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": false,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "medium",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": false,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "medium",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "pricing_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at most USD 160 per delivery",
+            "value": {
+              "amountMinor": 16000,
+              "currency": "USD"
+            }
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "Subscribe",
+            "value": null
+          }
+        ],
+        "mandate": "Subscribe to receive one blue medium Ocean Shell every month, at most USD 160 per delivery.",
+        "needsResolution": [
+          "Subscription fulfillment is unsupported in this single-store environment; clarify whether to proceed without a subscription.",
+          "Monthly recurrence cannot be represented by the supported contract paths; clarify how to handle the requested monthly delivery."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    },
+    {
+      "id": "unbounded",
+      "passed": true,
+      "expected": "clarification",
+      "observed": "clarification",
+      "candidate": {
+        "constraints": [
+          {
+            "hard": true,
+            "id": "product_id",
+            "op": "eq",
+            "path": "product.id",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "ocean-shell"
+          },
+          {
+            "hard": true,
+            "id": "product_name",
+            "op": "eq",
+            "path": "product.name",
+            "severity": "high",
+            "sourceText": "Ocean Shell",
+            "value": "Ocean Shell"
+          },
+          {
+            "hard": true,
+            "id": "variant_color",
+            "op": "eq",
+            "path": "variant.attributes.color",
+            "severity": "high",
+            "sourceText": "blue",
+            "value": "blue"
+          },
+          {
+            "hard": true,
+            "id": "variant_size",
+            "op": "eq",
+            "path": "variant.attributes.size",
+            "severity": "high",
+            "sourceText": "medium",
+            "value": "M"
+          },
+          {
+            "hard": true,
+            "id": "quantity",
+            "op": "eq",
+            "path": "quantity",
+            "severity": "high",
+            "sourceText": "one",
+            "value": 1
+          },
+          {
+            "hard": true,
+            "id": "inv_total",
+            "op": "money_lte",
+            "path": "pricing.total",
+            "severity": "critical",
+            "sourceText": "at any price, including shipping",
+            "value": null
+          },
+          {
+            "hard": true,
+            "id": "substitution_occurred",
+            "op": "bool_eq",
+            "path": "policy.substitutionOccurred",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          },
+          {
+            "hard": true,
+            "id": "subscription_enabled",
+            "op": "bool_eq",
+            "path": "subscription.enabled",
+            "severity": "high",
+            "sourceText": "No substitutions or subscriptions",
+            "value": false
+          }
+        ],
+        "mandate": "Buy one blue medium Ocean Shell at any price, including shipping. No substitutions or subscriptions.",
+        "needsResolution": [
+          "Provide an exact hard cap for the delivered total, including shipping; “at any price” does not specify a cap required by the runtime.",
+          "Explicitly identify the intended currency. The catalog’s USD currency does not establish the buyer’s intended currency.",
+          "Explicitly identify USD (US dollars) as the delivered-total currency in the buyer mandate; catalog currency, a bare dollar sign, or an amount alone is insufficient."
+        ],
+        "schemaVersion": "1.0"
+      },
+      "model": "gpt-6-luna",
+      "promptVersion": "intent-v2"
+    }
+  ],
+  "humanReview": false
+}

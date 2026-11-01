@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-11-01T03:05:57.963Z",
+  "execution": {
+    "dirty": false,
+    "builtAt": "2026-11-01T02:40:07.605Z",
+    "revision": "03c145157878602971c7f4bbd30555c512fade35",
+    "sourceDigest": "40c8e8c5b6479ace616f8c426179ca44f1b19278a7abcae0f45ce9df6a42af4f"
+  },
+  "sourceDigest": "40c8e8c5b6479ace616f8c426179ca44f1b19278a7abcae0f45ce9df6a42af4f",
+  "payments": {
+    "passed": 9,
+    "total": 9,
+    "consecutive": true,
+    "selection": "Latest three original attempts per scenario on the clean release revision, including failed and unfinished attempts in the selection boundary.",
+    "scenarios": {
+      "validCapture": 3,
+      "variantDenialAndVoid": 3,
+      "shippingDenialAndVoid": 3
+    }
+  },
+  "intent": {
+    "passed": 20,
+    "total": 20,
+    "executable": {
+      "passed": 8,
+      "total": 8
+    },
+    "clarification": {
+      "passed": 12,
+      "total": 12
+    },
+    "assistantReview": true,
+    "humanReview": false,
+    "limit": "Automated required-constraint checks and clarification presence only. Review every output for unsupported additions and relevant clarification; this is not payment or browser qualification.",
+    "caveat": "One correctly blocked subscription request marks requested color and size soft; clarify and recompile before confirmation. Automated 20/20 is not a human semantic acceptance result."
+  },
+  "recovery": {
+    "passed": 1,
+    "total": 1,
+    "parentId": "eb1c1706-7093-4ce8-a3dd-a0c612d2b4b7",
+    "runId": "05d9de46-0882-4c64-bfa6-f2b48c43a7bb",
+    "unchangedContract": true,
+    "freshApproval": true,
+    "amountMinor": 14800,
+    "currency": "USD",
+    "limit": "One controlled variant recovery; not general autonomous repair."
+  },
+  "retry": {
+    "passed": 5,
+    "total": 5,
+    "runId": "f6eee69b-2dd5-4314-85c8-2773cf468b99",
+    "captures": 1,
+    "merchantOrders": 1,
+    "scope": "Five concurrent duplicate approval commands after completed capture; actual hosted API and provider readback. This does not simulate a lost PayPal response."
+  },
+  "restart": {
+    "passed": 1,
+    "total": 1,
+    "runId": "f6eee69b-2dd5-4314-85c8-2773cf468b99",
+    "scope": "Render service restarted at 04:56 Cairo while a durable order awaited buyer approval; subsequent authorization and capture completed. Not an interrupted capture-response test."
+  },
+  "webhooks": {
+    "verifiedOutOfOrder": {
+      "passed": 1,
+      "total": 1,
+      "runId": "eb1c1706-7093-4ce8-a3dd-a0c612d2b4b7",
+      "voidedReceivedAt": "2026-11-01T02:45:34.814Z",
+      "createdReceivedAt": "2026-11-01T02:45:47.102Z",
+      "finalStatus": "VOIDED",
+      "captureId": null
+    },
+    "unsignedRejected": {
+      "passed": 1,
+      "total": 1,
+      "http": 400
+    },
+    "duplicateDelivery": "Mock-tested; no live delivery claim."
+  },
+  "localChecks": {
+    "automated": {
+      "passed": 103,
+      "total": 103,
+      "revision": "7df484fd56c97bbefd9972b2ab24be4952298296",
+      "scope": "Local suite with hosted PostgreSQL concurrency; financial responses mocked."
+    },
+    "readiness": {
+      "passed": 12,
+      "total": 12,
+      "allow": 2,
+      "deny": 8,
+      "review": 2,
+      "scope": "Synthetic cases through actual invariant engine; no provider calls."
+    }
+  },
+  "limitations": [
+    "Sandbox and one controlled merchant only.",
+    "Amounts in blocked synthetic tests are not customer savings.",
+    "Evidence hashes establish consistency, not independent merchant truth.",
+    "Lost provider response and unsuccessful recovery termination are mocked checks, not live fault injections."
+  ]
+}
