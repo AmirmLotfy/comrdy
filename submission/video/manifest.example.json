@@ -4,46 +4,46 @@
   "narration": "media/narration/final.wav",
   "clips": [
     {
-      "file": "media/01-control.mp4",
+      "file": "media/release/01-control.mp4",
       "start": 0,
       "seconds": 12,
       "caption": "Isolated merchant control \u00b7 Completed Sandbox capture \u00b7 Disclosed size fault"
     },
     {
-      "file": "media/02-contract.mp4",
+      "file": "media/release/02-contract.mp4",
       "start": 12,
-      "seconds": 23,
+      "seconds": 25,
       "caption": "AI compilation \u2192 human confirmation"
     },
     {
-      "file": "media/03-fault.mp4",
-      "start": 35,
-      "seconds": 25,
+      "file": "media/release/03-fault.mp4",
+      "start": 37,
+      "seconds": 22,
       "caption": "Controlled fault: medium \u2192 small"
     },
     {
-      "file": "media/04-void.mp4",
-      "start": 60,
-      "seconds": 30,
+      "file": "media/release/04-void.mp4",
+      "start": 59,
+      "seconds": 28,
       "caption": "Capture blocked \u00b7 authorization void confirmed"
     },
     {
-      "file": "media/05-recovery.mp4",
-      "start": 90,
-      "seconds": 35,
+      "file": "media/release/05-recovery.mp4",
+      "start": 87,
+      "seconds": 32,
       "caption": "Same contract \u00b7 fresh approval \u00b7 correct purchase"
     },
     {
-      "file": "media/06-evidence.mp4",
-      "start": 125,
-      "seconds": 20,
-      "caption": "Inspect the verdict and the provider evidence"
+      "file": "media/release/06-readiness.mp4",
+      "start": 119,
+      "seconds": 23,
+      "caption": "Executable readiness bench \u00b7 Synthetic cases \u00b7 No provider calls"
     },
     {
-      "file": "media/07-close.mp4",
-      "start": 145,
-      "seconds": 20,
-      "caption": "COMRDY \u00b7 Test the purchase against the promise"
+      "file": "media/release/07-evidence.mp4",
+      "start": 142,
+      "seconds": 23,
+      "caption": "Judge workbench \u00b7 Read-only saved evidence"
     }
   ],
   "mode": "release",

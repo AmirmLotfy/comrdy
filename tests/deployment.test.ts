@@ -1,6 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import {
+  mkdtempSync,
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+  rmSync,
+} from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { sourceDigest, sourceManifest } from "../scripts/lib/source-digest";
@@ -153,6 +159,86 @@ test("Next config reads the current receipt at build phase and rejects unknown p
     );
   } finally {
     process.chdir(previousDirectory);
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("Vercel config digest preserves semantics across platform JSON reserialization", () => {
+  const root = mkdtempSync(join(tmpdir(), "comrdy-config-digest-test-"));
+  try {
+    const config = JSON.parse(
+      readFileSync(new URL("../vercel.json", import.meta.url), "utf8"),
+    );
+    assert.equal(config.name, "comrdy");
+    assert.equal(config.version, 2);
+    // Include nested objects to verify key sorting at every depth.
+    config.headers = [
+      { source: "/example", headers: [{ key: "Example", value: "one" }] },
+    ];
+    const configPath = join(root, "vercel.json");
+    writeFileSync(configPath, JSON.stringify(config, null, 2));
+    const original = sourceManifest(root);
+    assert.equal(original.files[0].encoding, "canonical-json");
+    function reverseKeys(value: unknown): unknown {
+      if (Array.isArray(value)) return value.map(reverseKeys);
+      if (value === null || typeof value !== "object") return value;
+      return Object.fromEntries(
+        Object.entries(value)
+          .reverse()
+          .map(([key, item]) => [key, reverseKeys(item)]),
+      );
+    }
+    // This includes the confirmed remote transform, with explicit defaults.
+    writeFileSync(
+      configPath,
+      JSON.stringify({ ...config, name: "comrdy", version: 2 }) + "\n",
+    );
+    assert.deepEqual(sourceManifest(root), original);
+    writeFileSync(
+      configPath,
+      JSON.stringify(reverseKeys(config), null, 4) + "\r\n",
+    );
+    assert.deepEqual(sourceManifest(root), original);
+    for (const [key, value] of [
+      ["regions", ["sfo1"]],
+      ["buildCommand", "npm run another-build"],
+      ["name", "other-project"],
+      ["version", 3],
+      ["newKey", true],
+    ] as const) {
+      writeFileSync(configPath, JSON.stringify({ ...config, [key]: value }));
+      assert.notEqual(sourceDigest(root), original.digest, key);
+    }
+    const { name: _name, ...withoutName } = config;
+    writeFileSync(configPath, JSON.stringify(withoutName));
+    assert.notEqual(sourceDigest(root), original.digest);
+    writeFileSync(
+      configPath,
+      JSON.stringify({ ...config, regions: ["iad1", "sfo1"] }),
+    );
+    const ordered = sourceDigest(root);
+    writeFileSync(
+      configPath,
+      JSON.stringify({ ...config, regions: ["sfo1", "iad1"] }),
+    );
+    assert.notEqual(sourceDigest(root), ordered);
+    writeFileSync(configPath, "invalid JSON");
+    assert.throws(() => sourceDigest(root), SyntaxError);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("JSON files other than vercel config retain exact byte provenance", () => {
+  const root = mkdtempSync(join(tmpdir(), "comrdy-raw-digest-test-"));
+  try {
+    const file = join(root, "package.json");
+    writeFileSync(file, '{"name":"example"}');
+    const before = sourceManifest(root);
+    assert.equal(before.files[0].encoding, "raw");
+    writeFileSync(file, '{ "name": "example" }\n');
+    assert.notEqual(sourceDigest(root), before.digest);
+  } finally {
     rmSync(root, { recursive: true, force: true });
   }
 });

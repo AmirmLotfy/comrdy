@@ -3,5 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "name": "comrdy",
+  "version": 2
 }

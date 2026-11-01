@@ -38,7 +38,7 @@ The 147.32-second voice remains at speed 1.0. All source samples are retained in
 | 6     | 119–142 s     | 23 s   | Actual synthetic readiness bench, visibly identified as synthetic |
 | 7     | 142–165 s     | 23 s   | Actual judge workbench and read-only saved evidence               |
 
-The first voice segment begins at 0.35 seconds and each later segment at its scene start plus 0.35 seconds. Copy these exact scene starts and lengths into the working film manifest. **The older `manifest.example.json` timing is incompatible with this audio.** Chapter six must retain the distinction between synthetic verification cases and provider qualification. If the required real receipts or footage are missing, the matching narration remains an unsupported release claim: stop release production at that gate.
+The first voice segment begins at 0.35 seconds and each later segment at its scene start plus 0.35 seconds. Copy these exact scene starts and lengths into the working film manifest. The `manifest.example.json` timing now matches this approved mix; its footage and review fields remain placeholders. Chapter six must retain the distinction between synthetic verification cases and provider qualification. If the required real receipts or footage are missing, the matching narration remains an unsupported release claim: stop release production at that gate.
 
 Successful assembly creates:
 
