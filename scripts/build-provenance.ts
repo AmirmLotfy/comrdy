@@ -10,7 +10,7 @@ type GitState = { revision: string; dirty: boolean } | null;
 export function resolveBuildProvenance(
   digest: string,
   git: GitState,
-  env: NodeJS.ProcessEnv,
+  env: Readonly<Record<string, string | undefined>>,
 ) {
   const declaredRevision = env.COMRDY_SOURCE_REVISION;
   const declaredDigest = env.COMRDY_SOURCE_DIGEST;
