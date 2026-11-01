@@ -41,6 +41,8 @@ function harness(mode: "sandbox" | "simulation" = "sandbox") {
         mode: "sandbox",
         compiler: {
           execution: { revision: "a".repeat(40), dirty: false, builtAt: NOW },
+          promptVersion: COMPILER_PROMPT_VERSION,
+          rawCandidate: createCanonicalCandidate(),
           model: "test-model",
           responseId: "mock-compiler-response",
           usage: { inputTokens: 10, outputTokens: 20 },
@@ -67,6 +69,7 @@ test("edited candidate retains its owner-bound original compiler receipt without
   assert.equal(confirmed.compiler.model, "test-model");
   assert.equal(confirmed.compiler.responseId, "mock-compiler-response");
   assert.equal(confirmed.compiler.promptVersion, COMPILER_PROMPT_VERSION);
+  assert.deepEqual(confirmed.compiler.rawCandidate, original);
   assert.deepEqual(review.originalCandidate, original);
   assert.equal(review.originalCandidateHash, sha256(original));
   assert.deepEqual(review.finalCandidate, candidate);
