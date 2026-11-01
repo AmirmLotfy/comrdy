@@ -1,3 +1,4 @@
+import { executionProvenance } from "./provenance";
 export function status() {
   if (
     process.env.APP_MODE &&
@@ -19,6 +20,7 @@ export function status() {
   };
   return {
     mode: process.env.APP_MODE === "sandbox" ? "sandbox" : "simulation",
+    execution: executionProvenance(),
     ready,
     liveReady: Object.values(ready).every(Boolean),
     spendingLimitUSD: 100,

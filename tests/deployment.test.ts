@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { sourceDigest } from "../scripts/lib/source-digest";
 import { transaction } from "../src/server/store";
+import nextConfig from "../next.config";
 
 test("deployment checksum detects source changes without incorporating secrets or run evidence", () => {
   const root = mkdtempSync(join(tmpdir(), "comrdy-release-test-"));
@@ -42,5 +43,104 @@ test("Vercel cannot silently fall back to ephemeral file-backed simulation", asy
       if (value === undefined) delete process.env[key];
       else process.env[key] = value;
     }
+  }
+});
+
+// These checks qualify the provenance gate only; no deployment/provider calls.
+import { resolveBuildProvenance } from "../scripts/build-provenance";
+
+const revision = "a".repeat(40);
+const digest = "b".repeat(64);
+const declared = {
+  VERCEL: "1",
+  COMRDY_SOURCE_REVISION: revision,
+  COMRDY_SOURCE_DIGEST: digest,
+};
+
+test("clean CLI upload requires matching revision metadata and source bytes", () => {
+  assert.deepEqual(resolveBuildProvenance(digest, null, declared), {
+    revision,
+    dirty: false,
+  });
+  assert.throws(
+    () => resolveBuildProvenance("c".repeat(64), null, declared),
+    /digest does not match/,
+  );
+  assert.throws(
+    () => resolveBuildProvenance(digest, null, { VERCEL: "1" }),
+    /requires verified/,
+  );
+  assert.throws(
+    () =>
+      resolveBuildProvenance(digest, null, {
+        COMRDY_SOURCE_REVISION: revision,
+      }),
+    /together/,
+  );
+  assert.throws(
+    () =>
+      resolveBuildProvenance(digest, null, {
+        ...declared,
+        COMRDY_SOURCE_REVISION: "invalid",
+      }),
+    /together/,
+  );
+});
+
+test("declared provenance cannot override dirty or different Git source", () => {
+  assert.throws(
+    () => resolveBuildProvenance(digest, { revision, dirty: true }, declared),
+    /clean Git checkout/,
+  );
+  assert.throws(
+    () =>
+      resolveBuildProvenance(
+        digest,
+        { revision: "c".repeat(40), dirty: false },
+        declared,
+      ),
+    /clean Git checkout/,
+  );
+  assert.deepEqual(
+    resolveBuildProvenance(digest, { revision, dirty: false }, {}),
+    { revision, dirty: false },
+  );
+  assert.deepEqual(
+    resolveBuildProvenance(digest, { revision, dirty: true }, {}),
+    { revision, dirty: true },
+  );
+});
+
+test("Next config reads the current receipt at build phase and rejects unknown provenance", () => {
+  const root = mkdtempSync(join(tmpdir(), "comrdy-config-test-"));
+  const previousDirectory = process.cwd();
+  try {
+    process.chdir(root);
+    assert.throws(
+      () => nextConfig("phase-production-build"),
+      /requires valid build provenance/,
+    );
+    const receipt = {
+      revision,
+      dirty: false,
+      builtAt: "2026-11-01T00:00:00.000Z",
+      sourceDigest: digest,
+    };
+    writeFileSync(".build-provenance.json", JSON.stringify(receipt));
+    assert.equal(
+      nextConfig("phase-production-build").env?.COMRDY_BUILD_PROVENANCE,
+      JSON.stringify(receipt),
+    );
+    writeFileSync(
+      ".build-provenance.json",
+      JSON.stringify({ revision: null, dirty: true, builtAt: null }),
+    );
+    assert.throws(
+      () => nextConfig("phase-production-build"),
+      /requires valid build provenance/,
+    );
+  } finally {
+    process.chdir(previousDirectory);
+    rmSync(root, { recursive: true, force: true });
   }
 });
