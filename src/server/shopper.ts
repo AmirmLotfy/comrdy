@@ -1,6 +1,5 @@
 import Kernel from "@onkernel/sdk";
 import OpenAI from "openai";
-import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 export interface ShopperInput {
@@ -17,6 +16,8 @@ export async function runShopper(input: ShopperInput) {
     process.env.NODE_ENV !== "production";
   if (!process.env.OPENAI_API_KEY || (!local && !process.env.KERNEL_API_KEY))
     throw new Error("Browser and AI credentials required");
+  // Browser runtime belongs to the persistent worker, not API cold starts.
+  const { chromium } = await import("playwright");
   const base = new URL(input.baseUrl);
   if (base.origin !== new URL(process.env.APP_URL!).origin)
     throw new Error("Merchant origin is not allowlisted");
