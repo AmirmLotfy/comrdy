@@ -52,6 +52,8 @@ Payment success and purchase correctness are different assertions. An LLM can he
 
 ## What's next
 
+The planned custom domain is [comrdy.com](https://comrdy.com); it is not active yet. For the working demo, use [comrdy.vercel.app](https://comrdy.vercel.app).
+
 After this controlled demonstration, we would expand the case corpus and evaluate additional merchant integrations. General autonomous recovery, arbitrary storefronts, subscriptions, refunds and multi-tenant operation are outside this release.
 
 ## Original work and disclosures

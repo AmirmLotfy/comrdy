@@ -1,5 +1,9 @@
 # COMRDY current handoff — November 1, 2026
 
+## Planned domain note — November 1, 2026
+
+The owner plans to purchase `comrdy.com`. The existing submitted Devpost project story now links it as a **planned, inactive** domain and points to the working Vercel demo; private judge instructions contain the same inactive-domain notice while preserving the live access code and required Vercel demo URL. After both edits, authenticated finalization still showed **SUBMITTED, 5/5**. No domain was purchased or added to Vercel. Vercel's exact-name search returned available at $12.03 for one year and $12.03 renewal at the time checked; availability and price can change. The installed CLI documents `domains add` for a domain already owned. Follow `docs/CUSTOM_DOMAIN_CUTOVER.md` after the purchase; direct serving requires coordinated origin/callback/webhook testing, since API mutations and the shopper enforce `APP_URL`. Preserve the submitted URL until a verified replacement is ready.
+
 ## Published and submitted — authoritative final checkpoint
 
 The authorized release milestone is complete. Public video: https://www.youtube.com/watch?v=Or9gooJFwSo . Devpost: https://devpost.com/software/comrdy . Demo: https://comrdy.vercel.app . Source: https://github.com/AmirmLotfy/comrdy . November 1, 2026 authenticated finalization confirms **SUBMITTED, 5/5 steps done**, checked/disabled terms and disabled Project submitted button. Submission history points to the same video. `submission/receipt.json` contains observed timestamps and proof hashes. Exact provider submitted_at is unavailable (Devpost connector requires reauthentication); never turn observation time into a server timestamp.
