@@ -28,6 +28,7 @@
     "postgres": "^3.4.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "tsx": "^4.23.15",
     "zod": "^4.6.7"
   },
   "devDependencies": {
@@ -38,7 +39,6 @@
     "newman": "^6.2.3",
     "prettier": "^3.9.10",
     "remotion": "^4.0.539",
-    "tsx": "^4.20.0",
     "typescript": "^5.9.0"
   },
   "type": "module",

@@ -15,3 +15,6 @@ public/media/**/*.mp4
 .vercel
 
 public/media/rehearsal/
+
+# Private production footage and intermediate stills; public evidence uses public/release.
+public/media/release/

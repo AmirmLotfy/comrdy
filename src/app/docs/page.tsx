@@ -118,11 +118,11 @@ export default function DocsPage() {
               <span className="mini-label">EXAMPLE CONSTRAINT</span>
               <div>
                 <span>Customer says</span>
-                <strong>“Do not substitute another size.”</strong>
+                <strong>“No substitutions or subscriptions.”</strong>
               </div>
               <div>
                 <span>Verifier checks</span>
-                <code>observed size = confirmed size</code>
+                <code>substitutionOccurred = false; subscription = false</code>
               </div>
             </div>
             <p>

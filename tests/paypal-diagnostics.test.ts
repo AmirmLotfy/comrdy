@@ -20,6 +20,7 @@ test("PayPal diagnostics keep only bounded recognized issue codes and private de
       },
       { issue: "INSTRUMENT_DECLINED" },
       { issue: "ORDER_NOT_APPROVED" },
+      { issue: "COMPLIANCE_VIOLATION" },
       { issue: "https://private.invalid/token" },
       { issue: "PRIVATE_BUYER_NAME" },
       { issue: "X".repeat(10000) },
@@ -28,7 +29,11 @@ test("PayPal diagnostics keep only bounded recognized issue codes and private de
   });
   assert.deepEqual(result, {
     name: "UNPROCESSABLE_ENTITY",
-    issueCodes: ["INSTRUMENT_DECLINED", "ORDER_NOT_APPROVED"],
+    issueCodes: [
+      "INSTRUMENT_DECLINED",
+      "ORDER_NOT_APPROVED",
+      "COMPLIANCE_VIOLATION",
+    ],
     debugId: "a1b2c3d4e5f67",
   });
   const serialized = JSON.stringify(result);

@@ -119,21 +119,8 @@ test("currency evidence comes from the submitted mandate even if the model rewri
   );
 });
 
-function sharedProhibitionCandidate() {
-  const candidate = structuredClone(createCanonicalCandidate());
-  const phrase = "No substitutions or subscriptions";
-  candidate.mandate = candidate.mandate.replace(
-    "Do not substitute another size and do not start a subscription",
-    phrase,
-  );
-  for (const c of candidate.constraints)
-    if (["inv_substitution", "inv_subscription"].includes(c.id))
-      c.sourceText = phrase;
-  return candidate;
-}
-
 test("invented conjunction excerpt remains rejected and is never silently repaired", async () => {
-  const modelCandidate = sharedProhibitionCandidate();
+  const modelCandidate = structuredClone(createCanonicalCandidate());
   const subscription = modelCandidate.constraints.find(
     (c) => c.id === "inv_subscription",
   )!;
@@ -158,7 +145,7 @@ test("invented conjunction excerpt remains rejected and is never silently repair
 });
 
 test("the complete shared prohibition can support both constraints without relaxation", async () => {
-  const modelCandidate = sharedProhibitionCandidate();
+  const modelCandidate = createCanonicalCandidate();
   const { compile, requests } = mockedCompiler(modelCandidate);
   const compiled = await compile();
   assert.deepEqual(compiled.candidate, modelCandidate);

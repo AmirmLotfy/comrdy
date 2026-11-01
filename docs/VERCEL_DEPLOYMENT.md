@@ -37,6 +37,8 @@ Set production environment values privately with `vercel env add NAME production
 
 The companion worker needs those same values, `NODE_ENV=production`, and `EVIDENCE_DIR=/var/data/evidence`. Its PostgreSQL URL may use the internal hostname for the same database. Run only one worker instance; transaction leases remain the concurrency guard. Stop admission during rollouts and settle existing attempts before changing revisions.
 
+Use `npm ci --omit=dev && npm run build:provenance` as the companion worker build command. `tsx` is a runtime dependency because the worker and migration commands execute TypeScript. Development-only Newman/Remotion tooling is not installed on this payment worker. The web build still installs its development dependencies for compilation; its deployed API bundles do not load those tools.
+
 For preview, choose `APP_MODE=simulation` and an isolated durable database. File-backed simulation is explicitly rejected on Vercel; `/tmp` is not durable state. Avoid Sandbox credentials in previews unless performing an explicitly planned isolated qualification. Deployment protection can prevent KERNEL/PayPal from reaching preview URLs, so normal buyer approval and webhooks belong on the canonical public Sandbox demonstration host. Do not weaken protection as a workaround.
 
 Register the five v2 webhook events listed in [PayPal review](PAYPAL_REVIEW.md) at the canonical `/api/v1/webhooks/paypal` endpoint. Use actual app-generated events for postback signature acceptance; simulator events cannot qualify that method. Sandbox buyer approval remains a normal PayPal login step owned by the buyer.

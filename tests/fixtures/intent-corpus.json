@@ -1,7 +1,7 @@
 [
   {
     "id": "canonical",
-    "text": "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. Do not substitute another size and do not start a subscription.",
+    "text": "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. No substitutions or subscriptions.",
     "expect": {
       "size": "M",
       "cap": 16000,

@@ -3,7 +3,7 @@ import { confirmContract, sealSnapshot } from "./invariants";
 import type { Checkpoint, ContractCandidate, JsonObject, Money } from "./types";
 
 export const CANONICAL_MANDATE =
-  "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. Do not substitute another size and do not start a subscription.";
+  "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. No substitutions or subscriptions.";
 export const CANONICAL_PRICE: Readonly<Money> = Object.freeze({
   amountMinor: 14800,
   currency: "USD",
@@ -77,7 +77,7 @@ export function createCanonicalCandidate(): ContractCandidate {
         value: false,
         hard: true,
         severity: "critical",
-        sourceText: "Do not substitute another size",
+        sourceText: "No substitutions or subscriptions",
       },
       {
         id: "inv_subscription",
@@ -86,7 +86,7 @@ export function createCanonicalCandidate(): ContractCandidate {
         value: false,
         hard: true,
         severity: "critical",
-        sourceText: "do not start a subscription",
+        sourceText: "No substitutions or subscriptions",
       },
       {
         id: "inv_inventory",

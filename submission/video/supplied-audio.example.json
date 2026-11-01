@@ -1,0 +1,40 @@
+{
+  "kind": "comrdy-supplied-audio/v1",
+  "voice": "/Users/frameless/Desktop/vo.wav",
+  "music": "/Users/frameless/Desktop/music.mp3",
+  "alignment": "/Users/frameless/Desktop/Comrdy/artifacts/vo-alignment.json",
+  "sourceCaptions": "/Users/frameless/Desktop/Comrdy/artifacts/vo-captions-proposed-source.json",
+  "outputDir": "/Users/frameless/Desktop/Comrdy/artifacts/supplied-audio-v1",
+  "musicSettings": {
+    "start": 12.9,
+    "sourceStart": 0,
+    "seconds": 152,
+    "gainDb": -23,
+    "fadeIn": 2,
+    "fadeOut": 4,
+    "duck": true
+  },
+  "cues": [
+    {
+      "at": 12,
+      "frequency": 440,
+      "seconds": 0.15,
+      "peakDb": -30,
+      "label": "Editorial chapter transition: Commerce Ready"
+    },
+    {
+      "at": 87,
+      "frequency": 550,
+      "seconds": 0.12,
+      "peakDb": -32,
+      "label": "Editorial chapter transition: bounded recovery"
+    },
+    {
+      "at": 142,
+      "frequency": 660,
+      "seconds": 0.18,
+      "peakDb": -30,
+      "label": "Editorial chapter transition: inspectable evidence"
+    }
+  ]
+}

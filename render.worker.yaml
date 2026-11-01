@@ -5,7 +5,7 @@ services:
     name: comrdy-worker
     runtime: node
     plan: 0.5c-512mb
-    buildCommand: npm ci --include=dev && npm run build:provenance
+    buildCommand: npm ci --omit=dev && npm run build:provenance
     startCommand: npm run db:migrate && npm run worker
     disk:
       name: comrdy-evidence

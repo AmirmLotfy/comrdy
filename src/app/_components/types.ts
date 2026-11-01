@@ -302,7 +302,7 @@ export function contractRows(
 }
 
 export const DEFAULT_MANDATE =
-  "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. Do not substitute another size and do not start a subscription.";
+  "Buy one Ocean Shell in blue, size M. Spend no more than $160 USD delivered. No substitutions or subscriptions.";
 
 export const faultLabels: Record<Fault, string> = {
   none: "No injected fault",
