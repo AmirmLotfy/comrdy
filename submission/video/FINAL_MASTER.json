@@ -25,5 +25,16 @@
   "compositionSha256": "95022aeb2222bbe01f7ab7504dc4eab448492f32323905d5381dbd1910c2cd57",
   "humanReview": "Owner approved the complete reviewed content and final version without watermark; see ../RELEASE_REVIEW.json.",
   "separateEncodedMasterHumanViewing": false,
-  "publication": "pending YouTube upload and verified watch URL"
+  "publication": {
+    "status": "public",
+    "url": "https://www.youtube.com/watch?v=Or9gooJFwSo",
+    "verifiedAt": "2026-11-01T03:59:22.625Z",
+    "watchDurationSeconds": 165.021,
+    "watchResolution": [
+      1920,
+      1080
+    ],
+    "captions": "English",
+    "initialChecks": "No issues found"
+  }
 }

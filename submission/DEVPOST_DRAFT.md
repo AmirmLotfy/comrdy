@@ -2,7 +2,7 @@
 
 **Tagline:** Commerce Ready: test whether an AI checkout buys what the customer actually asked for.
 
-Prepared submission copy for executable source `03c145157878602971c7f4bbd30555c512fade35`. The measured Sandbox results below are recorded; public evidence is deployed; the final film and authenticated Devpost submission remain pending. Do not submit the local rehearsal as provider evidence.
+Prepared submission copy for executable source `03c145157878602971c7f4bbd30555c512fade35`. The measured Sandbox results below are recorded; public evidence is deployed; the final film is public and the existing Devpost entry is submitted (5/5 steps). Do not submit the local rehearsal as provider evidence.
 
 ## Inspiration
 
@@ -68,11 +68,11 @@ Local qualification records are `artifacts/payment-qualification.json`, `artifac
 
 The reviewed public receipt destinations are [qualification summary](https://comrdy.vercel.app/release/qualification.json), [protected evidence](https://comrdy.vercel.app/release/evidence.json) and [isolated control](https://comrdy.vercel.app/release/control.json). All three public receipt links were verified accessible without an operator session. The isolated control is separate from protected payment runs and makes no shopper or shipment claim.
 
-## Submission links and remaining account steps
+## Final submission links
 
 - Hosted demo: [COMRDY](https://comrdy.vercel.app).
 - Source: [public MIT repository](https://github.com/AmirmLotfy/comrdy), qualified executable revision `03c145157878602971c7f4bbd30555c512fade35`.
-- Video URL: **pending** final authentic 165-second film, human review, public YouTube upload and signed-out verification.
-- Judge instructions: inspect the ten published saved runs without making payments. Fresh Sandbox runs require operator access and ordinary buyer approval; credentials are never included in public copy.
+- Video URL: https://www.youtube.com/watch?v=Or9gooJFwSo — public, 2:45, 1080p, English captions.
+- Judge instructions: inspect the ten published saved runs without making payments. The owner-authorized live access code was saved only in Devpost’s private testing field. Fresh Sandbox runs require ordinary buyer approval; no access code or provider credential is included in public copy.
 - Team/personal eligibility and sponsor declarations remain the user's accurate declarations; this draft does not create or change them.
-- Submission timestamp: **pending** authenticated finalization of the existing Devpost entry. Retain submitted URLs, video/gallery readback and authenticated status in a completed copy of `submission/receipt.template.json`; a project page is not proof of submission.
+- Submission: authenticated finalization confirms **SUBMITTED, 5/5 steps done**, November 1, 2026. `submission/receipt.json` records observation time and submitted video/gallery verification. Exact server timestamp is unavailable because the connector requires reauthentication; this does not invalidate the successful finalization UI.

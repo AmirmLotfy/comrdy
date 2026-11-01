@@ -1,5 +1,18 @@
 # COMRDY current handoff — November 1, 2026
 
+## Published and submitted — authoritative final checkpoint
+
+The authorized release milestone is complete. Public video: https://www.youtube.com/watch?v=Or9gooJFwSo . Devpost: https://devpost.com/software/comrdy . Demo: https://comrdy.vercel.app . Source: https://github.com/AmirmLotfy/comrdy . November 1, 2026 authenticated finalization confirms **SUBMITTED, 5/5 steps done**, checked/disabled terms and disabled Project submitted button. Submission history points to the same video. `submission/receipt.json` contains observed timestamps and proof hashes. Exact provider submitted_at is unavailable (Devpost connector requires reauthentication); never turn observation time into a server timestamp.
+
+User explicitly agreed to terms/publication/finalization and to sharing the existing live access code only in Devpost’s private judge field. That field was saved and read back exactly without printing its value. No provider secrets were shared. Existing personal declarations were preserved. The final film was uploaded once (video Or9gooJFwSo), Public, English subtitles and original thumbnail, AI disclosure enabled, not made for kids, Science & Technology. Initial copyright and Community Guidelines checks passed. Hosted stream is1920×1080/165.021s; Studio rounds the container display to2:46 while watch UI shows2:45. Master remains165.000s video/165.013s container with unchanged approved hash.
+
+`artifacts/final-delivery/` contains the final master, seven clips, approved mix, SRT/VTT, six screenshots, thumbnails, source recipe links, attributions and publication receipt. Anonymous HTTP checks passed for demo/judges/readiness, all five evidence exports and GitHub. Authenticated browser verified YouTube Public status, playback and Devpost embed; no separate signed-out YouTube session claimed. `artifacts/devpost-finalized.png` and `youtube-published.png` preserve proof.
+
+Checkout main; publication started at ec91a0db164e205fa75653c12a9d90486f9f5aae. Final documentation/receipt commit follows this checkpoint; resolve exact HEAD with git. No app/payment source changed during publication. Hosted web and worker remain d9a3d4c, with qualified executable03c1451 and recorded evidence boundaries unchanged. No new credentials, app redeployment, provider charges, goal, successor or automation. All media workers finished; no local worker started. The old local3000 preview is unrelated to final proof and remains untouched. Retain hosted worker/database/evidence through December21 within approved budget. Domain comrdy.com connection awaits the user’s future purchase; canonical submitted URL works now.
+
+No publication action remains. Do not upload a duplicate film or resubmit/create another project. Future changes are a new bounded task; retain existing qualification limits. Earlier checkpoint sections below are historical and superseded.
+
+
 ## Final master verified — upload/finalization agreements pending
 
 Owner review approval is recorded; do not ask for caption/privacy/screenshot/intent approval again. Final `artifacts/comrdy-submission.mp4` SHA256 `4e3198edecad932142a83f89d233c7138b9ac5dff332baf670f2109dd597f7e4`,11,038,547bytes,165.000s video/165.013s container,1920×1080/30fps/4950frames/H264AAC. Encoded audio−16.03LUFS/−1.93dBTP. Guarded render/check passed; eight sampledframes show no review watermark and retain disclosures/readable closing links. `artifacts/final-master-receipt.json` binds all sources and approval. No separate human viewing of the encoded master is claimed. Specialist finished; all owned media processes exited; heavy slot free.

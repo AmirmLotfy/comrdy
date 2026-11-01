@@ -1,0 +1,127 @@
+{
+  "submittedObservedAt": "2026-11-01T03:57:39.373Z",
+  "finalizationVerifiedAt": "2026-11-01T03:59:22.625Z",
+  "status": "submitted",
+  "steps": "5/5",
+  "projectId": 1521664,
+  "submissionId": 1276140,
+  "videoUrl": "https://www.youtube.com/watch?v=Or9gooJFwSo",
+  "youtubeVisibility": "Public",
+  "youtubeInitialChecks": "Copyright and Community Guidelines: no issues found",
+  "captionTrack": "English by you; public player English option",
+  "maximumQuality": "1080p HD",
+  "privateJudgeCodeSaved": true,
+  "exactProviderSubmittedAt": null,
+  "exactTimestampLimitation": "Devpost connector requires reauthentication; authenticated finalization UI and submit-success message verified, but UI exposes no exact server timestamp.",
+  "projectUrl": "https://devpost.com/software/comrdy",
+  "hackathonUrl": "https://paypalaihackathon.devpost.com/",
+  "sourceUrl": "https://github.com/AmirmLotfy/comrdy",
+  "deployedUrl": "https://comrdy.vercel.app",
+  "qualifiedSourceRevision": "03c145157878602971c7f4bbd30555c512fade35",
+  "deployedEvidenceRevision": "d9a3d4ccb9a6535c43d52626e0cb7453d3e48e95",
+  "publicationSourceRevision": "ec91a0db164e205fa75653c12a9d90486f9f5aae",
+  "masterSha256": "4e3198edecad932142a83f89d233c7138b9ac5dff332baf670f2109dd597f7e4",
+  "masterVideoDurationSeconds": 165,
+  "youtubeStream": {
+    "observedAt": "2026-11-01T03:59:55.278Z",
+    "currentTime": 33.882763,
+    "duration": 165.021,
+    "height": 1080,
+    "width": 1920,
+    "quality": "1080p HD",
+    "captions": "English",
+    "publicWatchUrl": "https://www.youtube.com/watch?v=Or9gooJFwSo"
+  },
+  "galleryCount": 6,
+  "submissionHistoryVideoMatches": true,
+  "personalDeclarationsPreserved": true,
+  "termsAcceptedByExplicitUserApproval": true,
+  "privateJudgeCodeDisclosureAuthorized": true,
+  "providerSecretsShared": false,
+  "publicLinks": {
+    "checkedAt": "2026-11-01T03:59:37.062Z",
+    "method": "anonymous HTTP, no cookies or authorization",
+    "results": [
+      {
+        "url": "https://comrdy.vercel.app",
+        "status": 200,
+        "bytes": 44850,
+        "ok": true
+      },
+      {
+        "url": "https://comrdy.vercel.app/judges",
+        "status": 200,
+        "bytes": 36216,
+        "ok": true
+      },
+      {
+        "url": "https://comrdy.vercel.app/readiness",
+        "status": 200,
+        "bytes": 44332,
+        "ok": true
+      },
+      {
+        "url": "https://comrdy.vercel.app/release/qualification.json",
+        "status": 200,
+        "bytes": 3578,
+        "ok": true
+      },
+      {
+        "url": "https://comrdy.vercel.app/release/evidence.json",
+        "status": 200,
+        "bytes": 340776,
+        "ok": true
+      },
+      {
+        "url": "https://comrdy.vercel.app/release/control.json",
+        "status": 200,
+        "bytes": 4198,
+        "ok": true
+      },
+      {
+        "url": "https://comrdy.vercel.app/release/payment-readbacks.json",
+        "status": 200,
+        "bytes": 10341,
+        "ok": true
+      },
+      {
+        "url": "https://comrdy.vercel.app/release/intent-outputs.json",
+        "status": 200,
+        "bytes": 51246,
+        "ok": true
+      },
+      {
+        "url": "https://github.com/AmirmLotfy/comrdy",
+        "status": 200,
+        "bytes": 280989,
+        "ok": true
+      }
+    ]
+  },
+  "externalVerificationLimits": [
+    "YouTube Public visibility, public watch playback, 1080p, English caption option and Devpost embed verified in browser; no separate signed-out YouTube browser session was used.",
+    "Exact Devpost server submitted_at is unavailable through the expired connector. submittedObservedAt records observation of the successful submission, not a fabricated provider timestamp."
+  ],
+  "proof": [
+    {
+      "file": "artifacts/devpost-finalized.png",
+      "sha256": "f6b2be1df4edc613443589e1a417880fd5d340f09523e594f25c6e8718e21d2b"
+    },
+    {
+      "file": "artifacts/devpost-submitted.png",
+      "sha256": "6506647cd9ae28f64e40102f8b0fc03ff3486b51cb7ef34cc1cb3965da1c4e49"
+    },
+    {
+      "file": "artifacts/devpost-finalized-ui.txt",
+      "sha256": "3b8db3d1ecd56ff98db19cf882247aa4fb0dbded03eb341aa2a568d2f672500a"
+    },
+    {
+      "file": "artifacts/youtube-published.png",
+      "sha256": "31c54021a7e86a64d08b0498f1c209c9ad6bba68d264bb0ceefaf31876584c42"
+    },
+    {
+      "file": "artifacts/youtube-public-watch.png",
+      "sha256": "943fc4c11e102ea830fb5aeb2af27867b2b6e7185353d60544339157e1414215"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # YouTube publication copy
 
-Status: verified final master ready; YouTube terms/publication confirmation requested. No COMRDY video has been uploaded or published.
+Status: **Published publicly November 1, 2026.** [Watch COMRDY](https://www.youtube.com/watch?v=Or9gooJFwSo). Uploaded once, with the approved thumbnail and English captions. Hosted playback verified at 1920×1080 and 165.021 seconds; YouTube initial copyright/Community Guidelines checks reported no issues. See `../receipt.json`.
 
 Title: **COMRDY — Commerce Ready | PayPal AI Hackathon**
 
@@ -31,4 +31,4 @@ Finite release samples: 9/9 original payment runs (three valid captures, three v
 Built with PayPal, OpenAI, KERNEL, Render, Vercel, PostgreSQL, Next.js, AG Grid Community and Postman. OpenAI Codex assisted development and production. Narration is synthetic and supplied by the author; the author also supplied the music. Thumbnail artwork uses OpenAI image generation with COMRDY's original logo. Film assembled in Remotion and FFmpeg from actual product recordings and disclosed receipt graphics.
 ```
 
-Upload the accepted 165-second1080p H264 master once. Use `submission/assets/youtube-thumbnail.png` and the matching `public/media/release/captions.srt` (resolve actual final path from the release manifest). Audience: engineering product demo, not made for children. Public visibility is required by the chosen submission plan. Verify processing, duration, captions, visibility and the exact watch URL before inserting it into the existing Devpost entry. Preserve a receipt; an upload dialog alone is not proof of publication.
+Publication recipe (completed): upload the accepted 165-second 1080p H264 master once. Use `submission/assets/youtube-thumbnail.png` and the matching `public/media/release/captions.srt` (resolve actual final path from the release manifest). Audience: engineering product demo, not made for children. Public visibility is required by the chosen submission plan. Verify processing, duration, captions, visibility and the exact watch URL before inserting it into the existing Devpost entry. Preserve a receipt; an upload dialog alone is not proof of publication.
