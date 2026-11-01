@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { sourceManifest } from "./lib/source-digest";
@@ -81,6 +81,21 @@ function main() {
     // hashes localize changed build inputs without disclosing file contents.
     for (const file of manifest.files)
       console.log("COMRDY source manifest", JSON.stringify(file));
+    const platformConfig = JSON.parse(readFileSync("vercel.json", "utf8"));
+    console.log("COMRDY platform config keys", Object.keys(platformConfig));
+    for (const key of [
+      "$schema",
+      "framework",
+      "buildCommand",
+      "installCommand",
+      "regions",
+      "version",
+    ])
+      if (Object.hasOwn(platformConfig, key))
+        console.log(
+          "COMRDY public platform config",
+          JSON.stringify({ key, value: platformConfig[key] }),
+        );
   }
   const value = {
     ...resolveBuildProvenance(digest, git, process.env),
