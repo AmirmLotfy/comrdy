@@ -23,6 +23,7 @@ export default function DocsPage() {
         <nav className="docs-contents" aria-label="Documentation sections">
           <span className="mini-label">ON THIS PAGE</span>
           <a href="#start">Run your first test</a>
+          <a href="#readiness">Executable readiness checks</a>
           <a href="#contract">The intent contract</a>
           <a href="#evidence">Read the evidence</a>
           <a href="#payment">Payment boundaries</a>
@@ -63,6 +64,46 @@ export default function DocsPage() {
               Open the test lab
               <ArrowRight size={15} />
             </Link>
+          </section>
+          <section id="readiness">
+            <span className="docs-section-index">REPRODUCIBLE CHECKS</span>
+            <h2>Make the failure cases executable.</h2>
+            <p>
+              The readiness bench executes twelve synthetic scenarios against
+              the shared contract and payment-binding engine. It covers exact
+              budget boundaries, wrong variants and quantities, missing or stale
+              evidence, subscriptions, inventory and mismatched payment
+              bindings. Run the suite to see actual decisions; the initial
+              screen reports zero executed cases.
+            </p>
+            <p>
+              The what-if controls change only bounded checkout facts under the
+              unchanged contract. Reports include exact inputs and hashes for
+              reproduction. No agent, PayPal request, capture or void is invoked
+              by this bench.
+            </p>
+            <div className="overview-actions">
+              <Link href="/readiness" className="button dark">
+                Open the readiness bench <ArrowUpRight size={15} />
+              </Link>
+              <a
+                href="/verification/comrdy.postman_collection.json"
+                download
+                className="text-link"
+              >
+                Download the Postman kit <ArrowUpRight size={15} />
+              </a>
+            </div>
+            <p>
+              The Postman collection checks this bounded HTTP surface and
+              forbidden public financial commands. Provider qualification
+              remains a separate task. The{" "}
+              <Link href="/judges" className="text-link">
+                judge workbench
+              </Link>{" "}
+              lists accessible saved records with separate authorization,
+              capture and merchant-order facts.
+            </p>
           </section>
           <section id="contract">
             <span className="docs-section-index">02 / THE SOURCE OF TRUTH</span>

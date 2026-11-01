@@ -2,7 +2,7 @@
 <rect width="1200" height="630" fill="#fff"/><path d="M0 0H1200" stroke="#0b63f6" stroke-width="12"/>
 <g transform="translate(54 45) scale(1.15)"><path d="M28 7H15L7 15V25L15 33H28M30 15V25" stroke="#0b63f6" stroke-width="5"/><path d="M18 20H25M35 20H39" stroke="#71e2ed" stroke-width="4"/></g>
 <g font-family="Arial, Helvetica, sans-serif"><text x="111" y="80" fill="#0c1117" font-size="30" font-weight="700" letter-spacing="-1.5">COMRDY<tspan fill="#0b63f6">.</tspan></text>
-<text x="57" y="162" fill="#0b63f6" font-size="14" letter-spacing="1.6">TRANSACTION ASSURANCE FOR AI CHECKOUT</text>
+<text x="57" y="162" fill="#0b63f6" font-size="14" letter-spacing="1.6">COMRDY MEANS COMMERCE READY</text>
 <text x="54" y="245" fill="#0c1117" font-size="56" letter-spacing="-2.5">Test the purchase.</text><text x="54" y="311" fill="#0c1117" font-size="56" letter-spacing="-2.5">Before the capture.</text>
 <text x="57" y="377" fill="#47515e" font-size="21">A controlled test. A traceable transaction.</text><text x="57" y="410" fill="#47515e" font-size="21">An inspectable decision.</text>
 <rect x="57" y="459" width="224" height="48" rx="4" fill="#0b63f6"/><text x="78" y="490" fill="#fff" font-size="16">Run the failure case</text><path d="M245 482H258M252 476L258 482L252 488" stroke="#fff" stroke-width="1.5"/>

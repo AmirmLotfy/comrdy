@@ -3,17 +3,18 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Footer, MarketingNav } from "./_components/ui";
 import { TransactionDiagram } from "./_components/transaction-diagram";
 import { ScrollReveal } from "./_components/scroll-reveal";
+import styles from "./home.module.css";
 
 export default function Home() {
   return (
     <>
       <MarketingNav />
-      <main id="main" className="overview">
+      <main id="main" className={`overview ${styles.home}`}>
         <ScrollReveal />
-        <section className="overview-intro container">
-          <div className="overview-copy">
+        <section className={`overview-intro container ${styles.intro}`}>
+          <div className={`overview-copy ${styles.copy}`}>
             <p className="technical-label">
-              <span /> Transaction assurance for AI checkout
+              <span /> COMRDY means Commerce Ready
             </p>
             <h1>
               Test the purchase.
@@ -21,26 +22,26 @@ export default function Home() {
               Before the capture.
             </h1>
             <p className="overview-description">
-              Put your AI shopper through a controlled failure. Follow the
-              contract, inspect each observation, and see what earns permission
-              to capture.
+              A successful payment can still be the wrong purchase. Test your AI
+              checkout against the buyer’s instructions, then follow every
+              decision back to the evidence.
             </p>
-            <div className="overview-actions">
+            <div className={`overview-actions ${styles.actions}`}>
               <Link href="/demo" className="button brand large">
                 Run the failure case <ArrowUpRight size={17} />
               </Link>
-              <Link href="/docs" className="text-link">
-                Read the model <ArrowRight size={15} />
+              <Link href="/judges" className="text-link">
+                Take the judge tour <ArrowRight size={15} />
               </Link>
             </div>
-            <p className="overview-scope">
+            <p className={`overview-scope ${styles.scope}`}>
               Controlled merchant · Simulation or PayPal Sandbox
               <br />
               No real-money payments
             </p>
           </div>
           <div
-            className="transaction-figure"
+            className={`transaction-figure ${styles.figure}`}
             aria-label="Illustrative transaction test bench: contract, controlled shopper, verification gate and evidence record"
           >
             <div className="figure-top">
@@ -64,7 +65,7 @@ export default function Home() {
             </p>
           </div>
         </section>
-        <div className="overview-index container">
+        <div className={`overview-index container ${styles.index}`}>
           <span>THE CHECK BETWEEN AUTHORIZATION AND CAPTURE</span>
           <a href="#mechanism">
             Follow the transaction <span aria-hidden="true">↓</span>
@@ -175,11 +176,61 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <section className="readiness-feature-band">
+          <div className="readiness-feature container" data-reveal>
+            <div>
+              <p className="technical-label">An executable readiness bench</p>
+              <h2>
+                Go beyond
+                <br />
+                the happy path.
+              </h2>
+              <p>
+                A changed quantity. A missing total. A stale authorization. Run
+                the real verification engine against a bounded suite, inspect
+                every failed rule, and export a reproducible report.
+              </p>
+              <Link href="/readiness" className="button dark">
+                Run the constraint suite <ArrowUpRight size={16} />
+              </Link>
+              <small>
+                Deterministic synthetic cases. No payment or AI calls.
+              </small>
+            </div>
+            <div
+              className="readiness-feature-list"
+              aria-label="Readiness bench coverage areas"
+            >
+              <div>
+                <span className="mono">01</span>
+                <strong>Purchase intent</strong>
+                <p>Item · size · quantity · subscriptions</p>
+              </div>
+              <div>
+                <span className="mono">02</span>
+                <strong>Delivered cost</strong>
+                <p>Budget boundary · shipping · currency</p>
+              </div>
+              <div>
+                <span className="mono">03</span>
+                <strong>Evidence & bindings</strong>
+                <p>Missing facts · stale state · authorization</p>
+              </div>
+              <Link href="/judges">
+                <span>Inspect the evidence workbench</span>
+                <ArrowUpRight size={17} />
+              </Link>
+            </div>
+          </div>
+        </section>
         <section className="overview-close container" data-reveal>
           <div>
             <p className="technical-label">Start with a controlled failure</p>
             <h2>Find the first divergence.</h2>
-            <p>One store. A fixed example. An inspectable decision.</p>
+            <p>
+              One controlled store. A reproducible suite. An inspectable
+              decision.
+            </p>
           </div>
           <Link href="/demo" className="button brand large">
             Open the test lab <ArrowUpRight size={17} />

@@ -1,0 +1,392 @@
+{
+  "info": {
+    "name": "COMRDY \u2014 Commerce Ready verification kit",
+    "description": "Bounded deterministic checks only. No compile, fresh run, approval, recovery, financial action or real provider call. Run against a COMRDY deployment. No credentials or access code required. Test results qualify this HTTP surface only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Environment is explicit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/v1/status"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const d=pm.response.json();",
+              "pm.test(\"Explicit simulation or Sandbox\",()=>pm.expect(d.mode).to.be.oneOf([\"simulation\",\"sandbox\"]));",
+              "pm.test(\"No keys in status\",()=>pm.expect(JSON.stringify(d)).not.to.match(/client_secret|api_key|access_token/i));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Execute all twelve deterministic cases",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=suite"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const d=pm.response.json();",
+              "pm.test(\"All cases executed\",()=>{pm.expect(d.summary.definedCases).to.eql(12);pm.expect(d.summary.executedCases).to.eql(12);pm.expect(d.results).to.have.lengthOf(12);});",
+              "pm.test(\"All independent expectations match\",()=>pm.expect(d.results.every(r=>r.matchedExpectation)).to.eql(true));",
+              "pm.test(\"Missing evidence blocks with REVIEW\",()=>pm.expect(d.results.find(r=>r.id===\"missing-total\").gate.decision).to.eql(\"REVIEW\"));",
+              "pm.test(\"Wrong currency blocks\",()=>pm.expect(d.results.find(r=>r.id===\"currency\").gate.decision).to.eql(\"DENY\"));",
+              "pm.test(\"Stale revision blocks\",()=>pm.expect(d.results.find(r=>r.id===\"stale-revision\").gate.decision).to.eql(\"DENY\"));",
+              "pm.test(\"No financial or provider execution\",()=>{pm.expect(d.boundary.providerCalls).to.eql(0);pm.expect(d.boundary.paymentActions).to.eql(0);pm.expect(d.boundary.merchantOrdersCreated).to.eql(0);pm.expect(d.boundary.providerQualification).to.eql(\"not executed\");});",
+              "pm.test(\"Evidence is never cached\",()=>pm.expect(pm.response.headers.get(\"Cache-Control\")).to.eql(\"no-store\"));",
+              "pm.collectionVariables.set(\"suiteHash\",d.reportHash);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Identical inputs reproduce the same report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=suite"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Stable evidence hash\",()=>pm.expect(pm.response.json().reportHash).to.eql(pm.collectionVariables.get(\"suiteHash\")));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Missing total cannot become permission",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=compare&totalMinor=14800&size=M&quantity=1&evidence=missing-total"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const d=pm.response.json();",
+              "pm.test(\"Baseline remains allowed\",()=>pm.expect(d.results[0].gate.decision).to.eql(\"ALLOW\"));",
+              "pm.test(\"Composed decision is REVIEW\",()=>pm.expect(d.results[1].gate.decision).to.eql(\"REVIEW\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "One cent above budget blocks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=compare&totalMinor=16001&size=M&quantity=1&evidence=complete"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const d=pm.response.json();",
+              "pm.test(\"Baseline remains allowed\",()=>pm.expect(d.results[0].gate.decision).to.eql(\"ALLOW\"));",
+              "pm.test(\"Composed decision is DENY\",()=>pm.expect(d.results[1].gate.decision).to.eql(\"DENY\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exact budget boundary is allowed",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=compare&totalMinor=16000&size=M&quantity=1&evidence=complete"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const d=pm.response.json();",
+              "pm.test(\"Baseline remains allowed\",()=>pm.expect(d.results[0].gate.decision).to.eql(\"ALLOW\"));",
+              "pm.test(\"Composed decision is ALLOW\",()=>pm.expect(d.results[1].gate.decision).to.eql(\"ALLOW\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stale evidence requires review",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=compare&totalMinor=14800&size=M&quantity=1&evidence=stale"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const d=pm.response.json();",
+              "pm.test(\"Baseline remains allowed\",()=>pm.expect(d.results[0].gate.decision).to.eql(\"ALLOW\"));",
+              "pm.test(\"Composed decision is REVIEW\",()=>pm.expect(d.results[1].gate.decision).to.eql(\"REVIEW\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quantity drift blocks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=compare&totalMinor=14800&size=M&quantity=2&evidence=complete"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const d=pm.response.json();",
+              "pm.test(\"Baseline remains allowed\",()=>pm.expect(d.results[0].gate.decision).to.eql(\"ALLOW\"));",
+              "pm.test(\"Composed decision is DENY\",()=>pm.expect(d.results[1].gate.decision).to.eql(\"DENY\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown field is rejected",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=suite&url=https://example.com"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Bounded input error\",()=>pm.expect(pm.response.json().code).to.eql(\"READINESS_INPUT_INVALID\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Duplicate query field is rejected",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=suite&mode=compare"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Bounded input error\",()=>pm.expect(pm.response.json().code).to.eql(\"READINESS_INPUT_INVALID\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Out-of-bounds amount is rejected",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/readiness/run?schema=1.0&mode=compare&totalMinor=99999&size=M&quantity=1&evidence=complete"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Bounded input error\",()=>pm.expect(pm.response.json().code).to.eql(\"READINESS_INPUT_INVALID\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cross-origin mutations are denied",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Origin",
+            "value": "https://untrusted.example.invalid"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/confirm",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "An invalid contract cannot be confirmed",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/confirm",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"contract\": {}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "No public capture command",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/runs/verification-nonexistent/capture",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "No public void command",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/runs/verification-nonexistent/void",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

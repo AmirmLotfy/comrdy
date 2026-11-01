@@ -1,6 +1,6 @@
 # COMRDY
 
-**Tagline:** A transaction test lab for engineers building AI checkout.
+**Tagline:** Commerce Ready: test whether an AI checkout buys what the customer actually asked for.
 
 This copy is prepared for the qualified release. Replace the marked result/link fields with actual receipts before pasting into Devpost. Do not submit the local rehearsal as provider evidence.
 
@@ -17,6 +17,8 @@ The demo follows one purchase at our fictional Northpath Supply merchant: one bl
 An AI compiler proposes constraints with their source phrases. The buyer reviews and confirms them. A constrained shopping agent prepares the cart; the buyer approves through the normal PayPal Sandbox flow. COMRDY then injects a disclosed fault between authorization and the final capture check: the size changes at the same price, or shipping pushes the total to $173.
 
 Intent Lineage identifies the first divergence. A deterministic gate blocks capture if any hard requirement fails or lacks evidence. The application requests a void and retrieves its status. One bounded recovery restores the requested item under the unchanged contract, requires fresh approval, and verifies again before capture.
+
+A separate readiness bench runs 12 reproducible synthetic cases through the same invariant engine: budget boundaries, missing evidence, quantity/currency drift, stale revisions and authorization mismatches. Engineers can compose a bounded case, inspect its exact failed rules, and export JSON or CSV. The judge workbench provides a guided tour and searchable saved evidence using AG Grid Community. A downloadable Postman collection reproduces HTTP boundary checks. These checks make no AI or payment calls.
 
 Engineers can inspect the contract, merchant observations, decision and redacted provider resources; compare the original and recovered attempts; and replay saved events without invoking a payment.
 
@@ -53,6 +55,10 @@ After this controlled demonstration, we would expand the case corpus and evaluat
 Implementation began November 1, 2026. The earlier blueprint is design history, not a pre-existing functioning service. COMRDY does not claim to invent intent-based payment authorization; its contribution is this testing workflow, controlled fault reproduction and inspectable PayPal integration.
 
 Northpath Supply and Ocean Shell are fictional. All payments are Sandbox payments. No real customer savings, production deployment adoption or general repair capability is claimed. Codex assisted implementation and production; runtime AI and synthetic film narration are disclosed in the app/film and `ATTRIBUTION.md`.
+
+## Current measured checks (November 1)
+
+91/91 repository tests passed with PostgreSQL concurrency enabled against the dedicated Render database. The read-only verification collection passed 38/38 assertions across 15 requests. The deterministic suite matched 12/12 expectations (2 ALLOW, 8 DENY, 2 REVIEW). These are local execution and synthetic/mocked financial checks, not live PayPal qualification. OpenAI model access, KERNEL API access and PayPal Sandbox authentication have been checked separately; no successful payment is implied.
 
 ## Fields to complete at the final account stage
 

@@ -255,7 +255,12 @@ export function DemoWorkspace() {
         title="Test a transaction"
         description="Confirm the contract, choose a failure, then inspect the decision."
         action={
-          <Link href="/store" className="button secondary small">
+          <Link
+            href="/store"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button secondary small"
+          >
             Open demo store
             <ArrowUpRight size={14} />
           </Link>

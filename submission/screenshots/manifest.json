@@ -1,0 +1,51 @@
+{
+  "captured": "2026-11-01",
+  "boundary": "Local presentation captures, not final qualified provider screenshots.",
+  "screenshots": [
+    {
+      "file": "01-commerce-ready-home.jpg",
+      "sha256": "7f642c9a7a76f56b98d8fc226fc1b5776e6381793502f1bdcc85596b2f453e72",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "02-northpath-store.jpg",
+      "sha256": "fc1d222439107817b475b398c10af30269890107ca05284aa0854eb93995b028",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "03-readiness-suite.jpg",
+      "sha256": "ad55f65bf2baf19afd89572e180ddb7bd3ef0467dc606b679ccae7b861672efa",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "04-intent-lineage-simulation.jpg",
+      "sha256": "4f80f006bd19a8a088e2241892fc0ffe74b1f1f22164146857e65deecf8c9bbc",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "05-judge-workbench.jpg",
+      "sha256": "4d9fd58b20913282a32d6f9fd3c991c7663291e8d6f480d03260bdb3c14972b2",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "06-recovery-comparison-simulation.jpg",
+      "sha256": "987b11203a567985a3bfb6dd86f0ded5e5548a670cad8bab033bcf9f9338cb91",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "07-mobile-home.jpg",
+      "sha256": "24b87e441b102ed0449b2345ce1ced0f71e8360676194cc65fba00cc14bbdbe8",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "08-mobile-store.jpg",
+      "sha256": "d84d59e99e9cc93669ad99975864cdcb21526c57704750c24dfcbca08402a46d",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    },
+    {
+      "file": "09-mobile-checkout.jpg",
+      "sha256": "57d3734f6e32fe8f0d4de071b8b4cc3721f0fed94fc3fa7e8c7f176382217a50",
+      "evidence": "Local UI / synthetic or simulated data; no provider qualification"
+    }
+  ]
+}

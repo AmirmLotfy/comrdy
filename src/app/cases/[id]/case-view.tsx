@@ -18,7 +18,13 @@ import {
   type Run,
 } from "../../_components/types";
 
-export function CaseView({ id }: { id: string }) {
+export function CaseView({
+  id,
+  readOnly = false,
+}: {
+  id: string;
+  readOnly?: boolean;
+}) {
   const router = useRouter();
   const [run, setRun] = useState<Run | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -30,17 +36,18 @@ export function CaseView({ id }: { id: string }) {
   useEffect(() => {
     let active = true;
     const params = new URL(window.location.href).searchParams;
-    const approved = params.get("paypal") === "approved";
+    const approved = !readOnly && params.get("paypal") === "approved";
     const orderId = params.get("token");
     setLoading(true);
     setError(null);
     setCancelled(
-      params.get("paypal") === "canceled" ||
-        params.get("paypal") === "cancelled",
+      !readOnly &&
+        (params.get("paypal") === "canceled" ||
+          params.get("paypal") === "cancelled"),
     );
-    const isCanceled = ["canceled", "cancelled"].includes(
-      params.get("paypal") || "",
-    );
+    const isCanceled =
+      !readOnly &&
+      ["canceled", "cancelled"].includes(params.get("paypal") || "");
     const approvalKey = `${id}:${orderId}:${isCanceled}`;
     if (
       ((approved && orderId) || isCanceled) &&
@@ -77,7 +84,7 @@ export function CaseView({ id }: { id: string }) {
     return () => {
       active = false;
     };
-  }, [id]);
+  }, [id, readOnly]);
   useEffect(() => {
     if (!run || !isRunPending(run)) return;
     let active = true;
@@ -104,9 +111,9 @@ export function CaseView({ id }: { id: string }) {
   }, [run]);
   return (
     <AppShell section="Test lab" title="Transaction evidence">
-      <Link className="back-link" href="/demo">
+      <Link className="back-link" href={readOnly ? "/judges" : "/demo"}>
         <ArrowLeft size={14} />
-        Back to the test lab
+        {readOnly ? "Back to the judge overview" : "Back to the test lab"}
       </Link>
       <PageHeading
         eyebrow="TRANSACTION EVIDENCE"
@@ -135,6 +142,12 @@ export function CaseView({ id }: { id: string }) {
         </div>
       )}
       <ErrorNotice message={error} />
+      {readOnly && (
+        <p className="lab-context">
+          Read-only evidence view. Playback, inspection and comparison cannot
+          approve a payment or start recovery.
+        </p>
+      )}
       {loading ? (
         <div className="page-loading" role="status">
           <LoaderCircle size={20} className="spin" />
@@ -144,6 +157,7 @@ export function CaseView({ id }: { id: string }) {
         <>
           <RunResult
             run={run}
+            readOnly={readOnly}
             onRecovered={(next) =>
               router.push(`/cases/${encodeURIComponent(next.id)}`)
             }

@@ -18,6 +18,8 @@ import {
   Menu,
   X,
   ShoppingBag,
+  ScanLine,
+  PanelTop,
   TriangleAlert,
 } from "lucide-react";
 import { BrandMark } from "./brand-mark";
@@ -28,11 +30,14 @@ export function Brand({ inverse = false }: { inverse?: boolean }) {
     <Link
       href="/"
       className={`wordmark${inverse ? " inverse" : ""}`}
-      aria-label="COMRDY home"
+      aria-label="COMRDY — Commerce Ready. Home"
     >
       <BrandMark />
-      <span className="wordmark-name">
-        COMRDY<span className="wordmark-period">.</span>
+      <span className="wordmark-lockup">
+        <span className="wordmark-name">
+          COMRDY<span className="wordmark-period">.</span>
+        </span>
+        <span className="wordmark-meaning">Commerce Ready</span>
       </span>
     </Link>
   );
@@ -113,10 +118,55 @@ export function StatusPill({
 
 const navigationLinks = [
   { href: "/demo", label: "Test lab" },
+  { href: "/readiness", label: "Readiness bench" },
+  { href: "/judges", label: "Judge overview" },
   { href: "/compare", label: "Compare runs" },
   { href: "/store", label: "Demo store" },
   { href: "/docs", label: "Documentation" },
 ];
+
+/** Reveal navigation on an intentional upward scroll, and always for keyboard focus. */
+function useSmartHeader() {
+  const ref = useRef<HTMLElement>(null);
+  const pathname = usePathname();
+  useEffect(() => {
+    const header = ref.current;
+    if (!header) return;
+    let anchor = window.scrollY;
+    let frame = 0;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      frame = 0;
+      const y = Math.max(0, window.scrollY);
+      header.dataset.scrolled = String(y > 12);
+      if (
+        y < 120 ||
+        motion.matches ||
+        header.contains(document.activeElement) ||
+        header.querySelector("dialog[open]")
+      ) {
+        header.dataset.hidden = "false";
+        anchor = y;
+      } else if (Math.abs(y - anchor) > 12) {
+        header.dataset.hidden = String(y > anchor);
+        anchor = y;
+      }
+    };
+    const scroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    header.dataset.hidden = "false";
+    window.addEventListener("scroll", scroll, { passive: true });
+    motion.addEventListener("change", scroll);
+    update();
+    return () => {
+      window.removeEventListener("scroll", scroll);
+      motion.removeEventListener("change", scroll);
+      cancelAnimationFrame(frame);
+    };
+  }, [pathname]);
+  return ref;
+}
 
 function MobileNavigation({ workspace = false }: { workspace?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -212,6 +262,8 @@ function MobileNavigation({ workspace = false }: { workspace?: boolean }) {
                 key={href}
                 href={href}
                 onClick={close}
+                target={href === "/store" ? "_blank" : undefined}
+                rel={href === "/store" ? "noopener noreferrer" : undefined}
                 aria-current={pathname === href ? "page" : undefined}
               >
                 <span className="mono">0{index + 1}</span>
@@ -235,13 +287,18 @@ function MobileNavigation({ workspace = false }: { workspace?: boolean }) {
 }
 
 export function MarketingNav() {
+  const header = useSmartHeader();
   return (
-    <header className="marketing-header">
+    <header ref={header} className="marketing-header smart-header">
       <div className="marketing-nav container">
         <Brand />
         <nav className="desktop-navigation" aria-label="Main navigation">
-          <Link href="/#mechanism">How it works</Link>
-          <Link href="/docs">Documentation</Link>
+          <Link href="/readiness">Readiness bench</Link>
+          <Link href="/judges">For judges</Link>
+          <Link href="/store" target="_blank" rel="noopener noreferrer">
+            Visit the store <ArrowUpRight size={13} />
+            <span className="sr-only"> (opens in a new tab)</span>
+          </Link>
           <Link href="/demo" className="button small dark">
             Open the lab <ArrowUpRight size={14} />
           </Link>
@@ -264,23 +321,27 @@ export function Footer() {
             inside the promise.
           </p>
           <span className="footer-note">
-            A working prototype. Clear evidence. No real money.
+            Built for the PayPal AI Hackathon.
+            <br />
+            Sandbox and simulation. No real-money payments.
           </span>
         </div>
         <nav aria-label="Footer">
           <span className="footer-nav-label">Explore the workbench</span>
           {navigationLinks.map(({ href, label }) => (
-            <Link href={href} key={href}>
+            <Link
+              href={href}
+              key={href}
+              target={href === "/store" ? "_blank" : undefined}
+              rel={href === "/store" ? "noopener noreferrer" : undefined}
+            >
               {label}
               <ArrowUpRight size={15} />
             </Link>
           ))}
         </nav>
         <div className="footer-bottom">
-          <span>
-            Contract <span aria-hidden="true">→</span> observation{" "}
-            <span aria-hidden="true">→</span> decision
-          </span>
+          <span>COMRDY — Commerce Ready. Intent, checked.</span>
           <Link href="/docs#evidence">
             Evidence and limits <ArrowUpRight size={13} />
           </Link>
@@ -301,8 +362,11 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const { status, error } = useServiceStatus();
+  const header = useSmartHeader();
   const links = [
     { href: "/demo", label: "Test lab", icon: FlaskConical },
+    { href: "/readiness", label: "Readiness bench", icon: ScanLine },
+    { href: "/judges", label: "Judge overview", icon: PanelTop },
     { href: "/compare", label: "Compare runs", icon: GitCompareArrows },
     { href: "/store", label: "Demo store", icon: ShoppingBag },
     { href: "/docs", label: "Documentation", icon: BookOpen },
@@ -328,6 +392,8 @@ export function AppShell({
             <Link
               key={href}
               href={href}
+              target={href === "/store" ? "_blank" : undefined}
+              rel={href === "/store" ? "noopener noreferrer" : undefined}
               className={`sidebar-link ${pathname === href || (href === "/demo" && pathname.startsWith("/cases/")) ? "active" : ""}`}
               aria-current={pathname === href ? "page" : undefined}
             >
@@ -356,7 +422,7 @@ export function AppShell({
         </div>
       </aside>
       <div className="app-main">
-        <header className="app-topbar">
+        <header ref={header} className="app-topbar smart-header">
           <div className="breadcrumb">
             <div className="app-mobile-brand">
               <Brand />
@@ -378,7 +444,9 @@ export function AppShell({
           {children}
         </main>
         <footer className="app-footer">
-          <span>Controlled merchant · No real money</span>
+          <span>
+            <strong>Commerce Ready.</strong> Controlled merchant · No real money
+          </span>
           <nav aria-label="Workspace footer">
             <Link href="/demo">Test lab</Link>
             <Link href="/docs#evidence">

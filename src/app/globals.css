@@ -1,4 +1,6 @@
 :root {
+  --motion-fast: 140ms;
+  --motion-header: 220ms;
   --white: #fff;
   --canvas: #fbfcfd;
   --surface: #f7f8fa;
@@ -5464,5 +5466,310 @@ h3 {
   }
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+/* Commerce Ready navigation and product sections. Color identifies purpose;
+   interactions alter ink and rules rather than moving whole cards. */
+.wordmark-lockup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.wordmark-name {
+  line-height: 1;
+}
+.wordmark-meaning {
+  font: 500 9px/1.2 var(--font-sans);
+  letter-spacing: 0.015em;
+  color: #526174;
+}
+.wordmark.inverse .wordmark-meaning {
+  color: #b2c7df;
+}
+.smart-header {
+  transition:
+    transform var(--motion-header) cubic-bezier(0.2, 0, 0.2, 1),
+    box-shadow var(--motion-fast) ease;
+}
+.smart-header[data-hidden="true"] {
+  transform: translateY(-101%);
+}
+.smart-header:focus-within,
+.smart-header:has(dialog[open]) {
+  transform: none;
+}
+.smart-header[data-scrolled="true"] {
+  box-shadow: 0 3px 9px #152e4910;
+}
+.marketing-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: #fffffff5;
+  border-top: 3px solid var(--blue);
+}
+.marketing-nav {
+  height: 75px;
+}
+.marketing-nav .wordmark {
+  font-size: 23px;
+}
+.marketing-nav .brand-mark {
+  width: 35px;
+  height: 35px;
+}
+.marketing-nav .wordmark-meaning {
+  font-size: 10px;
+}
+.marketing-nav > nav {
+  gap: 25px;
+}
+.marketing-nav > nav > a:not(.button) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 2px solid transparent;
+  padding-top: 2px;
+}
+.marketing-nav > nav > a:not(.button):hover {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
+.app-topbar {
+  min-height: 66px;
+  background: #fffffff7;
+  border-top: 3px solid var(--blue);
+}
+.sidebar-brand {
+  height: 83px;
+}
+.sidebar-brand .brand-mark {
+  width: 31px;
+  height: 31px;
+}
+.sidebar-link.active {
+  background: #e9f1ff;
+  color: #073f99;
+  box-shadow: inset 3px 0 var(--blue);
+}
+.sidebar-link:hover {
+  background: #edf3fa;
+  color: #073f99;
+}
+.sidebar-link.active:hover {
+  background: #e0ecff;
+}
+.workspace-picker {
+  background: #eaf1f8;
+  border: 1px solid #d9e5f0;
+  padding: 13px 9px;
+}
+.topbar-actions .environment-badge {
+  border-color: #c6d9ec;
+  background: #f0f6fc;
+  color: #355472;
+}
+.site-footer nav a:hover {
+  color: #8ce6ef;
+  border-bottom-color: #8ce6ef;
+}
+.site-footer .wordmark-meaning {
+  font-size: 11px;
+}
+.app-footer strong {
+  font-weight: 500;
+  color: #285477;
+}
+.app-mobile-brand .wordmark {
+  color: var(--ink);
+}
+.mobile-navigation nav a[aria-current="page"] {
+  background: #edf4ff;
+  color: #0643a7;
+}
+.mobile-navigation nav a:hover {
+  background: #f2f6fc;
+}
+.mobile-navigation .wordmark-meaning {
+  font-size: 9px;
+}
+.readiness-feature-band {
+  background: #edf6f7;
+  border-bottom: 1px solid #cbdee2;
+}
+.readiness-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  padding-block: 80px;
+}
+.readiness-feature h2 {
+  margin-block: 20px;
+  font-size: clamp(32px, 3.8vw, 49px);
+  letter-spacing: -0.045em;
+}
+.readiness-feature > div > p:not(.technical-label) {
+  max-width: 430px;
+  font-size: 15px;
+  color: #3e5d65;
+  line-height: 1.85;
+}
+.readiness-feature .button {
+  margin-top: 24px;
+}
+.readiness-feature small {
+  display: block;
+  margin-top: 14px;
+  font-size: 11px;
+  color: #4c6870;
+}
+.readiness-feature-list {
+  align-self: center;
+  border: 1px solid #c0d8dd;
+  background: #f8fcfc;
+}
+.readiness-feature-list > div {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  column-gap: 14px;
+  padding: 24px;
+  border-bottom: 1px solid #d5e6e9;
+}
+.readiness-feature-list .mono {
+  color: #286275;
+  font-size: 11px;
+  grid-row: span 2;
+  padding-top: 4px;
+}
+.readiness-feature-list strong {
+  font-size: 17px;
+  font-weight: 500;
+}
+.readiness-feature-list p {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #49646d;
+}
+.readiness-feature-list > a {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #114b6e;
+  font-size: 13px;
+  background: #e0eff2;
+}
+.readiness-feature-list > a:hover {
+  background: #d0e8ed;
+}
+.workflow-stages article:nth-child(2) {
+  background: #f4f8fd;
+  padding-inline: 20px;
+}
+.contract-review {
+  background: #eef4fc;
+}
+.fault-option:has(input:checked) {
+  background: #edf4ff;
+}
+@media (max-width: 1000px) {
+  .marketing-nav > nav {
+    gap: 16px;
+  }
+  .readiness-feature {
+    gap: 48px;
+  }
+}
+@media (max-width: 760px) {
+  .marketing-nav {
+    height: 68px;
+  }
+  .marketing-nav .wordmark {
+    font-size: 22px;
+  }
+  .marketing-nav .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+  .marketing-nav .wordmark-meaning {
+    font-size: 9px;
+  }
+  .app-topbar {
+    min-height: 67px;
+    padding-inline: 20px;
+    gap: 8px;
+  }
+  .app-mobile-brand .wordmark {
+    font-size: 19px;
+  }
+  .app-mobile-brand .wordmark-meaning {
+    font-size: 8px;
+  }
+  .topbar-actions {
+    gap: 8px;
+  }
+  .topbar-actions .environment-badge {
+    font-size: 10px;
+    max-width: 120px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .mobile-navigation nav a {
+    min-height: 56px;
+    padding-block: 14px;
+  }
+  .readiness-feature {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding-block: 54px;
+  }
+  .readiness-feature h2 {
+    font-size: 36px;
+  }
+  .readiness-feature-list > div {
+    padding: 21px;
+  }
+  .workflow-stages article:nth-child(2) {
+    padding-inline: 14px;
+  }
+}
+@media (max-width: 380px) {
+  .app-topbar {
+    padding-inline: 14px;
+  }
+  .app-mobile-brand .wordmark {
+    font-size: 17px;
+    gap: 6px;
+  }
+  .app-mobile-brand .wordmark-meaning {
+    font-size: 7px;
+  }
+  .topbar-actions .environment-badge {
+    max-width: 82px;
+    font-size: 9px;
+    padding-inline: 4px;
+  }
+  .topbar-actions .environment-badge svg {
+    display: none;
+  }
+  .topbar-actions .mobile-menu-trigger {
+    min-width: 44px;
+    padding-inline: 8px;
+  }
+  .topbar-actions .mobile-menu-trigger span {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .smart-header {
+    transition: none;
+    transform: none;
+  }
+  .smart-header[data-hidden="true"] {
+    transform: none;
   }
 }

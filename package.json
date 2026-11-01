@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@onkernel/sdk": "^0.139.0",
+    "ag-grid-react": "^36.2.0",
     "drizzle-orm": "^0.45.4",
     "lucide-react": "^0.468.0",
     "next": "^16.0.0",
@@ -30,14 +31,15 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@remotion/cli": "^4.0.539",
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "newman": "^6.2.3",
     "prettier": "^3.9.10",
+    "remotion": "^4.0.539",
     "tsx": "^4.20.0",
-    "typescript": "^5.9.0",
-    "@remotion/cli": "^4.0.539",
-    "remotion": "^4.0.539"
+    "typescript": "^5.9.0"
   },
   "type": "module",
   "overrides": {

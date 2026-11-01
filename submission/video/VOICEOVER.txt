@@ -1,0 +1,13 @@
+A payment can succeed and still be the wrong purchase. In this controlled Sandbox example, capture completes, but the merchant records the wrong size.
+
+COMRDY means Commerce Ready. It is a transaction test lab for engineers building AI checkout. Start with the customer's instruction: one blue Ocean Shell, medium, under one hundred sixty dollars delivered. No substitutions or subscriptions. AI compiles the request. The buyer reviews the source phrases, resolves ambiguity, and confirms the contract.
+
+Our shopping agent opens Northpath, a controlled test store. It selects the product and builds a cart totaling one hundred forty-eight dollars. The buyer approves through PayPal Sandbox. Then we deliberately change the checkout after authorization. The price stays the same. The size does not. This is a disclosed fault injection.
+
+Intent Lineage reveals the first divergence from the confirmed request. The deterministic gate checks the merchant again, including its revision, the authorization, the amount, and every hard constraint. The wrong size blocks capture. COMRDY requests a void and retrieves the authorization's status. Missing evidence also blocks. The test verdict and the payment outcome remain separate, so uncertainty cannot look like success.
+
+Recovery has a strict boundary. Restore the requested medium, preserve the original contract, and create one fresh attempt. The buyer approves again. All constraints are rechecked before capturing one hundred forty-eight dollars. Only a completed capture can produce the merchant order. If recovery fails, it stops. Durable command identities and reconciliation protect retries from becoming another purchase. This demonstrates correction of a controlled fault, with an inspectable record of both attempts.
+
+The readiness bench goes beyond a single demo. Execute twelve synthetic cases against the same verification engine: budget boundaries, quantity changes, missing facts, stale evidence, and payment bindings. Change the inputs, compare decisions, and export a reproducible report. These are deterministic tests, not provider qualification.
+
+The judge workbench brings the evidence together. Filter runs, inspect the original and recovery, and see what was actually observed. Saved playback makes no payments. COMRDY helps engineering teams reproduce checkout failures before changing an agent or integration. Commerce Ready. Test the purchase against the promise.

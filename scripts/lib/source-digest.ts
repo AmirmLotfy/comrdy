@@ -16,7 +16,13 @@ export function sourceDigest(root = process.cwd()) {
       else throw new Error("Release source cannot contain symbolic links.");
     }
   }
-  for (const directory of ["src", "scripts", "public/brand"]) walk(directory);
+  for (const directory of [
+    "src",
+    "scripts",
+    "public/brand",
+    "public/verification",
+  ])
+    walk(directory);
   for (const file of [
     "package.json",
     "package-lock.json",

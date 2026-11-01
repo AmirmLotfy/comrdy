@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   openGraph: {
     type: "website",
-    siteName: "COMRDY",
-    title: "COMRDY — Test the purchase. Before the capture.",
+    siteName: "COMRDY — Commerce Ready",
+    title: "COMRDY — Commerce Ready. Test the purchase.",
     description:
       "A confirmed contract. A changed merchant state. An inspectable decision. A controlled test lab for AI checkout.",
     images: [
@@ -38,12 +38,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "COMRDY — Test the purchase. Before the capture.",
+    title: "COMRDY — Commerce Ready. Test the purchase.",
     description: "Test AI checkout against the customer's confirmed intent.",
     images: ["/brand/comrdy-og.png"],
   },
   title: {
-    default: "COMRDY — Keep the purchase inside the promise",
+    default: "COMRDY — Commerce Ready. Test the purchase.",
     template: "%s · COMRDY",
   },
   description:

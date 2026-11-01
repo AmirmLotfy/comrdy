@@ -1,8 +1,18 @@
-# COMRDY
+# COMRDY — Commerce Ready
 
 A transaction test lab for engineers building AI checkout.
 
 **A payment can succeed and still be the wrong purchase.**
+
+## Explore the product
+
+- `/judges`: a guided review and searchable AG Grid workbench of actual accessible evidence. Test verdict, authorization, capture and merchant order remain separate.
+- `/readiness`: execute 12 synthetic scenarios using the real verification engine. Inspect failed rules, change bounded checkout facts, compare against the baseline, and export reproducible JSON/CSV.
+- `/demo`: compile and confirm intent, introduce a controlled variant or shipping fault, and inspect one bounded recovery.
+- `/store`: Northpath's controlled storefront with product views, size guide, editable cart and checkout observation. Store links open separately from the lab.
+- `/compare`: original/recovery comparison under the unchanged contract.
+
+The [Postman verification kit](docs/API_VERIFICATION.md) runs without provider credentials. New screens and screenshots explicitly distinguish synthetic engine checks, local simulation and real PayPal Sandbox execution. They do not imply live provider qualification.
 
 ## Local development
 

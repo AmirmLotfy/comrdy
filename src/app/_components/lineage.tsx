@@ -429,10 +429,12 @@ export function RunResult({
   run,
   onRecovered,
   compact = false,
+  readOnly = false,
 }: {
   run: Run;
   onRecovered?: (run: Run) => void;
   compact?: boolean;
+  readOnly?: boolean;
 }) {
   const [evidence, setEvidence] = useState<EvidenceSelection | null>(null);
   const [recovering, setRecovering] = useState(false);
@@ -444,6 +446,7 @@ export function RunResult({
   const pending = isRunPending(run);
   const approveUrl = approvalLink(run);
   async function recover() {
+    if (readOnly) return;
     setRecovering(true);
     setRecoveryError(null);
     try {
@@ -508,7 +511,7 @@ export function RunResult({
                 : "Review required"}
         </StatusPill>
       </div>
-      {approveUrl && run.status === "awaiting_approval" && (
+      {!readOnly && approveUrl && run.status === "awaiting_approval" && (
         <div className="approval-callout">
           <div>
             <strong>Continue in PayPal Sandbox.</strong>
@@ -663,7 +666,8 @@ export function RunResult({
           )}
         </section>
       </div>
-      {!pending &&
+      {!readOnly &&
+        !pending &&
         denied &&
         run.fault === "variant" &&
         !run.parentId &&

@@ -11,3 +11,7 @@ Hosted target (updated by the user on November 1): Vercel hosts the Next.js webs
 Budget: USD 100 additional total, existing credits first. No costs incurred during initial implementation. Preserve evidence through December 21. Credentials requested only after code/local verification, per user's instruction.
 
 Local simulation is not PayPal/AI/provider acceptance. Never present fixtures as observed provider results. Current acceptance receipts belong in CURRENT_HANDOFF.md.
+
+## November 1 extension
+
+COMRDY means **Commerce Ready**. The authorized extension adds a finite, executable 12-case readiness bench using the actual invariant engine, an evidence-focused judge workbench, and a reproducible Postman/Newman HTTP collection. These synthetic cases make no provider calls and do not qualify payments. AG Grid Community supports inspection/export; no AG Studio integration is claimed. The Northpath purchase flow uses explicit size selection and a focused cart/review drawer. All merchant entry links open a new tab.
