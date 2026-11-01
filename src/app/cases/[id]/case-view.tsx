@@ -9,8 +9,10 @@ import {
   EmptyState,
   ErrorNotice,
   PageHeading,
+  useServiceStatus,
 } from "../../_components/ui";
 import { RecordedPlayback, RunResult } from "../../_components/lineage";
+import { LiveAccessCode } from "../../_components/live-access-code";
 import {
   api,
   faultLabels,
@@ -26,6 +28,7 @@ export function CaseView({
   readOnly?: boolean;
 }) {
   const router = useRouter();
+  const { status } = useServiceStatus();
   const [run, setRun] = useState<Run | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -155,6 +158,16 @@ export function CaseView({
         </div>
       ) : run ? (
         <>
+          {!readOnly &&
+            run.mode === "sandbox" &&
+            status?.accessCodeRequired &&
+            run.status === "blocked" &&
+            run.decision?.verdict === "DENY" &&
+            run.fault === "variant" &&
+            !run.parentId &&
+            ["VOIDED", "NOT_REQUESTED"].includes(run.payment.status) && (
+              <LiveAccessCode description="Enter the access code before starting recovery. Kept in this browser tab’s session; fresh PayPal approval is still required." />
+            )}
           <RunResult
             run={run}
             readOnly={readOnly}

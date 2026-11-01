@@ -26,6 +26,7 @@ import {
   RunResult,
   type EvidenceSelection,
 } from "../_components/lineage";
+import { LiveAccessCode } from "../_components/live-access-code";
 import {
   api,
   contractRows,
@@ -45,7 +46,6 @@ export function DemoWorkspace() {
   const [compilerReceipt, setCompilerReceipt] = useState<unknown>(null);
   const [constraintDraft, setConstraintDraft] = useState("");
   const [draftChanged, setDraftChanged] = useState(false);
-  const [accessCode, setAccessCode] = useState("");
   const [unresolved, setUnresolved] = useState<string[]>([]);
   const [confirmed, setConfirmed] = useState(false);
   const [fault, setFault] = useState<Fault>("variant");
@@ -57,9 +57,6 @@ export function DemoWorkspace() {
   const resultRef = useRef<HTMLDivElement>(null);
   const [edit, setEdit] = useState(true);
   useEffect(() => {
-    setAccessCode(
-      window.sessionStorage.getItem("comrdy-live-access-code") ?? "",
-    );
     let active = true;
     api<{ runs: Run[] }>("/api/v1/runs")
       .then((data) => {
@@ -299,34 +296,7 @@ export function DemoWorkspace() {
         </div>
         <span>Ocean Shell · Blue · Sandbox-only purchase flow</span>
       </div>
-      {status?.accessCodeRequired && (
-        <div className="access-code-panel">
-          <div>
-            <label className="field-label" htmlFor="live-access-code">
-              Live demo access code
-            </label>
-            <p>
-              Required for metered runs. Kept in this browser tab’s session.
-            </p>
-          </div>
-          <input
-            id="live-access-code"
-            type="password"
-            autoComplete="off"
-            value={accessCode}
-            placeholder="Enter access code"
-            onChange={(event) => {
-              setAccessCode(event.target.value);
-              if (event.target.value)
-                window.sessionStorage.setItem(
-                  "comrdy-live-access-code",
-                  event.target.value,
-                );
-              else window.sessionStorage.removeItem("comrdy-live-access-code");
-            }}
-          />
-        </div>
-      )}
+      {status?.accessCodeRequired && <LiveAccessCode />}
       <div className="lab-setup">
         <section className="intent-editor">
           <div className="section-heading">
