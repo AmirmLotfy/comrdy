@@ -1,6 +1,6 @@
 # YouTube publication copy
 
-Status: prepared; no COMRDY video has been uploaded or published.
+Status: verified final master ready; YouTube terms/publication confirmation requested. No COMRDY video has been uploaded or published.
 
 Title: **COMRDY — Commerce Ready | PayPal AI Hackathon**
 

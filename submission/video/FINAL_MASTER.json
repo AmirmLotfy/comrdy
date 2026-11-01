@@ -1,0 +1,29 @@
+{
+  "kind": "COMRDY final submission film",
+  "masterSha256": "4e3198edecad932142a83f89d233c7138b9ac5dff332baf670f2109dd597f7e4",
+  "delivery": {
+    "containerDurationSeconds": 165.013,
+    "videoDurationSeconds": 165.0,
+    "frames": 4950,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "videoCodec": "h264",
+    "audioCodec": "aac",
+    "sampleRate": 48000,
+    "channels": 2,
+    "bytes": 11038547
+  },
+  "encodedAudio": {
+    "measurement": "ffmpeg loudnorm analysis; input values measure encoded master; no output audio saved",
+    "integratedLufs": -16.03,
+    "truePeakDbtp": -1.93,
+    "loudnessRangeLu": 5.8,
+    "passed": true
+  },
+  "sourceRevision": "03c145157878602971c7f4bbd30555c512fade35",
+  "compositionSha256": "95022aeb2222bbe01f7ab7504dc4eab448492f32323905d5381dbd1910c2cd57",
+  "humanReview": "Owner approved the complete reviewed content and final version without watermark; see ../RELEASE_REVIEW.json.",
+  "separateEncodedMasterHumanViewing": false,
+  "publication": "pending YouTube upload and verified watch URL"
+}
