@@ -2,7 +2,7 @@
 
 **Tagline:** Commerce Ready: test whether an AI checkout buys what the customer actually asked for.
 
-Prepared submission copy for executable source `03c145157878602971c7f4bbd30555c512fade35`. The measured Sandbox results below are recorded; the final film, public evidence publication and authenticated Devpost submission are still pending. Do not submit the local rehearsal as provider evidence.
+Prepared submission copy for executable source `03c145157878602971c7f4bbd30555c512fade35`. The measured Sandbox results below are recorded; public evidence is deployed; the final film and authenticated Devpost submission remain pending. Do not submit the local rehearsal as provider evidence.
 
 ## Inspiration
 
@@ -28,7 +28,7 @@ TypeScript and Next.js serve the test lab and controlled storefront. OpenAI Resp
 
 PayPal Orders v2 and Payments v2 provide Sandbox order creation, buyer approval, authorization, exact-amount capture, void and readback. Operation identities are persisted before network requests. PostgreSQL transactions and leases coordinate the web process and persistent worker. Retries reuse the original economic identity; ambiguous outcomes are reconciled before another action. Verified webhooks trigger readback rather than authorizing a new payment.
 
-Vercel hosts the web/API deployment; a persistent Render worker shares managed PostgreSQL and retains private browser evidence. The qualified web and worker execute clean source `03c145157878602971c7f4bbd30555c512fade35`; evidence records its execution revision separately from later documentation and media packaging.
+Vercel hosts the web/API deployment; a persistent Render worker shares managed PostgreSQL and retains private browser evidence. The qualified runs executed clean source `03c145157878602971c7f4bbd30555c512fade35`. The deployed evidence-package revision `d9a3d4c` has the same executable source digest; run evidence retains its actual execution revision.
 
 ## Challenges we ran into
 
@@ -44,7 +44,7 @@ On that frozen source, provider retrieval qualified the latest three original at
 
 The live compiler corpus met its automated expectations in **20/20 cases: 8/8 executable preservation cases and 12/12 expected clarifications**. Assistant inspection covered every raw and final output. One blocked subscription request marks the requested blue/medium variant as soft; it remains blocked for unsupported subscription and recurrence. Human semantic review is pending. These finite checks are not a claim of universal accuracy or perfect semantic preservation.
 
-Five concurrent duplicate approval requests against an already completed run preserved one capture and one merchant order (**5/5**). A worker restart while another run awaited buyer approval resumed successfully. This restart did not exercise a lost provider response or an interruption during capture. Broader live interrupted-response and duplicate/out-of-order webhook qualification remains unestablished; local tests do not fill that gap.
+Five concurrent duplicate approval requests against an already completed run preserved one capture and one merchant order (**5/5**). A worker restart while another run awaited buyer approval resumed successfully. This restart did not exercise a lost provider response or an interruption during capture. A verified authorization-voided webhook arrived before authorization-created; the final state remained VOIDED with no capture. An unsigned forged webhook was rejected with HTTP 400. Live lost-response and duplicate-webhook delivery tests remain unperformed; their local mocks do not fill that gap.
 
 ## What we learned
 
@@ -66,13 +66,13 @@ The earlier automated suite passed 103/103 at source `7df`, including hosted Pos
 
 Local qualification records are `artifacts/payment-qualification.json`, `artifacts/intent-qualification.json`, `artifacts/sandbox-recovery-03c1451.json` and `artifacts/live-duplicate-approval.json`. The recovery is `05d9de46-0882-4c64-bfa6-f2b48c43a7bb`, parent `eb1c1706-7093-4ce8-a3dd-a0c612d2b4b7`. The restart observation belongs to run `f6eee69b-2dd5-4314-85c8-2773cf468b99`.
 
-The reviewed public receipt destinations are [qualification summary](https://comrdy.vercel.app/release/qualification.json), [protected evidence](https://comrdy.vercel.app/release/evidence.json) and [isolated control](https://comrdy.vercel.app/release/control.json). Publication and signed-out verification of these destinations remain pending; links alone do not establish that the exports are available or qualified. The isolated control is separate from protected payment runs and makes no shopper or shipment claim.
+The reviewed public receipt destinations are [qualification summary](https://comrdy.vercel.app/release/qualification.json), [protected evidence](https://comrdy.vercel.app/release/evidence.json) and [isolated control](https://comrdy.vercel.app/release/control.json). All three public receipt links were verified accessible without an operator session. The isolated control is separate from protected payment runs and makes no shopper or shipment claim.
 
 ## Submission links and remaining account steps
 
 - Hosted demo: [COMRDY](https://comrdy.vercel.app).
 - Source: [public MIT repository](https://github.com/AmirmLotfy/comrdy), qualified executable revision `03c145157878602971c7f4bbd30555c512fade35`.
 - Video URL: **pending** final authentic 165-second film, human review, public YouTube upload and signed-out verification.
-- Judge instructions: once the reviewed evidence export is published, inspect saved evidence without making payments. Fresh Sandbox runs require operator access and ordinary buyer approval; credentials are never included in public copy.
+- Judge instructions: inspect the ten published saved runs without making payments. Fresh Sandbox runs require operator access and ordinary buyer approval; credentials are never included in public copy.
 - Team/personal eligibility and sponsor declarations remain the user's accurate declarations; this draft does not create or change them.
 - Submission timestamp: **pending** authenticated finalization of the existing Devpost entry. Retain submitted URLs, video/gallery readback and authenticated status in a completed copy of `submission/receipt.template.json`; a project page is not proof of submission.

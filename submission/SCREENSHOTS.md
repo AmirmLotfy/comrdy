@@ -1,5 +1,8 @@
 # Six release screenshots
 
+The final six 1440×960 images are in `submission/screenshots/release/`, with SHA256 values and exact labels in `manifest.json`. They were captured from the hosted UI, visually checked by the assistant, uploaded with captions to the existing Devpost project on November 1, and verified in its six-image gallery. Human acceptance is pending; the project remains an incomplete submission without the final video. Older simulation images are preserved separately.
+
+
 Capture from the qualified hosted release at 1440×1000 (or a legible crop), with no credentials, buyer identity, approval URL tokens, or browser control URLs.
 
 1. Homepage: product purpose and signature lineage graphic.

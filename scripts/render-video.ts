@@ -88,7 +88,9 @@ for (const shot of m.screenshots) {
     reviewed: shot.reviewed,
   };
 }
-if (m.mode === "release") {
+// Review previews require the same qualified evidence as release delivery.
+// Only the manifest's human approval assertions differ.
+if (m.mode !== "rehearsal") {
   const library = JSON.parse(
     await readFile("public/release/evidence.json", "utf8"),
   );
@@ -213,7 +215,11 @@ if (m.mode === "release") {
 }
 await mkdir("artifacts", { recursive: true });
 const stem =
-  m.mode === "release" ? "comrdy-submission" : "comrdy-local-rehearsal";
+  m.mode === "release"
+    ? "comrdy-submission"
+    : m.mode === "review"
+      ? "comrdy-review"
+      : "comrdy-local-rehearsal";
 await writeFile(
   `artifacts/${stem}-validation.json`,
   JSON.stringify(
@@ -221,6 +227,8 @@ await writeFile(
       checkedAt: new Date().toISOString(),
       mode: m.mode,
       release: m.release,
+      reviews: m.reviews,
+      publicationPerformed: false,
       assets,
       limitation:
         "Consistency and media checks; human reviews and provider retrieval receipts remain separate evidence.",

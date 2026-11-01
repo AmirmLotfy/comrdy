@@ -1,0 +1,394 @@
+{
+  "schemaVersion": 1,
+  "width": 1920,
+  "height": 872,
+  "fps": 30,
+  "seconds": 165,
+  "threads": 2,
+  "sequential": true,
+  "disclosurePlacement": "Reserved 48px top strip; never covers source evidence",
+  "motion": "Static documentary crops. No simulated interaction, speedup or inferred actions.",
+  "pending": [],
+  "chapters": [
+    {
+      "name": "01-control",
+      "seconds": 12,
+      "output": "public/media/release/01-control.mp4",
+      "segments": [
+        {
+          "name": "01-payment",
+          "type": "image",
+          "source": "artifacts/control-art/01-payment.png",
+          "seconds": 5.2,
+          "crop": [
+            0,
+            0,
+            1920,
+            872
+          ],
+          "visual_reviewed": true,
+          "cropReason": "Complete documentary receipt plate, all disclosures retained"
+        },
+        {
+          "name": "02-wrong-purchase",
+          "type": "image",
+          "source": "artifacts/control-art/02-wrong-purchase.png",
+          "seconds": 6.8,
+          "crop": [
+            0,
+            0,
+            1920,
+            872
+          ],
+          "visual_reviewed": true,
+          "cropReason": "Complete documentary receipt plate, all disclosures retained"
+        }
+      ]
+    },
+    {
+      "name": "02-contract",
+      "seconds": 25,
+      "output": "public/media/release/02-contract.mp4",
+      "segments": [
+        {
+          "name": "contract-confirmed",
+          "type": "frames",
+          "source": "artifacts/film-frames/contract-confirmed",
+          "seconds": 7,
+          "crop": [
+            240,
+            460,
+            1180,
+            470
+          ],
+          "disclosure": null,
+          "visual_reviewed": true,
+          "cropReason": "Customer instruction, full fixed contract and confirmation together"
+        },
+        {
+          "name": "contract-sources",
+          "type": "frames",
+          "source": "artifacts/film-frames/contract-sources",
+          "seconds": 9,
+          "crop": [
+            840,
+            535,
+            580,
+            440
+          ],
+          "disclosure": null,
+          "visual_reviewed": true,
+          "cropReason": "Source phrases and confirmed state enlarged without page chrome"
+        },
+        {
+          "name": "contract-history",
+          "type": "frames",
+          "source": "artifacts/film-frames/contract-history",
+          "seconds": 9,
+          "crop": [
+            860,
+            80,
+            580,
+            450
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Enlarge history title, non-authorization disclosure and compiler provenance; source phrases shown immediately before"
+        }
+      ]
+    },
+    {
+      "name": "03-fault",
+      "seconds": 22,
+      "output": "public/media/release/03-fault.mp4",
+      "segments": [
+        {
+          "name": "shopper",
+          "type": "video",
+          "source": "artifacts/provider-footage/eb1c1706-7093-4ce8-a3dd-a0c612d2b4b7-shopper.mp4",
+          "seconds": 6,
+          "in": 1.5,
+          "endHoldSeconds": 0.45,
+          "crop": [
+            0,
+            90,
+            1920,
+            990
+          ],
+          "disclosure": "Recorded agent browser \u00b7 Final 0.45 s held as saved observation",
+          "visual_reviewed": true,
+          "cropReason": "Remove entire browser address area; 1.5s first inspected nonblank frame to real end 7.05s, then disclosed static observation"
+        },
+        {
+          "name": "original-authorization",
+          "type": "frames",
+          "source": "artifacts/film-frames/original-authorization",
+          "seconds": 7,
+          "crop": [
+            860,
+            70,
+            580,
+            380
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Entire authorization event drawer and evidence limit; excludes unrelated final-state background"
+        },
+        {
+          "name": "original-fault",
+          "type": "frames",
+          "source": "artifacts/film-frames/original-fault",
+          "seconds": 9,
+          "crop": [
+            860,
+            70,
+            580,
+            380
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Entire disclosed fault event drawer, timestamp and recorded detail"
+        }
+      ]
+    },
+    {
+      "name": "04-void",
+      "seconds": 28,
+      "output": "public/media/release/04-void.mp4",
+      "segments": [
+        {
+          "name": "denial-lineage",
+          "type": "frames",
+          "source": "artifacts/film-frames/denial-lineage",
+          "seconds": 9,
+          "crop": [
+            240,
+            320,
+            1180,
+            530
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Actual capture-blocked verdict, constraint lineage, M to S and unchanged 148"
+        },
+        {
+          "name": "denial-divergence",
+          "type": "frames",
+          "source": "artifacts/film-frames/denial-divergence",
+          "seconds": 10,
+          "crop": [
+            860,
+            70,
+            580,
+            480
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Source title, expected M, observed S, revision 2 and total 14800"
+        },
+        {
+          "name": "denial-void",
+          "type": "frames",
+          "source": "artifacts/film-frames/denial-void",
+          "seconds": 9,
+          "crop": [
+            240,
+            80,
+            1200,
+            560
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Payment boundary plus VOIDED, authorization ID, captureId null and provider order"
+        }
+      ]
+    },
+    {
+      "name": "05-recovery",
+      "seconds": 32,
+      "output": "public/media/release/05-recovery.mp4",
+      "segments": [
+        {
+          "name": "recovery-start",
+          "type": "frames",
+          "source": "artifacts/film-frames/recovery-start",
+          "seconds": 6,
+          "crop": [
+            240,
+            720,
+            1180,
+            430
+          ],
+          "disclosure": "Recorded Sandbox run",
+          "visual_reviewed": true,
+          "cropReason": "Enlarge actual not-requested payment state, ongoing agent history and explicit recovery-attempt marker"
+        },
+        {
+          "name": "recovery-capture-context",
+          "type": "frames",
+          "source": "artifacts/film-frames/recovery-capture",
+          "seconds": 9,
+          "crop": [
+            240,
+            250,
+            1180,
+            530
+          ],
+          "disclosure": "Recorded Sandbox run",
+          "visual_reviewed": true,
+          "cropReason": "First 9 seconds of real capture recording; preserve pending/result and confirmed/observed M plus 148"
+        },
+        {
+          "name": "recovery-capture-payment",
+          "type": "frames",
+          "source": "artifacts/film-frames/recovery-capture",
+          "seconds": 7,
+          "crop": [
+            240,
+            780,
+            600,
+            330
+          ],
+          "disclosure": "Recorded Sandbox run",
+          "visual_reviewed": true,
+          "cropReason": "Uninterrupted source seconds9\u201316; documentary cut to actual provider status and capture ID, no time compression",
+          "in": 9
+        },
+        {
+          "name": "recovery-compare",
+          "type": "frames",
+          "source": "artifacts/film-frames/recovery-compare",
+          "seconds": 4,
+          "crop": [
+            240,
+            290,
+            1180,
+            570
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Bound recovery disclosure, original/recovery DENY-ALLOW, M/S and VOIDED-COMPLETED together"
+        },
+        {
+          "name": "duplicate-commands",
+          "type": "image",
+          "source": "artifacts/control-art/03-duplicate-commands.png",
+          "receiptManifest": "artifacts/control-art/retry-manifest.json",
+          "seconds": 6,
+          "crop": [
+            0,
+            0,
+            1920,
+            872
+          ],
+          "visual_reviewed": true,
+          "cropReason": "Separate authentic duplicate-command receipt; five commands after completed capture, one provider capture and merchant order; lost-response limit disclosed"
+        }
+      ]
+    },
+    {
+      "name": "06-readiness",
+      "seconds": 23,
+      "output": "public/media/release/06-readiness.mp4",
+      "segments": [
+        {
+          "name": "bench-before",
+          "type": "frames",
+          "source": "artifacts/film-frames/bench-before",
+          "seconds": 3,
+          "crop": [
+            240,
+            350,
+            1180,
+            590
+          ],
+          "disclosure": "Synthetic cases \u2022 No provider calls",
+          "visual_reviewed": true,
+          "cropReason": "Synthetic disclosure, 0/12 and real run control"
+        },
+        {
+          "name": "bench-results",
+          "type": "frames",
+          "source": "artifacts/film-frames/bench-results",
+          "seconds": 10,
+          "crop": [
+            240,
+            350,
+            1180,
+            590
+          ],
+          "disclosure": "Synthetic cases \u2022 No provider calls",
+          "visual_reviewed": true,
+          "cropReason": "Synthetic disclosure, actual 12/12 and decision table"
+        },
+        {
+          "name": "bench-missing",
+          "type": "frames",
+          "source": "artifacts/film-frames/bench-missing",
+          "seconds": 10,
+          "crop": [
+            240,
+            275,
+            1180,
+            510
+          ],
+          "disclosure": "Synthetic cases \u2022 No provider calls",
+          "visual_reviewed": true,
+          "cropReason": "Delivered total missing, REVIEW and capture blocked; source omission detail retained"
+        }
+      ]
+    },
+    {
+      "name": "07-evidence",
+      "seconds": 23,
+      "output": "public/media/release/07-evidence.mp4",
+      "segments": [
+        {
+          "name": "judges-overview",
+          "type": "frames",
+          "source": "artifacts/film-frames/judges-overview",
+          "seconds": 10,
+          "crop": [
+            240,
+            100,
+            1180,
+            640
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Recorded judge entry, three inspection routes and configuration-is-not-qualification boundary"
+        },
+        {
+          "name": "judges-records",
+          "type": "frames",
+          "source": "artifacts/film-frames/judges-records",
+          "seconds": 8,
+          "crop": [
+            240,
+            425,
+            1180,
+            570
+          ],
+          "disclosure": "Saved evidence",
+          "visual_reviewed": true,
+          "cropReason": "Actual measured denominators, filter controls and saved payment records; no synthetic outcome overlay"
+        },
+        {
+          "name": "home-close",
+          "type": "frames",
+          "source": "artifacts/film-frames/home-close",
+          "seconds": 5,
+          "crop": [
+            80,
+            180,
+            1280,
+            570
+          ],
+          "disclosure": null,
+          "visual_reviewed": true,
+          "cropReason": "Hero statement and complete illustrative-workflow disclosure, excluding nav and excess whitespace"
+        }
+      ]
+    }
+  ]
+}

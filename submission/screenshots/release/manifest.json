@@ -1,0 +1,49 @@
+{
+  "kind": "submission-gallery",
+  "images": [
+    {
+      "file": "01-home.jpg",
+      "sha256": "c8d37d96098bbacc7da7904f6ad4f3bd653ef116ef2d2f1e5dd88cb17b945c0b",
+      "label": "Commerce Ready \u2014 test the purchase against the promise",
+      "assistantVisualReview": true,
+      "humanReview": false
+    },
+    {
+      "file": "02-confirmed-contract.jpg",
+      "sha256": "614c8e20eefe3d0725a258a4a5d1fa6c65f276f40df014c6dea59944c40b3cf8",
+      "label": "Confirmed intent with explicit buyer constraints",
+      "assistantVisualReview": true,
+      "humanReview": false
+    },
+    {
+      "file": "03-variant-denial.jpg",
+      "sha256": "251faccac30fad25a03698b80a3079c84fbb8fc0c103ca3377cd7071cf5b0a70",
+      "label": "Intent Lineage identifies the disclosed size divergence",
+      "assistantVisualReview": true,
+      "humanReview": false
+    },
+    {
+      "file": "04-provider-void.jpg",
+      "sha256": "523bf68543e9787639257597a4c7e3832d5693d002cb7d67e2e4e62fe1e3069b",
+      "label": "Provider-confirmed void with capture blocked",
+      "assistantVisualReview": true,
+      "humanReview": false
+    },
+    {
+      "file": "05-recovery-capture.jpg",
+      "sha256": "13bfa4752e1e278460adaa3fdbff3c582b2d8d69f3ed33b00c1192f4bd801a7d",
+      "label": "Same-contract recovery completes the correct $148 purchase",
+      "assistantVisualReview": true,
+      "humanReview": false
+    },
+    {
+      "file": "06-evidence-results.jpg",
+      "sha256": "f1b7bde2e55c034323b6d1903bbdc65f0b9ac48906bc988250eb31886fe29f15",
+      "label": "Ten authentic saved Sandbox runs in the judge workbench",
+      "assistantVisualReview": true,
+      "humanReview": false
+    }
+  ],
+  "executionRevision": "03c145157878602971c7f4bbd30555c512fade35",
+  "presentationRevision": "d9a3d4ccb9a6535c43d52626e0cb7453d3e48e95"
+}

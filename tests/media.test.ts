@@ -41,6 +41,43 @@ test("rehearsal cannot become a release by changing its label", () => {
   m.providerRunIds = ["fake"];
   assert.throws(() => validateFilmManifest(m), /cannot claim/);
 });
+test("review requires qualified manifest inputs while release still requires human approval", () => {
+  const m = manifest();
+  m.mode = "review";
+  assert.throws(() => validateFilmManifest(m));
+  m.providerRunIds = ["original", "recovery", "shipping"];
+  m.links = {
+    demo: "https://comrdy.vercel.app",
+    source: "https://github.com/AmirmLotfy/comrdy",
+  };
+  validateFilmManifest(m);
+  m.mode = "release";
+  assert.throws(() => validateFilmManifest(m), /Human.*review/);
+  m.reviews = { captions: true, redaction: true, intentOutputs: true };
+  assert.throws(() => validateFilmManifest(m), /Review all public screenshots/);
+  m.screenshots.forEach((shot) => {
+    shot.reviewed = true;
+  });
+  validateFilmManifest(m);
+  m.mode = "review";
+  assert.throws(() => validateFilmManifest(m), /approvals pending/);
+});
+test("review does not relax source, public link, or caption validation", () => {
+  const m = manifest();
+  m.mode = "review";
+  m.providerRunIds = ["original", "recovery", "shipping"];
+  m.links = {
+    demo: "http://localhost",
+    source: "https://github.com/AmirmLotfy/comrdy",
+  };
+  assert.throws(() => validateFilmManifest(m), /public HTTPS/);
+  m.links.demo = "https://comrdy.vercel.app";
+  m.release = "unqualified";
+  assert.throws(() => validateFilmManifest(m), /source commit/);
+  m.release = "a".repeat(40);
+  m.captions[1]!.start = 0;
+  assert.throws(() => validateFilmManifest(m), /caption timing/);
+});
 test("film rejects broken continuity, overlapping captions and duplicate screenshots", () => {
   const m = manifest();
   m.clips[2]!.start++;

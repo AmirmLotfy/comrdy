@@ -11,7 +11,11 @@ import {
   useCurrentFrame,
 } from "remotion";
 import type { FilmManifest } from "../scripts/lib/film-manifest";
-import { captionLines, chapterProgress, reveal } from "../scripts/lib/film-presentation";
+import {
+  captionLines,
+  chapterProgress,
+  reveal,
+} from "../scripts/lib/film-presentation";
 import { useFilmFont } from "./use-film-font";
 
 const FPS = 30;
@@ -40,6 +44,7 @@ export function Film({
   const entrance = reducedMotion ? 1 : reveal(chapterFrame, 10);
   const closing = time >= 160;
   const rehearsal = m.mode === "rehearsal";
+  const review = m.mode === "review";
   return (
     <AbsoluteFill
       style={{
@@ -106,7 +111,9 @@ export function Film({
             {String(Math.max(0, index) + 1).padStart(2, "0")}
           </span>
           <span style={{ fontSize: 19, letterSpacing: -0.3 }}>
-            {current?.caption || "Test the purchase against the promise."}
+            {closing
+              ? "Commerce Ready · Explore the demo and source"
+              : current?.caption || "Test the purchase against the promise."}
           </span>
         </div>
         <div
@@ -145,6 +152,63 @@ export function Film({
             <Footage file={clip.file} />
           </Sequence>
         ))}
+        {closing && !rehearsal && (
+          <AbsoluteFill
+            style={{
+              background: "#f4f6f9",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 32,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+              <Img
+                src={staticFile("brand/comrdy-mark.svg")}
+                style={{ width: 88, height: 88 }}
+              />
+              <span
+                style={{ fontSize: 96, fontWeight: 750, letterSpacing: -5 }}
+              >
+                COMRDY
+              </span>
+            </div>
+            <div style={{ fontSize: 42, color: "#536173", marginBottom: 35 }}>
+              Commerce Ready
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  color: BLUE,
+                  fontSize: 20,
+                  fontWeight: 700,
+                  marginBottom: 12,
+                }}
+              >
+                EXPLORE THE DEMO
+              </div>
+              <div style={{ fontSize: 68, fontWeight: 650, letterSpacing: -2 }}>
+                {m.links.demo}
+              </div>
+            </div>
+            <div style={{ textAlign: "center", marginTop: 20 }}>
+              <div
+                style={{
+                  color: "#536173",
+                  fontSize: 20,
+                  fontWeight: 700,
+                  marginBottom: 12,
+                }}
+              >
+                READ THE SOURCE
+              </div>
+              <div
+                style={{ fontSize: 52, fontWeight: 550, letterSpacing: -1.2 }}
+              >
+                {m.links.source}
+              </div>
+            </div>
+          </AbsoluteFill>
+        )}
         <div
           style={{
             position: "absolute",
@@ -216,6 +280,22 @@ export function Film({
           {rehearsal ? " + LOCAL CHANGES" : ""}
         </span>
       </div>
+      {review && (
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 5,
+            textAlign: "center",
+            fontSize: 22,
+            fontWeight: 750,
+            color: "#7a3d00",
+          }}
+        >
+          REVIEW COPY – NOT APPROVED
+        </div>
+      )}
       {/* Editorial progress, never a test score. */}
       <div
         style={{

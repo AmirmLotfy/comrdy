@@ -1,5 +1,8 @@
 # COMRDY film production
 
+Current production: seven authentic 1920×872 chapters have been assembled for the 165-second timeline. The approved mix is unchanged. `mode: "review"` runs the same financial, provenance and asset checks as release, visibly marks the preview **REVIEW COPY — NOT APPROVED**, and writes only `artifacts/comrdy-review.mp4`. It does not assert human approval or publish. Release still requires the separate human review flags. Use `npm run video:render -- artifacts/review-manifest.json` for the local review copy.
+
+
 Target: 165 seconds, 1920×1080, 30 fps, H.264. Editable composition: `video/index.tsx`. Script wording: `narration.json`. The supplied single voice recording and the timing table below supersede that file's old scene durations. Each claim is conditional on release evidence; the script is not a validation report.
 
 1. Qualify protected Sandbox runs, recovery, retries, and the isolated ungated control. Export reviewed redacted evidence and record source commit. Do not film fixture runs as provider proof.
@@ -72,3 +75,9 @@ The release manifest now requires `mode: "release"`, full source SHA, reviewed c
 The opening control scene must use the actual operator-only control merchant-order receipt after real execution. Until that exists, keep rehearsal wording and do not claim a wrong-size merchant order was paid. The source implementation alone is not a receipt. Preserve the final original footage/audio/caption edits and asset attribution alongside the master.
 
 Local production check: the complete 165-second rehearsal rendered successfully in Remotion at1920×1080/30fps with H.264 video and AAC audio. The patched dependency warning did not prevent this full render. The actual final provider footage still requires its own full render and listening/legibility review. `artifacts/rehearsal-master-metadata.json` records the local master specifications; `artifacts/comrdy-local-rehearsal-validation.json` hashes its source assets. No final-video publication is implied.
+
+## Reproducing the release chapter edit
+
+`submission/video/compose-chapters.py` and `edit-plan.json` retain the exact chapter assembly recipe. Run `python3 submission/video/compose-chapters.py --check` before `--encode`. The command requires the privately retained original frame sequences, timestamp receipts, KERNEL recording and documentary plate assets at the recorded workspace-relative paths; it does not download or recreate provider evidence. Sequential FFmpeg assembly preserves source timestamps, normal shopper speed, deliberate static holds and visible disclosure strips. Every crop and source hash is recorded in `artifacts/film-edit-ledger.json`.
+
+The final five seconds of the Remotion composition are an editorial end card with large demo/source links. It sits inside the footage well, preserving captions and Sandbox/synthetic-narration disclosure. It makes no additional product or provider claim.

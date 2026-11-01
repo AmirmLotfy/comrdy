@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 export type FilmManifest = {
-  mode: "release" | "rehearsal";
+  mode: "release" | "review" | "rehearsal";
   release: string;
   providerRunIds: string[];
   narration: string;
@@ -13,8 +13,8 @@ export type FilmManifest = {
 };
 export function validateFilmManifest(m: FilmManifest) {
   assert.ok(
-    ["release", "rehearsal"].includes(m.mode),
-    "Explicit release/rehearsal mode required",
+    ["release", "review", "rehearsal"].includes(m.mode),
+    "Explicit release/review/rehearsal mode required",
   );
   assert.match(m.release, /^[a-f0-9]{40}$/, "Full source commit required");
   assert.equal(m.clips.length, 7, "Seven actual clips required");
@@ -54,6 +54,19 @@ export function validateFilmManifest(m: FilmManifest) {
     assert.ok(
       m.screenshots.every((s) => s.reviewed && s.label.trim()),
       "Review all public screenshots",
+    );
+  }
+  if (m.mode === "review") {
+    assert.ok(
+      Object.values(m.reviews).every((reviewed) => reviewed === false) &&
+        m.screenshots.every((shot) => shot.reviewed === false),
+      "Review copy must keep human approvals pending",
+    );
+  }
+  if (m.mode !== "rehearsal") {
+    assert.ok(
+      m.screenshots.every((shot) => shot.label.trim()),
+      "Screenshot labels required",
     );
     assert.ok(
       m.providerRunIds.length >= 3 &&
