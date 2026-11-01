@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { sourceDigest } from "../scripts/lib/source-digest";
+import { sourceDigest, sourceManifest } from "../scripts/lib/source-digest";
 import { transaction } from "../src/server/store";
 import nextConfig from "../next.config";
 
@@ -13,10 +13,22 @@ test("deployment checksum detects source changes without incorporating secrets o
     mkdirSync(join(root, "src"));
     writeFileSync(join(root, "src/example.ts"), "export const revision = 1;");
     const before = sourceDigest(root);
+    const manifest = sourceManifest(root);
+    assert.equal(manifest.digest, before);
+    assert.deepEqual(
+      manifest.files.map((file) => file.path),
+      ["src/example.ts"],
+    );
+    assert.equal(
+      manifest.files[0].bytes,
+      Buffer.byteLength("export const revision = 1;"),
+    );
+    assert.match(manifest.files[0].sha256, /^[a-f0-9]{64}$/);
     writeFileSync(join(root, ".env.local"), "TEST_VALUE=private-placeholder");
     mkdirSync(join(root, "artifacts"));
     writeFileSync(join(root, "artifacts/local.json"), "{}");
     assert.equal(sourceDigest(root), before);
+    assert.deepEqual(sourceManifest(root), manifest);
     writeFileSync(join(root, "src/example.ts"), "export const revision = 2;");
     assert.notEqual(sourceDigest(root), before);
   } finally {

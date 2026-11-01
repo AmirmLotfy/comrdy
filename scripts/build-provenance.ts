@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { sourceDigest } from "./lib/source-digest";
+import { sourceManifest } from "./lib/source-digest";
 
 type GitState = { revision: string; dirty: boolean } | null;
 
@@ -38,7 +38,8 @@ export function resolveBuildProvenance(
 }
 
 function main() {
-  const digest = sourceDigest();
+  const manifest = sourceManifest();
+  const digest = manifest.digest;
   let git: GitState = null;
   try {
     const revision = execFileSync("git", ["rev-parse", "HEAD"], {
@@ -72,6 +73,15 @@ function main() {
       gitAvailable: git !== null,
     }),
   );
+  if (
+    process.env.COMRDY_SOURCE_DIGEST !== undefined &&
+    process.env.COMRDY_SOURCE_DIGEST !== digest
+  ) {
+    // One entry per line avoids provider log truncation. Paths, lengths and
+    // hashes localize changed build inputs without disclosing file contents.
+    for (const file of manifest.files)
+      console.log("COMRDY source manifest", JSON.stringify(file));
+  }
   const value = {
     ...resolveBuildProvenance(digest, git, process.env),
     builtAt: new Date().toISOString(),
