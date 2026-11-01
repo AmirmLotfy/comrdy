@@ -11,7 +11,7 @@ import {
   useCurrentFrame,
 } from "remotion";
 import type { FilmManifest } from "../scripts/lib/film-manifest";
-import { captionLines, chapterProgress, reveal } from "./presentation";
+import { captionLines, chapterProgress, reveal } from "../scripts/lib/film-presentation";
 import { useFilmFont } from "./use-film-font";
 
 const FPS = 30;

@@ -12,7 +12,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
-import { captionLines } from "../video/presentation";
+import { captionLines } from "./lib/film-presentation";
 
 const RATE = 48_000;
 const SECONDS = 165;
